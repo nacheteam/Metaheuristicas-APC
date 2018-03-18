@@ -13,7 +13,3 @@ def lecturaDatos(nombre_fich):
             son_datos=True
         if linea_data:
             data.append((linea.rstrip()).split(","))
-    print(data[0])
-
-fichero = input("Introduzca la dirección al fichero de datos: ")
-lecturaDatos(fichero)
