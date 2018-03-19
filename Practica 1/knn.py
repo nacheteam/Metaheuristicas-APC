@@ -6,6 +6,7 @@ def UnoNN(w,nombre_datos):
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
     @param w Vector de pesos.
     @param nombre_datos Nombre del fichero (ruta) que contiene los datos.
+    @return Devuelve un número entre 0 y 1 indicando el ratio de aciertos con el vector de pesos dado.
     """
 
     data = auxiliar.lecturaDatos(nombre_datos)
