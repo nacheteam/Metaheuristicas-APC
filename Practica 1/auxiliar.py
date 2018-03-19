@@ -36,3 +36,13 @@ def distanciaManhattan(e1,e2,w):
         for i in range(len(e1)):
             distancia+=w[i]*abs(e1[i]-e2[i])
     return distancia
+
+#Calcula la distancia de Minkowski
+def distanciaMinkowski(e1,e2,w,k):
+    distancia = 0
+    if len(e1)!=len(e2):
+        print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
+    else:
+        for i in range(len(e1)):
+            distancia+=w[i]*abs((e1[i]-e2[i])**k)
+    return math.pow(distancia,1/k)
