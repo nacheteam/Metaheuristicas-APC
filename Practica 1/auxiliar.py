@@ -26,3 +26,13 @@ def distanciaEuclidea(e1,e2,w):
             distancia+=w[i]*(e1[i]-e2[i])**2
     distancia = math.sqrt(distancia)
     return distancia
+
+#Calcula la distancia Manhattan
+def distanciaManhattan(e1,e2,w):
+    distancia = 0
+    if len(e1)!=len(e2):
+        print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
+    else:
+        for i in range(len(e1)):
+            distancia+=w[i]*abs(e1[i]-e2[i])
+    return distancia
