@@ -1,6 +1,11 @@
 import math
 
 def lecturaDatos(nombre_fich):
+    """
+    @brief Función que lee un fichero con formato arff y devuelve una lista con los datos.
+    @param nombre_fich Nombre del fichero arff para leer.
+    @return Lista con los datos formateados.
+    """
     data = []
     f = open(nombre_fich, "r")
     #El siguiente booleano indica cuando empiezan los datos en el fichero.
@@ -18,6 +23,13 @@ def lecturaDatos(nombre_fich):
 
 #Calcula la distancia euclídea de e1 a e2
 def distanciaEuclidea(e1,e2,w):
+    """
+    @brief Función que calcula la distancia euclídea.
+    @param e1 Elemento 1.
+    @param e2 Elemento 2.
+    @param w Vector de pesos.
+    @return Devuelve la distancia entre e1 y e2.
+    """
     distancia = 0
     if len(e1)!=len(e2):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
@@ -29,6 +41,13 @@ def distanciaEuclidea(e1,e2,w):
 
 #Calcula la distancia Manhattan
 def distanciaManhattan(e1,e2,w):
+    """
+    @brief Función que calcula la distancia de Manhattan.
+    @param e1 Elemento 1.
+    @param e2 Elemento 2.
+    @param w Vector de pesos.
+    @return Devuelve la distancia entre e1 y e2.
+    """
     distancia = 0
     if len(e1)!=len(e2):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
@@ -39,6 +58,14 @@ def distanciaManhattan(e1,e2,w):
 
 #Calcula la distancia de Minkowski
 def distanciaMinkowski(e1,e2,w,k):
+    """
+    @brief Función que calcula la distancia de Minkowski.
+    @param e1 Elemento 1.
+    @param e2 Elemento 2.
+    @param w Vector de pesos.
+    @param k Factor para la distancia.
+    @return Devuelve la distancia entre e1 y e2.
+    """
     distancia = 0
     if len(e1)!=len(e2):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
