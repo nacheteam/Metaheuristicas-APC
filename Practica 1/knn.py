@@ -11,6 +11,7 @@ def UnoNN(w,nombre_datos):
     data = auxiliar.lecturaDatos(nombre_datos)
     clases = []
 
+    # Para cada elemento tomamos la distancia mínima y lo clasificamos.
     for i in range(len(data)):
         c_min = data[i+1][-1] if i<len(data)-1 else 0
         d_min = auxiliar.distanciaEuclidea(data[i],data[i+1],w) if i<len(data)-1 else auxiliar.distanciaEuclidea(data[i],data[0],w)
@@ -22,6 +23,7 @@ def UnoNN(w,nombre_datos):
                     d_min = d
         clases.append(c_min)
 
+    # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
     for (c,d) in zip(clases,data):
         if c==d[-1]:
