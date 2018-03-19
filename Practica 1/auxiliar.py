@@ -17,12 +17,12 @@ def lecturaDatos(nombre_fich):
     return data
 
 #Calcula la distancia euclídea de e1 a e2
-def distanciaEuclidea(e1,e2):
+def distanciaEuclidea(e1,e2,w):
     distancia = 0
     if len(e1)!=len(e2):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
     else:
         for i in range(len(e1)):
-            distancia+=(e1[i]-e2[i])**2
+            distancia+=w[i]*(e1[i]-e2[i])**2
     distancia = math.sqrt(distancia)
     return distancia
