@@ -76,3 +76,7 @@ def distanciaMinkowski(e1,e2,w,k):
             if w[i]>=0.2:
                 distancia+=w[i]*abs((e1[i]-e2[i])**k)
     return math.pow(distancia,1/k)
+
+#Función para obtener el elemento más común de una lista
+def masComun(lista):
+    return max(set(lista), key=lista.count)
