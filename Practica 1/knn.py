@@ -35,3 +35,21 @@ def KNN(w,nombre_datos,k):
             bien_clasificadas+=1
 
     return bien_clasificadas/len(data)
+
+def Valoracion(nombre_datos,k,w):
+    """
+    @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
+    @param nombre_datos Nombre del fichero de datos.
+    @param k Número de elementos con los que se compara cada dato en el knn.
+    @param w Vector de pesos.
+    @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
+    """
+    aciertos = KNN(w,nombre_datos,k)
+    simplicidad = 0
+
+    pesos_bajos = 0
+    for wi in w:
+        if wi<0.2:
+            pesos_bajos+=1
+    simplicidad = pesos_bajos/len(w)
+    return 100*(simplicidad+aciertos)
