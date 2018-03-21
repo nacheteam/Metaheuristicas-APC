@@ -1,28 +1,32 @@
 import auxiliar
 
-
-def UnoNN(w,nombre_datos):
+def KNN(w,nombre_datos,k):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
     @param w Vector de pesos.
     @param nombre_datos Nombre del fichero (ruta) que contiene los datos.
+    @param k Número de elementos con los que se compara cada dato.
     @return Devuelve un número entre 0 y 1 indicando el ratio de aciertos con el vector de pesos dado.
     """
-
     data = auxiliar.lecturaDatos(nombre_datos)
     clases = []
 
-    # Para cada elemento tomamos la distancia mínima y lo clasificamos.
+    #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
     for i in range(len(data)):
-        c_min = data[i+1][-1] if i<len(data)-1 else 0
-        d_min = auxiliar.distanciaEuclidea(data[i],data[i+1],w) if i<len(data)-1 else auxiliar.distanciaEuclidea(data[i],data[0],w)
+        distancias = []
+        minimos = []
         for e in data:
-            if e!=data[i]:
-                d = auxiliar.distanciaEuclidea(data[i],e,w)
-                if d_min>d:
-                    c_min = e[-1]
-                    d_min = d
-        clases.append(c_min)
+                distancias.append(e,data[i],w)
+        for j in k:
+            minimo = j+1 if j<len(distancias)-1 else 0
+            for l in range(distancias):
+                if l not in minimos and distancias[minimo]>distancias[l] and l!=i:
+                    minimo=l
+            minimos.append(minimo)
+        clases_minimos = []
+        for m in minimos:
+            clases_minimos.append(data[m][-1])
+        clases.append(auxiliar.masComun(clases_minimos))
 
     # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
