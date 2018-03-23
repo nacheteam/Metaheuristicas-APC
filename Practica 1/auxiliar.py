@@ -27,7 +27,7 @@ def distanciaEuclidea(e1,e2,w):
     @brief Función que calcula la distancia euclídea.
     @param e1 Elemento 1.
     @param e2 Elemento 2.
-    @param w Vector de pesos.
+    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
     @return Devuelve la distancia entre e1 y e2.
     """
     distancia = 0
@@ -46,7 +46,7 @@ def distanciaManhattan(e1,e2,w):
     @brief Función que calcula la distancia de Manhattan.
     @param e1 Elemento 1.
     @param e2 Elemento 2.
-    @param w Vector de pesos.
+    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
     @return Devuelve la distancia entre e1 y e2.
     """
     distancia = 0
@@ -64,7 +64,7 @@ def distanciaMinkowski(e1,e2,w,k):
     @brief Función que calcula la distancia de Minkowski.
     @param e1 Elemento 1.
     @param e2 Elemento 2.
-    @param w Vector de pesos.
+    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
     @param k Factor para la distancia.
     @return Devuelve la distancia entre e1 y e2.
     """
