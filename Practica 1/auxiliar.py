@@ -85,3 +85,14 @@ def masComun(lista):
     @return Devuelve el elemento que más veces aparece en la lista.
     """
     return max(set(lista), key=lista.count)
+
+def normaEuclidea(e):
+    """
+    @brief Función que devuelve la norma euclídea de un vector e.
+    @param e Vector al que se le quiere calcular la norma.
+    @return Devuelve un valor real que es la raíz cuadrada de la suma de cada componente del vector al cuadrado.
+    """
+    norma = 0
+    for ei in e:
+        norma+=ei**2
+    return math.sqrt(norma)
