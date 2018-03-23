@@ -79,4 +79,9 @@ def distanciaMinkowski(e1,e2,w,k):
 
 #Función para obtener el elemento más común de una lista
 def masComun(lista):
+    """
+    @brief Devuelve el elemento más común de una lista.
+    @param lista Lista de la que se obtiene el elemento más común.
+    @return Devuelve el elemento que más veces aparece en la lista.
+    """
     return max(set(lista), key=lista.count)
