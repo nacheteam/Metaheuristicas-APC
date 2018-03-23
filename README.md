@@ -1,2 +1,2 @@
-# Metaheur-sticas-APC
+# Metaheurísticas-APC
 Resolución del problema APC.
