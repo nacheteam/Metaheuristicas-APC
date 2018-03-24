@@ -18,7 +18,7 @@ def elementoMinimaDistancia(e,lista):
 def Relief(nombre_datos):
     data = auxiliar.lecturaDatos(nombre_datos)
     w = []
-    for i in range(len(data[0])):
+    for i in range(len(data[0])-1):
         w.append(0)
 
     for element in data:
@@ -33,4 +33,19 @@ def Relief(nombre_datos):
                     enemigos.append(e)
         amigo_cercano = elementoMinimaDistancia(element, amigos)
         enemigo_cercano = elementoMinimaDistancia(element, enemigos)
-        
+
+        resta_enemigo = list(map(operator.sub, element, enemigo_cercano))
+        del resta_enemigo[-1]
+
+        resta_amigo = list(map(operator.sub, element, amigo_cercano))
+        del resta_amigo[-1]
+
+        w = list(map(operador.add, w, resta_enemigo))
+        w = list(map(operador.sub, w, resta_amigo))
+        w_max = max(w)
+        for wi in w:
+            if wi<0:
+                wi=0
+            else:
+                wi=wi/w_max
+    return w
