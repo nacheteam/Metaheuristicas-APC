@@ -22,9 +22,14 @@ def elementoMinimaDistancia(e,lista):
     return lista.index(min(distancias))
 
 def Relief(nombre_datos):
+    """
+    @brief Función que implementa el algoritmo greedy Relief.
+    @param nombre_datos Nombre del fichero de datos a clasificar.
+    @return Devuelve un vector de números entre 0 y 1 que nos dan la relevancia de cada característica.
+    """
     data = auxiliar.lecturaDatos(nombre_datos)
     w = []
-    for i in range(len(data[0])-1):
+    for i in range(len(data[0])):
         w.append(0)
 
     for element in data:
@@ -41,10 +46,8 @@ def Relief(nombre_datos):
         enemigo_cercano = elementoMinimaDistancia(element, enemigos)
 
         resta_enemigo = list(map(operator.sub, element, enemigo_cercano))
-        del resta_enemigo[-1]
 
         resta_amigo = list(map(operator.sub, element, amigo_cercano))
-        del resta_amigo[-1]
 
         w = list(map(operador.add, w, resta_enemigo))
         w = list(map(operador.sub, w, resta_amigo))
