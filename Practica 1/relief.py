@@ -2,6 +2,12 @@ import knn
 import auxiliar
 
 def elementoMinimaDistancia(e,lista):
+    """
+    @brief Devuelve el elemento de la lista que está más cercano a e.
+    @param e Elemento con el que comparamos la distancia.
+    @param lista Lista de la que queremos obtener el objeto con menor distancia a e.
+    @return Devuelve el elemento de la lista con menor distancia a e.
+    """
     distancias = []
     indice_elemento=-1
     for l in lista:
