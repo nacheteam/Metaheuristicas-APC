@@ -5,6 +5,7 @@ import knn
 MU = 0
 SIGMA = 0.3
 MAX_EVALUACIONES = 15000
+K=1
 random.seed(1010101010)
 
 def mutacion(w, vector_posiciones):
@@ -39,8 +40,24 @@ def primerVector(n):
     return w
 
 def busquedaLocal(nombre_datos):
+    """
+    @brief Función de busqueda local para hallar un vector de pesos.
+    @param nombre_datos Fichero con el que se quiere ajustar el vector de pesos.
+    @return Devuelve un vector de pesos.
+    """
     data = auxiliar.lecturaDatos(nombre_datos)
     MAX_VECINOS = 20*(len(data[0]))
     vecinos = 0
     evaluaciones = 0
+    w = primerVector(len(data[0]))
+    vector_posiciones = range(len(w))
+    valoracion_actual = knn.Valoracion(nombre_datos,K,w)
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
+        vecino, vector_posiciones = mutacion(w,vector_posiciones)
+        valoracion_vecino = knn.Valoracion(nombre_datos,K,vecino)
+        if valoracion_vecino>valoracion_actual:
+            w = vecino
+            valoracion_actual=valoracion_vecino
+        else if vector_posiciones==[]:
+            return w
+    return w
