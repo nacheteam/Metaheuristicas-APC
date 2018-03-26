@@ -1,8 +1,11 @@
 import random
+import auxiliar
+import knn
 
 MU = 0
 SIGMA = 0.3
-random.seed(1010)
+MAX_EVALUACIONES = 15000
+random.seed(1010101010)
 
 def mutacion(w, vector_posiciones):
     """
@@ -23,3 +26,11 @@ def mutacion(w, vector_posiciones):
             wi=wi/w_max
     delete vector_posiciones[pos]
     return w,vector_posiciones
+
+def busquedaLocal(nombre_datos):
+    data = auxiliar.lecturaDatos(nombre_datos)
+    MAX_VECINOS = 20*(len(data[0]))
+    vecinos = 0
+    evaluaciones = 0
+    while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
+        
