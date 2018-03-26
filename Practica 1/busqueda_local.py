@@ -27,10 +27,20 @@ def mutacion(w, vector_posiciones):
     delete vector_posiciones[pos]
     return w,vector_posiciones
 
+def primerVector(n):
+    """
+    @brief Función que te devuelve un vector inicial de pesos con valores aleatorios según una distribución uniforme entre 0 y 1.
+    @param n Tamaño del vector.
+    @return Devuelve un vector de pesos generado de forma aleatoria.
+    """
+    w = []
+    for i in range(n):
+        w.append(random.uniform(0,1))
+    return w
+
 def busquedaLocal(nombre_datos):
     data = auxiliar.lecturaDatos(nombre_datos)
     MAX_VECINOS = 20*(len(data[0]))
     vecinos = 0
     evaluaciones = 0
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
-        
