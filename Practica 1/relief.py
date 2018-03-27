@@ -27,13 +27,12 @@ def elementoMinimaDistancia(e,lista):
             indice_menor_distancia=i
     return lista[indice_menor_distancia]
 
-def Relief(nombre_datos):
+def Relief(data):
     """
     @brief Función que implementa el algoritmo greedy Relief.
-    @param nombre_datos Nombre del fichero de datos a clasificar.
+    @param data Datos de los que se obtiene el vector de pesos.
     @return Devuelve un vector de números entre 0 y 1 que nos dan la relevancia de cada característica.
     """
-    data = auxiliar.lecturaDatos(nombre_datos)
     w = []
     for i in range(len(data[0])):
         w.append(0)
@@ -64,3 +63,20 @@ def Relief(nombre_datos):
             else:
                 w[i]=w[i]/w_max
     return w
+
+def ValoracionRelief(nombre_datos):
+    """
+    @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
+    @param nombre_datos Nombre del fichero de datos.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método relief.
+    """
+    data = auxiliar.lecturaDatos(nombre_datos)
+    particiones = auxiliar.divideDatosFCV(data,5)
+    vectores = []
+    valoraciones = []
+    for particion in particiones:
+        v = Relief(particion)
+        vectores.append(v)
+    for vec in vectores:
+        valoraciones.append(knn.Valoracion(nombre_datos,1,vec))
+    return valoraciones
