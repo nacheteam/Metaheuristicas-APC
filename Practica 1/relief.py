@@ -1,6 +1,7 @@
 import knn
 import auxiliar
 import operator
+import time
 
 def elementoMinimaDistancia(e,lista):
     """
@@ -76,15 +77,17 @@ def ValoracionRelief(nombre_datos):
     valoraciones = []
     contador = 0
     for particion in particiones:
-        print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        #print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        comienzo = time.time()
         v = Relief(particion)
+        fin = time.time()
         vectores.append(v)
         datos_test = []
         for d in data:
             if d not in particion:
                 datos_test.append(d)
         tc,tr = knn.Valoracion(datos_test,1,v)
-        val = [tc,tr]
+        val = [[tc,tr], fin-comienzo]
         valoraciones.append(val)
         contador+=1
     return valoraciones

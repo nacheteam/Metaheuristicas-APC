@@ -1,4 +1,5 @@
 import auxiliar
+import time
 
 ALPHA=0.5
 
@@ -72,9 +73,11 @@ def ValoracionKNN(nombre_datos):
     for i in range(len(data[0])):
         w.append(1)
     for particion in particiones:
-        print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        #print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        comienzo = time.time()
         tc,tr = Valoracion(particion,1,w)
-        val = [tc,tr]
+        fin = time.time()
+        val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1
     return valoraciones
