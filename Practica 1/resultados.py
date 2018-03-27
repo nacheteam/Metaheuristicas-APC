@@ -38,7 +38,7 @@ for fichero in FICHEROS_DATOS:
     media_tiempo_bl = 0
     media_tc_bl = 0
     media_tr_bl = 0
-    for res in reblnn:
+    for res in res_bl:
         media_tc_bl+=res[0][0]/NUM_PARTICIONES
         media_tr_bl+=res[0][1]/NUM_PARTICIONES
         media_tiempo_bl+=res[1]/NUM_PARTICIONES
