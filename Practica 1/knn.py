@@ -1,5 +1,7 @@
 import auxiliar
 
+ALPHA=0.5
+
 def KNN(w,nombre_datos,k):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
@@ -19,7 +21,7 @@ def KNN(w,nombre_datos,k):
                 distancias.append(auxiliar.distanciaEuclidea(e,data[i],w))
         for j in range(k):
             minimo = j+1 if j<len(distancias)-1 else 0
-            for l in range(distancias):
+            for l in range(len(distancias)):
                 if l not in minimos and distancias[minimo]>distancias[l] and l!=i:
                     minimo=l
             minimos.append(minimo)
@@ -52,4 +54,4 @@ def Valoracion(nombre_datos,k,w):
         if wi<0.2:
             pesos_bajos+=1
     simplicidad = pesos_bajos/len(w)
-    return 100*(simplicidad+aciertos)
+    return 100*(ALPHA*simplicidad+(1-ALPHA)*aciertos)
