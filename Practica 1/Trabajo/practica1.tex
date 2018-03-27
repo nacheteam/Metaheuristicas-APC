@@ -34,7 +34,7 @@
 %	\framebox[16cm][c]{\LaTeX}
 
 	\section{1NN}
-	
+
 	\begin{table}[ht]
 	\centering
 	\resizebox{\textwidth}{!}{
@@ -53,9 +53,9 @@
 	\label{tabla1NN}
 	\caption{Resultados 1NN}
 	\end{table}
-	
+
 	\section{Relief}
-	
+
 	\begin{table}[ht]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -71,10 +71,29 @@
 				Partición 5 & 28.7109 & 47.9452 & 76.6561 & 0.0638 & 38.1579 & 43.7483 & 81.6362 & 0.0104 & 40.0966 & 21.1111 & 61.1077 & 0.0557 \\ [0.5ex] \hline
 			\end{tabular}
 		}
-		\label{tabla1NN}
+		\label{tablaRelief}
 		\caption{Resultados Relief}
 	\end{table}
-	
+
 	\section{Búsqueda Local}
-		
+
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 & 37.0588 & 26.7123 & 63.7712 & 34.5843 & 41.0828 & 21.7391 & 32.8219 & 0.5610 & 40.5830 & 17.7778 & 58.3607 & 5.3001 \\ [0.5ex] \hline
+				Partición 2 & 33.5938 & 17.8082 & 51.4020 & 6.4653 & 41.4013 & 21.7391 & 63.1404 & 0.5545 & 43.7023 & 15.5556 & 59.2578 & 3.5880 \\ [0.5ex] \hline
+				Partición 3 & 33.2677 & 26.7123 & 59.9800 & 13.2504 & 46.1783 & 19.5652 & 65.7436 & 0.6979 & 46.9314 & 20.0000 & 66.9314 & 4.7296 \\ [0.5ex] \hline
+				Partición 4 & 35.5469 & 23.9726 & 59.5195 & 23.0546 & 44.5860 & 10.8696 & 55.4556 & 0.2889 & 43.7500 & 17.7778 & 61.5278 & 9.3608 \\ [0.5ex] \hline
+				Partición 5 & 34.5703 & 21.9178 & 56.4881 & 10.8910 & 46.0526 & 21.7391 & 67.7918 & 0.3560 & 38.4058 & 25.5556 & 63.9614 & 11.3526 \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaBL}
+		\caption{Resultados Búsqueda Local}
+	\end{table}
+
 \end{document}
