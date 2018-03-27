@@ -19,6 +19,9 @@ def lecturaDatos(nombre_fich):
             son_datos=True
         if linea_data:
             data.append((linea.rstrip()).split(","))
+    for i in range(len(data)):
+        for j in range(len(data[i])):
+            data[i][j] = float(data[i][j])
     return data
 
 #Calcula la distancia euclídea de e1 a e2
@@ -35,8 +38,7 @@ def distanciaEuclidea(e1,e2,w):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
     else:
         for i in range(len(e1)):
-            if float(w[i])>=0.2:
-                distancia+=w[i]*(e1[i]-e2[i])**2 if w!=-1 else (e1[i]-e2[i])**2
+            distancia+=w[i]*(e1[i]-e2[i])**2 if w!=-1 else (e1[i]-e2[i])**2
     distancia = math.sqrt(distancia)
     return distancia
 
@@ -54,8 +56,7 @@ def distanciaManhattan(e1,e2,w):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
     else:
         for i in range(len(e1)):
-            if float(w[i])>=0.2:
-                distancia+=w[i]*abs(e1[i]-e2[i]) if w!=-1 else abs(e1[i]-e2[i])
+            distancia+=w[i]*abs(e1[i]-e2[i]) if w!=-1 else abs(e1[i]-e2[i])
     return distancia
 
 #Calcula la distancia de Minkowski
@@ -73,8 +74,7 @@ def distanciaMinkowski(e1,e2,w,k):
         print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
     else:
         for i in range(len(e1)):
-            if float(w[i])>=0.2:
-                distancia+=w[i]*abs((e1[i]-e2[i])**k) if w!=-1 else abs((e1[i]-e2[i])**k)
+            distancia+=w[i]*abs((e1[i]-e2[i])**k) if w!=-1 else abs((e1[i]-e2[i])**k)
     return math.pow(distancia,1/k)
 
 #Función para obtener el elemento más común de una lista
