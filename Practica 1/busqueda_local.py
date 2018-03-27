@@ -43,30 +43,51 @@ def primerVector(n):
         w.append(random.uniform(0,1))
     return w
 
-def busquedaLocal(nombre_datos):
+def busquedaLocal(data,nombre_datos):
     """
     @brief Función de busqueda local para hallar un vector de pesos.
     @param nombre_datos Fichero con el que se quiere ajustar el vector de pesos.
     @return Devuelve un vector de pesos.
     """
-    data = auxiliar.lecturaDatos(nombre_datos)
     MAX_VECINOS = 20*(len(data[0]))
     vecinos = 0
     evaluaciones = 0
     w = primerVector(len(data[0]))
     vector_posiciones = list(range(len(w)))
-    valoracion_actual = knn.Valoracion(nombre_datos,K,w)
+    valoracion_actual = knn.Valoracion(data,K,w)
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
         vecinos+=1
         vecino, vector_posiciones = mutacion(w,vector_posiciones)
-        valoracion_vecino = knn.Valoracion(nombre_datos,K,vecino)
+        valoracion_vecino = knn.Valoracion(data,K,vecino)
         if valoracion_vecino>valoracion_actual:
-            print("Se ha mejorado")
             w = vecino
             valoracion_actual=valoracion_vecino
-            print(valoracion_actual)
             vector_posiciones = list(range(len(w)))
         elif vector_posiciones==[]:
             return w
     return w
+
+
+def ValoracionBusquedaLocal(nombre_datos):
+    """
+    @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
+    @param nombre_datos Nombre del fichero de datos.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método de búsqueda local.
+    """
+    data = auxiliar.lecturaDatos(nombre_datos)
+    particiones = auxiliar.divideDatosFCV(data,5)
+    vectores = []
+    valoraciones = []
+    contador = 0
+    for particion in particiones:
+        print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        v = busquedaLocal(particion,nombre_datos)
+        vectores.append(v)
+        datos_test = []
+        for d in data:
+            if d not in particion:
+                datos_test.append(d)
+        valoraciones.append(knn.Valoracion(datos_test,1,v))
+        contador+=1
+    return valoraciones
