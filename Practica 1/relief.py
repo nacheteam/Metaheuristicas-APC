@@ -74,9 +74,15 @@ def ValoracionRelief(nombre_datos):
     particiones = auxiliar.divideDatosFCV(data,5)
     vectores = []
     valoraciones = []
+    contador = 0
     for particion in particiones:
+        print("Completado " + str((contador/len(particiones))*100) + "%\n")
         v = Relief(particion)
         vectores.append(v)
-    for vec in vectores:
-        valoraciones.append(knn.Valoracion(nombre_datos,1,vec))
+        datos_test = []
+        for d in data:
+            if d not in particion:
+                datos_test.append(d)
+        valoraciones.append(knn.Valoracion(datos_test,1,v))
+        contador+=1
     return valoraciones
