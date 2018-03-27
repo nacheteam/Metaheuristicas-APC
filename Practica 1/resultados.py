@@ -44,6 +44,6 @@ for fichero in FICHEROS_DATOS:
         media_tiempo_bl+=res[1]/NUM_PARTICIONES
 
     print("MEDIAS: \n")
-    print("1NN: " + str(media_tc_1nn) + " --- " + str(media_tr_1nn) + " --- " + str(media_tc_1nn+media_tr_1nn) + " --- " + str(media_tiempo_1nn) + "\n")
-    print("RELIEF: " + str(media_tc_relief) + " --- " + str(media_tr_relief) + " --- " + str(media_tc_relief+media_tr_relief) + " --- " + str(media_tiempo_relief) + "\n")
-    print("BL: " + str(media_tc_bl) + " --- " + str(media_tr_bl) + " --- " + str(media_tc_bl+media_tr_bl) + " --- " + str(media_tiempo_bl) + "\n")
+    print("1NN: " + str(media_tc_1nn) + " --- " + str(media_tr_1nn) + " --- " + str(0.5*media_tc_1nn+0.5*media_tr_1nn) + " --- " + str(media_tiempo_1nn) + "\n")
+    print("RELIEF: " + str(media_tc_relief) + " --- " + str(media_tr_relief) + " --- " + str(0.5*media_tc_relief+0.5*media_tr_relief) + " --- " + str(media_tiempo_relief) + "\n")
+    print("BL: " + str(media_tc_bl) + " --- " + str(media_tr_bl) + " --- " + str(0.5*media_tc_bl+0.5*media_tr_bl) + " --- " + str(media_tiempo_bl) + "\n")
