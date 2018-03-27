@@ -96,3 +96,41 @@ def normaEuclidea(e):
     for ei in e:
         norma+=ei**2
     return math.sqrt(norma)
+
+def divideDatosFCV(data, num_folds):
+    """
+    @brief Función que divide los datos datos dados en particiones que mantienen el porcentaje de elementos de la misma clase que en el conjunto original.
+    @param data Datos a particionar.
+    @para num_folds Número de particiones a obtener.
+    @return Devuelve una lista con num_folds listas de datos.
+    """
+    datos_divididos_clases = []
+    clases = []
+    num_clases_diferentes = 0
+    for e in data:
+        if e[-1] not in clases:
+            clases.append(e[-1])
+            num_clases_diferentes+=1
+    for clase in clases:
+        lista_clase = []
+        for e in data:
+            if e[-1]==clase:
+                lista_clase.append(e)
+        datos_divididos_clases.append(lista_clase)
+    porcentajes_clases = []
+    for i in range(datos_divididos_clases):
+        porcentajes_clases.append(len(datos_divididos_clases[i])/len(data))
+    folds = []
+    for i in range(num_folds):
+        fold = []
+        tam_fold = len(data)/num_folds
+        for j in range(tam_fold):
+            for t in range(len(porcentajes_clases)):
+                for k in range(int(tam_fold*porcentaje)):
+                    fold.append(datos_divididos_clases[t][0])
+                    del datos_divididos_clases[t][0]
+        folds.append(fold)
+    for e in datos_divididos_clases:
+        for ei in e:
+            folds[-1].append(ei)
+    return folds
