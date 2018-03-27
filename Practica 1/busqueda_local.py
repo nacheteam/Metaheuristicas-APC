@@ -91,6 +91,7 @@ def ValoracionBusquedaLocal(nombre_datos):
             if d not in particion:
                 datos_test.append(d)
         tc,tr = knn.Valoracion(datos_test,1,v)
-        valoraciones.append(tc+tr)
+        val = [tc,tr]
+        valoraciones.append(val)
         contador+=1
     return valoraciones
