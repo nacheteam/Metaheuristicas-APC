@@ -6,7 +6,7 @@ MU = 0
 SIGMA = 0.3
 MAX_EVALUACIONES = 15000
 K=1
-random.seed(1010101010)
+random.seed(123456789)
 
 def mutacion(w, vector_posiciones):
     """
