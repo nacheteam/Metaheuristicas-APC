@@ -17,16 +17,20 @@ def mutacion(w, vector_posiciones):
     @return Se devuelve el vector de pesos mutados y el vector de posiciones con la posición usada elminada.
     """
     incremento = random.gauss(MU,SIGMA)
-    i = random.randint(0,len(vector_posiciones))
+    i = random.randint(0,len(vector_posiciones)-1)
+    vector_posiciones_aux = []
     pos = vector_posiciones[i]
     w[pos]+=incremento
+    w_max = max(w)
     for i in range(len(w)):
         if w[i]<0:
             w[i]=0
         else:
             w[i]=w[i]/w_max
-    del vector_posiciones[pos]
-    return w,vector_posiciones
+    for v in vector_posiciones:
+        if v!=pos:
+            vector_posiciones_aux.append(v)
+    return w,vector_posiciones_aux
 
 def primerVector(n):
     """
@@ -50,14 +54,19 @@ def busquedaLocal(nombre_datos):
     vecinos = 0
     evaluaciones = 0
     w = primerVector(len(data[0]))
-    vector_posiciones = range(len(w))
+    vector_posiciones = list(range(len(w)))
     valoracion_actual = knn.Valoracion(nombre_datos,K,w)
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
+        evaluaciones+=1
+        vecinos+=1
         vecino, vector_posiciones = mutacion(w,vector_posiciones)
         valoracion_vecino = knn.Valoracion(nombre_datos,K,vecino)
         if valoracion_vecino>valoracion_actual:
+            print("Se ha mejorado")
             w = vecino
             valoracion_actual=valoracion_vecino
-        else if vector_posiciones==[]:
+            print(valoracion_actual)
+            vector_posiciones = list(range(len(w)))
+        elif vector_posiciones==[]:
             return w
     return w
