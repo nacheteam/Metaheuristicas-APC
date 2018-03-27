@@ -9,17 +9,22 @@ def elementoMinimaDistancia(e,lista):
     @return Devuelve el elemento de la lista con menor distancia a e.
     """
     distancias = []
-    indice_elemento=-1
     for l in lista:
         if l!=e:
             distancias.append(auxiliar.distanciaEuclidea(e,l,-1))
         else:
-            indice_elemento = lista.index(l)
             distancias.append(-1)
 
-    if indice_elemento!=-1:
-        distancias[indice_elemento] = max(distancias)
-    return lista.index(min(distancias))
+    maximo = max(distancias)
+    for i in range(len(distancias)):
+        if distancias[i]==-1:
+            distancias[i] = maximo
+
+    indice_menor_distancia = 0
+    for i in range(len(distancias)):
+        if distancias[i]<distancias[indice_menor_distancia]:
+            indice_menor_distancia=i
+    return lista[indice_menor_distancia]
 
 def Relief(nombre_datos):
     """
