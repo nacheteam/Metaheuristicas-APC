@@ -2,15 +2,14 @@ import auxiliar
 
 ALPHA=0.5
 
-def KNN(w,nombre_datos,k):
+def KNN(w,data,k):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
     @param w Vector de pesos.
-    @param nombre_datos Nombre del fichero (ruta) que contiene los datos.
+    @param data Datos usados para clasificar.
     @param k Número de elementos con los que se compara cada dato.
     @return Devuelve un número entre 0 y 1 indicando el ratio de aciertos con el vector de pesos dado.
     """
-    data = auxiliar.lecturaDatos(nombre_datos)
     clases = []
 
     #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
@@ -38,7 +37,7 @@ def KNN(w,nombre_datos,k):
 
     return bien_clasificadas/len(data)
 
-def Valoracion(nombre_datos,k,w):
+def Valoracion(data,k,w):
     """
     @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
     @param nombre_datos Nombre del fichero de datos.
@@ -46,7 +45,7 @@ def Valoracion(nombre_datos,k,w):
     @param w Vector de pesos.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
     """
-    aciertos = KNN(w,nombre_datos,k)
+    aciertos = KNN(w,data,k)
     simplicidad = 0
 
     pesos_bajos = 0
