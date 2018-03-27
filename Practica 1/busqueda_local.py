@@ -20,12 +20,12 @@ def mutacion(w, vector_posiciones):
     i = random.randint(0,len(vector_posiciones))
     pos = vector_posiciones[i]
     w[pos]+=incremento
-    for wi in w:
-        if wi<0:
-            wi=0
+    for i in range(len(w)):
+        if w[i]<0:
+            w[i]=0
         else:
-            wi=wi/w_max
-    delete vector_posiciones[pos]
+            w[i]=w[i]/w_max
+    del vector_posiciones[pos]
     return w,vector_posiciones
 
 def primerVector(n):
