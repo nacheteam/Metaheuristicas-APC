@@ -53,4 +53,27 @@ def Valoracion(data,k,w):
         if wi<0.2:
             pesos_bajos+=1
     simplicidad = pesos_bajos/len(w)
-    return 100*(ALPHA*simplicidad+(1-ALPHA)*aciertos)
+    tasa_clas = 100*ALPHA*aciertos
+    tasa_red = 100*(1-ALPHA)*simplicidad
+    return tasa_clas, tasa_red
+
+def ValoracionKNN(nombre_datos):
+    """
+    @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
+    @param nombre_datos Nombre del fichero de datos.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método KNN con pesos a 1.
+    """
+    data = auxiliar.lecturaDatos(nombre_datos)
+    particiones = auxiliar.divideDatosFCV(data,5)
+    vectores = []
+    valoraciones = []
+    contador = 0
+    w = []
+    for i in range(len(data[0])):
+        w.append(1)
+    for particion in particiones:
+        print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        tc,tr = Valoracion(particion,1,w)
+        valoraciones.append(tc+tr)
+        contador+=1
+    return valoraciones

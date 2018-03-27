@@ -83,6 +83,7 @@ def ValoracionRelief(nombre_datos):
         for d in data:
             if d not in particion:
                 datos_test.append(d)
-        valoraciones.append(knn.Valoracion(datos_test,1,v))
+        tc,tr = knn.Valoracion(datos_test,1,v)
+        valoraciones.append(tc+tr)
         contador+=1
     return valoraciones
