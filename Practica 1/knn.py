@@ -16,7 +16,7 @@ def KNN(w,nombre_datos,k):
         distancias = []
         minimos = []
         for e in data:
-                distancias.append(aux.distanciaEuclidea(e,data[i],w))
+                distancias.append(auxiliar.distanciaEuclidea(e,data[i],w))
         for j in k:
             minimo = j+1 if j<len(distancias)-1 else 0
             for l in range(distancias):
