@@ -1,5 +1,6 @@
 import knn
 import auxiliar
+import operator
 
 def elementoMinimaDistancia(e,lista):
     """
@@ -54,12 +55,12 @@ def Relief(nombre_datos):
 
         resta_amigo = list(map(operator.sub, element, amigo_cercano))
 
-        w = list(map(operador.add, w, resta_enemigo))
-        w = list(map(operador.sub, w, resta_amigo))
+        w = list(map(operator.add, w, resta_enemigo))
+        w = list(map(operator.sub, w, resta_amigo))
         w_max = max(w)
-        for wi in w:
-            if wi<0:
-                wi=0
+        for i in range(len(w)):
+            if w[i]<0:
+                w[i]=0
             else:
-                wi=wi/w_max
+                w[i]=w[i]/w_max
     return w
