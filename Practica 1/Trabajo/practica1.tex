@@ -11,7 +11,8 @@
 %         Paquetes usados sólo para esta entrega         %
 %--------------------------------------------------------%
 
-\usepackage{enumitem}
+\usepackage{hyperref}
+
 
 
 \author{Ignacio Aguilera Martos}
@@ -34,10 +35,18 @@
 %	\framebox[16cm][c]{\LaTeX}
 
 	\section{Introducción}
+	\label{sec:introduccion}
 	
-	En esta práctica he analizado el comportamiento de los algoritmos KNN con k=1, el algoritmo greedy Relief y una implementación del algoritmo de búsqueda local para el problema de obtención de un vector de pesos para clasificar un conjunto de datos.
+	En esta práctica he analizado el comportamiento de los algoritmos KNN con k=1, el algoritmo greedy Relief y una implementación del algoritmo de búsqueda local para el problema de obtención de un vector de pesos para clasificar un conjunto de datos. Así mismo he realizado la implementación del algoritmo KNN con k variable para poder estudiar si varían los resultados al aumentar el valor de K o por contra obtenemos demasiado ajuste.
+	
+	Para empezar al leer los ficheros de datos dados para el problema me he dado cuenta de que tenemos tuplas repetidas, cosa que he tenido en cuenta para no usarlas en la clasificación, ya que siempre obtendríamos distancia 0 para dicha tupla. Para ello en vez de comprobar el índice dentro del vector he comprobado si las tuplas son iguales para no usarlas.
+	
+	Así mismo he implementado diferentes distancias a parte de la euclídea para comprobar si los resultados son mejores o peores en función de la distancia para cada conjunto de datos.
+	
+	Para terminar antes de analizar los datos, se debe considerar que los datos han sido redondeados a 4 decimales para no obtener tablas excesivamente largas. Si se desea obtener los datos completos se puede ejecutar el programa como se describe en la sección \hyperref[sec:programa]{\ref{sec:programa}}.
 
-	\section{1NN}
+	\section{KNN}
+	\label{sec:knn}
 
 	\begin{table}[ht]
 	\centering
@@ -59,9 +68,50 @@
 	\caption{Resultados 1NN}
 	\end{table}
 	
-	Como podemos observar 
+	\begin{table}[ht]
+	\centering
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+		\cline{2-13}
+		\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+		\cline{2-13}
+		\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+		Partición 1 & 67.1875 & 0.0000 & 33.5938 & 0.1127 & 100.0000 & 0.0000 & 50.0000 & 0.0113 & 72.0588 & 0.0000 & 36.0294 & 0.0641 \\ [0.5ex] \hline
+		Partición 2 & 76.5625 & 0.0000 & 38.2813 & 0.1115 & 92.1053 & 0.0000 & 46.0526 & 0.0108 & 70.5882 & 0.0000 & 35.2941 & 0.0619 \\ [0.5ex] \hline
+		Partición 3 & 62.5000 & 0.0000 & 31.2500 & 0.1123 & 94.7368 & 0.0000 & 47.3684 & 0.0119 & 79.4118 & 0.0000 & 39.7059 & 0.0607 \\ [0.5ex] \hline
+		Partición 4 & 68.7500 & 0.0000 & 34.3750 & 0.1115 & 76.3158 & 0.0000 & 38.1579 & 0.0107 & 67.6471 & 0.0000 & 33.8235 & 0.0622 \\ [0.5ex] \hline
+		Partición 5 & 76.5625 & 0.0000 & 38.2813 & 0.1119 & 76.7442 & 0.0000 & 38.3721 & 0.0135 & 71.4286 & 0.0000 & 35.7243 & 0.0773 \\ [0.5ex] \hline
+		Media & 70.3125 & 0.0000 & 35.1563 & 0.1120 & 87.9804 & 0.0000 & 43.9902 & 0.0116 & 72.2269 & 0.0000 & 36.1134 & 0.0653 \\ [0.5ex] \hline
+		\end{tabular}
+	}
+	\label{tabla3NN}
+	\caption{Resultados 3NN}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tabla5NN}
+		\caption{Resultados 5NN}
+	\end{table}
+
+
 
 	\section{Relief}
+	\label{sec:relief}
 
 	\begin{table}[ht]
 		\centering
@@ -82,8 +132,49 @@
 		\label{tablaReliefK1}
 		\caption{Resultados Relief con K=1}
 	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 & 65.8824 & 94.5205 & 80.2015 & 0.0607 & 84.7134 & 86.9565 & 85.8349 & 0.0078 & 69.9552 & 48.8889 & 59.4220 & 0.0457 \\ [0.5ex] \hline
+				Partición 2 & 75.3906 & 63.0137 & 69.2022 & 0.0613 & 80.2548 & 91.3043 & 85.7796 & 0.0078 & 73.2824 & 80.0000 & 76.6412 & 0.0437 \\ [0.5ex] \hline
+				Partición 3 & 74.0157 & 82.1918 & 78.1038 & 0.0626 & 82.8025 & 86.9565 & 84.8795 & 0.0086 & 76.1733 & 51.1111 & 63.6422 & 0.0453 \\ [0.5ex] \hline
+				Partición 4 & 57.0313 & 94.5205 & 75.7759 & 0.0618 & 83.4395 & 95.6522 & 89.5458 & 0.0078 & 81.4394 & 62.2222 & 71.8308 & 0.0436 \\ [0.5ex] \hline
+				Partición 5 & 63.6719 & 95.8904 & 79.7811 & 0.0599 & 85.5263 & 86.9565 & 86.2414 & 0.0099 & 73.9130 & 42.2222 & 58.0676 & 0.0571 \\ [0.5ex] \hline
+				Media & 67.1984 & 86.0274 & 76.6129 & 0.0613 & 83.3473 & 89.5652 & 86.4563 & 0.0084 & 74.9527 & 56.8889 & 65.9208 & 0.0471 \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaReliefK3}
+		\caption{Resultados Relief con K=3}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaReliefK5}
+		\caption{Resultados Relief con K=5}
+	\end{table}
 
 	\section{Búsqueda Local}
+	\label{sec:bl}
 
 	\begin{table}[ht]
 		\centering
@@ -104,5 +195,48 @@
 		\label{tablaBLK1}
 		\caption{Resultados Búsqueda Local con K=1}
 	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 & 69.8039 & 43.8356 & 56.8198 & 12.9352 & 88.5350 & 39.1304 & 63.8327 & 0.3989 & 75.7848 & 28.8889 & 52.3368 & 4.6527 \\ [0.5ex] \hline
+				Partición 2 & 69.5313 & 50.6849 & 60.1081 & 18.8173 & 81.5287 & 26.0869 & 53.8078 & 0.2219 & 78.2443 & 44.4444 & 61.3444 & 4.9285 \\ [0.5ex] \hline
+				Partición 3 & 70.4724 & 43.8356 & 57.1540 & 13.0915 & 82.1656 & 43.4783 & 62.8219 & 1.0002 & 71.4801 & 53.3333 & 62.4067 & 7.6825 \\ [0.5ex] \hline
+				Partición 4 & 67.1875 & 41.0959 & 54.1417 & 17.3212 & 89.1720 & 34.7826 & 61.9773 & 0.5576 & 74.6212 & 37.7778 & 56.1995 & 7.1972 \\ [0.5ex] \hline
+				Partición 5 & 67.5781 & 46.5753 & 57.0767 & 22.6021 & 87.5000 & 47.8261 & 67.6630 & 0.7952 & 77.7778 & 37.7778 & 57.7778 & 9.2464 \\ [0.5ex] \hline
+				Media & 68.9146 & 45.2055 & 57.0601 & 16.9535 & 85.7803 & 38.2609 & 62.0206 & 0.5948 & 75.5816 & 40.4444 & 58.0130 & 6.7415 \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaBLK3}
+		\caption{Resultados Búsqueda Local con K=3}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaBLK5}
+		\caption{Resultados Búsqueda Local con K=5}
+	\end{table}
+	
+	\section{Ejecución del programa y explicación}
+	\label{sec:programa}
 
 \end{document}
