@@ -15,9 +15,11 @@
 
 
 
-\author{Ignacio Aguilera Martos}
-\title{Práctica 1 APC \\ Metaheurísticas}
-\date{\today}
+\author{Ignacio Aguilera Martos \\
+	DNI: 77448262V       e-mail: nacheteam@correo.ugr.es \\
+	Grupo de prácticas 1 Lunes 17:30-19:30}
+\title{Práctica 1 Búsqueda Local APC \\ Metaheurísticas \\ Algoritmos KNN, Relief y Búsqueda Local}
+\date{Curso 2017-2018}
 
 %Quita la sangría
 \setlength{\parindent}{0cm}
@@ -34,7 +36,28 @@
 
 %	\framebox[16cm][c]{\LaTeX}
 
-	\section{Introducción}
+	\section{Introducción del problema}
+	
+	Para el problema de clasificación partimos de un conjunto de datos dado por una serie de tuplas que contienen los valores de atributos para cada instancia. Esto es una n-tupla de valores reales en nuestro caso. 
+
+	El objetivo del problema es obtener un vector de pesos que asocia un valor en el intervalo $[0,1]$ indicativo de la relevancia de ese atributo. Esta relevancia va referida a lo importante que es en nuestro algoritmo clasificador ese atributo a la hora de computar la distancia entre elementos.
+	
+	Resumiendo lo que tenemos es un algoritmo clasificador que utiliza el vector de pesos calculado para predecir la clase a la que pertenece una instancia dada. Este algoritmo clasificador es el KNN con k=1. Lo que hace es calcular según la distancia euclídea (o cualquier otra) la tupla más cercana a la que queremos clasificar ponderando cada atributo con el correspondiente peso del vector, es decir, la distancia entre dos elementos sería:
+	$$d(e,f) = \sqrt{\sum_{i=0}^{n}w_i * (e_{i} - f_{i})}$$
+	Donde e y f son instancias del conjunto de datos, w el vector de pesos y n la longitud de e y f que es la misma.
+	
+	La calificación que se le asigna al vector w depende de dos cosas: la tasa de aciertos y la simplicidad.
+	
+	La tasa de aciertos se mide contando el número de aciertos al emplear el clasificador descrito y la simplicidad se mide como el número de elementos del vector de pesos que son menores que 0.2, ya que estos pesos no son empleados por el clasificador, o lo que es lo mismo, son sustituidos por cero. Por lo tanto las calificaciones siguen las fórmulas:
+	$$Tasa\_acierto = 100\cdot \frac{nº aciertos}{nº datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº valores de w < 0.2}{nº de atributos}$$
+	$$Tasa\_agregada = \frac{1}{2}\cdot Tasa\_acierto + \frac{1}{2}\cdot Tasa\_simplicidad$$
+	Cabe destacar que todas las tasas están expresadas en porcentajes, por lo tanto cuanto más cercano sea el valor a 100 mejor es la calificación.
+	
+	De esta forma a través del algoritmo que obtiene el vector de pesos para el conjunto de datos dado y el clasificador obtenemos un programa que clasifica de forma automática las nuevas instancias de datos que se introduzcan.
+	
+	\newpage
+
+	\section{Introducción de la práctica}
 	\label{sec:introduccion}
 	
 	En esta práctica he analizado el comportamiento de los algoritmos KNN con k=1, el algoritmo greedy Relief y una implementación del algoritmo de búsqueda local para el problema de obtención de un vector de pesos para clasificar un conjunto de datos. Así mismo he realizado la implementación del algoritmo KNN con k variable para poder estudiar si varían los resultados al aumentar el valor de K o por contra obtenemos demasiado ajuste.
@@ -43,7 +66,7 @@
 	
 	Así mismo he implementado diferentes distancias a parte de la euclídea para comprobar si los resultados son mejores o peores en función de la distancia para cada conjunto de datos.
 	
-	Para terminar antes de analizar los datos, se debe considerar que los datos han sido redondeados a 4 decimales para no obtener tablas excesivamente largas. Si se desea obtener los datos completos se puede ejecutar el programa como se describe en la sección \hyperref[sec:programa]{\ref{sec:programa}}.
+	Para terminar, antes de analizar los datos, se debe considerar que los datos han sido redondeados a 4 decimales para no obtener tablas excesivamente largas. Si se desea obtener los datos completos se puede ejecutar el programa como se describe en la sección \hyperref[sec:programa]{\ref{sec:programa}}.
 
 	\section{KNN}
 	\label{sec:knn}

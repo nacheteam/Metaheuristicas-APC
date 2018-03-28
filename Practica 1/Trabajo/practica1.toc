@@ -1,6 +1,7 @@
 \select@language {spanish}
-\contentsline {section}{\numberline {1}Introducci\IeC {\'o}n}{2}{section.1}
-\contentsline {section}{\numberline {2}KNN}{2}{section.2}
-\contentsline {section}{\numberline {3}Relief}{2}{section.3}
-\contentsline {section}{\numberline {4}B\IeC {\'u}squeda Local}{2}{section.4}
-\contentsline {section}{\numberline {5}Ejecuci\IeC {\'o}n del programa y explicaci\IeC {\'o}n}{2}{section.5}
+\contentsline {section}{\numberline {1}Introducci\IeC {\'o}n del problema}{2}{section.1}
+\contentsline {section}{\numberline {2}Introducci\IeC {\'o}n de la pr\IeC {\'a}ctica}{3}{section.2}
+\contentsline {section}{\numberline {3}KNN}{3}{section.3}
+\contentsline {section}{\numberline {4}Relief}{4}{section.4}
+\contentsline {section}{\numberline {5}B\IeC {\'u}squeda Local}{4}{section.5}
+\contentsline {section}{\numberline {6}Ejecuci\IeC {\'o}n del programa y explicaci\IeC {\'o}n}{4}{section.6}
