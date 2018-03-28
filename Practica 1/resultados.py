@@ -4,9 +4,11 @@ import auxiliar
 import busqueda_local
 
 FICHEROS_DATOS = ["../Data/ozone-320.arff","../Data/parkinsons.arff","../Data/spectf-heart.arff"]
-ALGORITMOS = ["1NN", "RELIEF", "BL"]
+ALGORITMOS = ["KNN", "RELIEF", "BL"]
 NUM_PARTICIONES = 5
-k=1
+k=3
+
+print("El valor utilizado es K = " + str(k) + "\n")
 
 for fichero in FICHEROS_DATOS:
     res_1nn = knn.ValoracionKNN(fichero,k)
