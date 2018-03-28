@@ -6,7 +6,7 @@ import busqueda_local
 FICHEROS_DATOS = ["../Data/ozone-320.arff","../Data/parkinsons.arff","../Data/spectf-heart.arff"]
 ALGORITMOS = ["KNN", "RELIEF", "BL"]
 NUM_PARTICIONES = 5
-k=3
+k=5
 
 print("El valor utilizado es K = " + str(k) + "\n")
 
