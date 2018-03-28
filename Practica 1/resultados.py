@@ -6,11 +6,12 @@ import busqueda_local
 FICHEROS_DATOS = ["../Data/ozone-320.arff","../Data/parkinsons.arff","../Data/spectf-heart.arff"]
 ALGORITMOS = ["1NN", "RELIEF", "BL"]
 NUM_PARTICIONES = 5
+k=1
 
 for fichero in FICHEROS_DATOS:
-    res_1nn = knn.ValoracionKNN(fichero)
-    res_relief = relief.ValoracionRelief(fichero)
-    res_bl = busqueda_local.ValoracionBusquedaLocal(fichero)
+    res_1nn = knn.ValoracionKNN(fichero,k)
+    res_relief = relief.ValoracionRelief(fichero,k)
+    res_bl = busqueda_local.ValoracionBusquedaLocal(fichero,k)
     resultados = [res_1nn, res_relief, res_bl]
     print("Fichero de datos: " + fichero)
     print("Tasa clasificación --- Tasa simplicidad --- Tasa total --- Tiempo\n")

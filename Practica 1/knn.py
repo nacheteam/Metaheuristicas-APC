@@ -58,7 +58,7 @@ def Valoracion(data,k,w):
     tasa_red = 100*(1-ALPHA)*simplicidad
     return tasa_clas, tasa_red
 
-def ValoracionKNN(nombre_datos):
+def ValoracionKNN(nombre_datos,k):
     """
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
@@ -75,7 +75,7 @@ def ValoracionKNN(nombre_datos):
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
         comienzo = time.time()
-        tc,tr = Valoracion(particion,1,w)
+        tc,tr = Valoracion(particion,k,w)
         fin = time.time()
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)

@@ -6,7 +6,6 @@ import time
 MU = 0
 SIGMA = 0.3
 MAX_EVALUACIONES = 15000
-K=1
 random.seed(123456789)
 
 def mutacion(w, vector_posiciones):
@@ -44,7 +43,7 @@ def primerVector(n):
         w.append(random.uniform(0,1))
     return w
 
-def busquedaLocal(data,nombre_datos):
+def busquedaLocal(data,nombre_datos,k):
     """
     @brief Función de busqueda local para hallar un vector de pesos.
     @param nombre_datos Fichero con el que se quiere ajustar el vector de pesos.
@@ -55,13 +54,13 @@ def busquedaLocal(data,nombre_datos):
     evaluaciones = 0
     w = primerVector(len(data[0]))
     vector_posiciones = list(range(len(w)))
-    tc,tr = knn.Valoracion(data,K,w)
+    tc,tr = knn.Valoracion(data,k,w)
     valoracion_actual = tc+tr
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
         vecinos+=1
         vecino, vector_posiciones = mutacion(w,vector_posiciones)
-        tc,tr = knn.Valoracion(data,K,vecino)
+        tc,tr = knn.Valoracion(data,k,vecino)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
             w = vecino
@@ -72,7 +71,7 @@ def busquedaLocal(data,nombre_datos):
     return w
 
 
-def ValoracionBusquedaLocal(nombre_datos):
+def ValoracionBusquedaLocal(nombre_datos,k):
     """
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
@@ -86,14 +85,14 @@ def ValoracionBusquedaLocal(nombre_datos):
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
         comienzo = time.time()
-        v = busquedaLocal(particion,nombre_datos)
+        v = busquedaLocal(particion,nombre_datos,k)
         fin = time.time()
         vectores.append(v)
         datos_test = []
         for d in data:
             if d not in particion:
                 datos_test.append(d)
-        tc,tr = knn.Valoracion(datos_test,1,v)
+        tc,tr = knn.Valoracion(datos_test,k,v)
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1

@@ -65,7 +65,7 @@ def Relief(data):
                 w[i]=w[i]/w_max
     return w
 
-def ValoracionRelief(nombre_datos):
+def ValoracionRelief(nombre_datos,k):
     """
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
@@ -86,7 +86,7 @@ def ValoracionRelief(nombre_datos):
         for d in data:
             if d not in particion:
                 datos_test.append(d)
-        tc,tr = knn.Valoracion(datos_test,1,v)
+        tc,tr = knn.Valoracion(datos_test,k,v)
         val = [[tc,tr], fin-comienzo]
         valoraciones.append(val)
         contador+=1
