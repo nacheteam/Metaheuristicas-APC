@@ -13,19 +13,46 @@ def KNN(w,particion, data_train,k):
     """
     clases = []
 
-    #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
-    for i in range(len(particion)):
+    if particion!=data_train:
+        #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
+        for i in range(len(particion)):
+            distancias = []
+            minimos = []
+            for j in range(len(data_train)):
+                if particion[i]!=data_train[j]:
+                    distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
+            distancias.sort(key=lambda x: x[1])
+            minimos = [item[0] for item in distancias[:k]]
+            clases_minimos = []
+            for m in minimos:
+                clases_minimos.append(data_train[m][-1])
+            clases.append(auxiliar.masComun(clases_minimos))
+
+    else:
         distancias = []
-        minimos = []
-        for j in range(len(data_train)):
-            if particion[i]!=data_train[j]:
-                distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
-        distancias.sort(key=lambda x: x[1])
-        minimos = [item [0] for item in distancias[:k]]
-        clases_minimos = []
-        for m in minimos:
-            clases_minimos.append(data_train[m][-1])
-        clases.append(auxiliar.masComun(clases_minimos))
+        for i in range(len(particion)):
+            dis = []
+            for j in range(len(particion)):
+                if j>i:
+                    dis.append([i,j,auxiliar.distanciaEuclidea(particion[i],particion[j],w)])
+                else:
+                    dis.append([i,j,0])
+            distancias.append(dis)
+        for i in range(len(particion)):
+            for j in range(i):
+                distancias[i][j]=[distancias[j][i][1], distancias[j][i][0], distancias[j][i][2]]
+
+
+        for i in range(len(particion)):
+            for j in range(len(particion)):
+                dist = distancias[i]
+                dist.sort(key=lambda x: x[2])
+                minimos = [item[1] for item in dist[:k]]
+                clases_minimos = []
+                for m in minimos:
+                    clases_minimos.append(particion[m][-1])
+                clases.append(auxiliar.masComun(clases_minimos))
+
 
     # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
