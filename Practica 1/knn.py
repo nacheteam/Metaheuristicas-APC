@@ -17,14 +17,11 @@ def KNN(w,data,k):
     for i in range(len(data)):
         distancias = []
         minimos = []
-        for e in data:
-                distancias.append(auxiliar.distanciaEuclidea(e,data[i],w))
-        for j in range(k):
-            minimo = j+1 if j<len(distancias)-1 else 0
-            for l in range(len(distancias)):
-                if l not in minimos and distancias[minimo]>distancias[l] and l!=i:
-                    minimo=l
-            minimos.append(minimo)
+        for j in range(len(data)):
+            if data[i]!=data[j]:
+                distancias.append([j,auxiliar.distanciaEuclidea(data[j],data[i],w)])
+        distancias.sort(key=lambda x: x[1])
+        minimos = [item [0] for item in distancias[:k]]
         clases_minimos = []
         for m in minimos:
             clases_minimos.append(data[m][-1])
@@ -37,6 +34,7 @@ def KNN(w,data,k):
             bien_clasificadas+=1
 
     return bien_clasificadas/len(data)
+
 
 def Valoracion(data,k,w):
     """
