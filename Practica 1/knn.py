@@ -28,34 +28,6 @@ def KNN(w,particion, data_train,k):
                 clases_minimos.append(data_train[m][-1])
             clases.append(auxiliar.masComun(clases_minimos))
 
-    else:
-        distancias = []
-        for i in range(len(particion)):
-            dis = []
-            for j in range(len(particion)):
-                if j>i:
-                    dis.append([i,j,auxiliar.distanciaEuclidea(particion[i],particion[j],w)])
-                else:
-                    dis.append([i,j,0])
-            distancias.append(dis)
-        for i in range(len(particion)):
-            for j in range(i):
-                distancias[i][j]=[distancias[j][i][1], distancias[j][i][0], distancias[j][i][2]]
-
-
-        for i in range(len(particion)):
-            for j in range(len(particion)):
-                dist = distancias[i]
-                dist.sort(key=lambda x: x[2])
-                while dist[0][2]==0:
-                    del dist[0]
-                minimos = [item[1] for item in dist[:k]]
-                clases_minimos = []
-                for m in minimos:
-                    clases_minimos.append(particion[m][-1])
-                clases.append(auxiliar.masComun(clases_minimos))
-
-
     # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
     for (c,d) in zip(clases,particion):
