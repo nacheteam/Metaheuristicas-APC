@@ -84,15 +84,15 @@ def ValoracionBusquedaLocal(nombre_datos,k):
     contador = 0
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
-        comienzo = time.time()
-        v = busquedaLocal(particion,nombre_datos,k)
-        fin = time.time()
-        vectores.append(v)
         datos_test = []
         for d in data:
             if d not in particion:
                 datos_test.append(d)
-        tc,tr = knn.Valoracion(datos_test,k,v)
+        comienzo = time.time()
+        v = busquedaLocal(datos_test,nombre_datos,k)
+        fin = time.time()
+        vectores.append(v)
+        tc,tr = knn.Valoracion(particion,k,v)
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1

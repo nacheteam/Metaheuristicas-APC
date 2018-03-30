@@ -74,8 +74,12 @@ def ValoracionKNN(nombre_datos,k):
         w.append(1)
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        datos_test = []
+        for d in data:
+            if d not in particion:
+                datos_test.append(d)
         comienzo = time.time()
-        tc,tr = Valoracion(particion,k,w)
+        tc,tr = Valoracion(datos_test,k,w)
         fin = time.time()
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
