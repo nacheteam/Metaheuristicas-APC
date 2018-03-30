@@ -3,7 +3,7 @@ import time
 
 ALPHA=0.5
 
-def KNN(w,data,k):
+def KNN(w,particion, data_train,k):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
     @param w Vector de pesos.
@@ -14,26 +14,26 @@ def KNN(w,data,k):
     clases = []
 
     #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
-    for i in range(len(data)):
+    for i in range(len(particion)):
         distancias = []
         minimos = []
-        for j in range(len(data)):
-            if data[i]!=data[j]:
-                distancias.append([j,auxiliar.distanciaEuclidea(data[j],data[i],w)])
+        for j in range(len(data_train)):
+            if particion[i]!=data_train[j]:
+                distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
         distancias.sort(key=lambda x: x[1])
         minimos = [item [0] for item in distancias[:k]]
         clases_minimos = []
         for m in minimos:
-            clases_minimos.append(data[m][-1])
+            clases_minimos.append(data_train[m][-1])
         clases.append(auxiliar.masComun(clases_minimos))
 
     # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
-    for (c,d) in zip(clases,data):
+    for (c,d) in zip(clases,particion):
         if c==d[-1]:
             bien_clasificadas+=1
 
-    return bien_clasificadas/len(data)
+    return bien_clasificadas/len(particion)
 
 
 def Valoracion(data,k,w):
@@ -72,12 +72,12 @@ def ValoracionKNN(nombre_datos,k):
         w.append(1)
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
-        datos_test = []
+        datos_train = []
         for d in data:
             if d not in particion:
-                datos_test.append(d)
+                datos_train.append(d)
         comienzo = time.time()
-        tc,tr = Valoracion(datos_test,k,w)
+        tc,tr = Valoracion(datos_train,k,w)
         fin = time.time()
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
