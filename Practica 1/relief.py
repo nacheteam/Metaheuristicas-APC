@@ -78,15 +78,15 @@ def ValoracionRelief(nombre_datos,k):
     contador = 0
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
-        datos_test = []
+        datos_train = []
         for d in data:
             if d not in particion:
-                datos_test.append(d)
+                datos_train.append(d)
         comienzo = time.time()
-        v = Relief(datos_test)
+        v = Relief(datos_train)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(particion,k,v)
+        tc,tr = knn.Valoracion(particion, datos_train,k,v)
         val = [[tc,tr], fin-comienzo]
         valoraciones.append(val)
         contador+=1
