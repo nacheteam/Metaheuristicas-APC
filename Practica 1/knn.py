@@ -47,6 +47,8 @@ def KNN(w,particion, data_train,k):
             for j in range(len(particion)):
                 dist = distancias[i]
                 dist.sort(key=lambda x: x[2])
+                while dist[0][2]==0:
+                    del dist[0]
                 minimos = [item[1] for item in dist[:k]]
                 clases_minimos = []
                 for m in minimos:
