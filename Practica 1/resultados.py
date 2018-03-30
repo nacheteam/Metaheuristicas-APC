@@ -21,7 +21,7 @@ for k in [1,3,5]:
         for i in range(len(ALGORITMOS)):
             print(ALGORITMOS[i] + ":\n")
             for res in resultados[i]:
-                print(str(res[0][0]*2) + " --- " + str(res[0][1]*2) + " --- " + str(res[0][0]+res[0][1]) + " --- " + str(res[1]) + "\n")
+                print(str(res[0][0]*2) + "\t" + str(res[0][1]*2) + "\t" + str(res[0][0]+res[0][1]) + "\t" + str(res[1]) + "\n")
 
         media_tiempo_1nn = 0
         media_tc_1nn = 0
