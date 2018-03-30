@@ -12,6 +12,8 @@
 %--------------------------------------------------------%
 
 \usepackage{hyperref}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 
 
@@ -92,6 +94,28 @@
 	De esta forma combinando ambas tasas obtenemos la tasa agregada que nos hace la media entre ambas tasas, de forma que le asignamos la misma importancia a acertar en la clasificación de las instancias y a la simplicidad en la solución. Cabe destacar que es imposible obtener una tasa de un 100\% a no ser que los datos se compongan únicamente de un punto ya que ello implicaría que la simplicidad ha de ser un 100\% (todos las posiciones del vector menores que 0.2) y por tanto la distancia sería 0 en todos los casos. De esta forma aspiraremos a una calificación lo mas alta posible pero teniendo en cuenta las restricciones de la función objetivo construida.
 	
 	Las funciones y operadores de uso común los he agrupado en un fichero llamado auxiliar.py. Este fichero contiene las funciones de lectura de datos, distancias, una función que devuelve el elemento más común de una lista, la norma euclídea y una función para dividir los datos en el número de particiones que queramos manteniendo el porcentaje de elementos de cada clase que había en el conjunto de datos original.
+	
+	\subsection{Función de lectura de datos}
+	
+	La función de lectura de datos recibe la ruta del fichero arff y lee el contenido del mismo dando como resultado una lista de listas en la que cada una de ellas es una tupla o instancia de los datos.
+	
+	El pseudocódigo de la función es:
+	
+	\begin{algorithm}
+		\caption{lecturaDatos(nombre\_fich)}
+		\label{algoritmoLecturaDatos}
+		\begin{algorithmic}
+			\STATE data $\leftarrow$ [ ]
+			\FOR{linea de nombre\_fich}
+				\IF{se ha leído @data}
+					\STATE data $\leftarrow$ [data,linea]
+				\ENDIF
+			\ENDFOR
+			\RETURN data
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Para esta implementación en concreto nos apoyamos en que Python tiene polimorfismo para todos los tipos de datos sin necesidad de declarar las variables, de forma que no nos importa que los datos sean numéricos o de tipo string.
 	
 	
 	
