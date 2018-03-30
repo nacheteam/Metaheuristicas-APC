@@ -13,20 +13,19 @@ def KNN(w,particion, data_train,k):
     """
     clases = []
 
-    if data_train==-1:
-        #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
-        for i in range(len(particion)):
-            distancias = []
-            minimos = []
-            for j in range(len(data_train)):
-                if particion[i]!=data_train[j]:
-                    distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
-            distancias.sort(key=lambda x: x[1])
-            minimos = [item[0] for item in distancias[:k]]
-            clases_minimos = []
-            for m in minimos:
-                clases_minimos.append(data_train[m][-1])
-            clases.append(auxiliar.masComun(clases_minimos))
+    #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
+    for i in range(len(particion)):
+        distancias = []
+        minimos = []
+        for j in range(len(data_train)):
+            if particion[i]!=data_train[j]:
+                distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
+        distancias.sort(key=lambda x: x[1])
+        minimos = [item[0] for item in distancias[:k]]
+        clases_minimos = []
+        for m in minimos:
+            clases_minimos.append(data_train[m][-1])
+        clases.append(auxiliar.masComun(clases_minimos))
 
     # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
