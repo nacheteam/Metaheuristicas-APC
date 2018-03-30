@@ -13,7 +13,7 @@ def KNN(w,particion, data_train,k):
     """
     clases = []
 
-    if particion!=data_train:
+    if data_train==-1:
         #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
         for i in range(len(particion)):
             distancias = []
