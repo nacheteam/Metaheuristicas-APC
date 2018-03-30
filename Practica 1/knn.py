@@ -36,7 +36,7 @@ def KNN(w,particion, data_train,k):
     return bien_clasificadas/len(particion)
 
 
-def Valoracion(data,k,w):
+def Valoracion(particion, data_train,k,w):
     """
     @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
     @param nombre_datos Nombre del fichero de datos.
@@ -44,7 +44,7 @@ def Valoracion(data,k,w):
     @param w Vector de pesos.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
     """
-    aciertos = KNN(w,data,k)
+    aciertos = KNN(w,particion, data_train,k)
     simplicidad = 0
 
     pesos_bajos = 0
@@ -77,7 +77,7 @@ def ValoracionKNN(nombre_datos,k):
             if d not in particion:
                 datos_train.append(d)
         comienzo = time.time()
-        tc,tr = Valoracion(datos_train,k,w)
+        tc,tr = Valoracion(particion, datos_train,k,w)
         fin = time.time()
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
