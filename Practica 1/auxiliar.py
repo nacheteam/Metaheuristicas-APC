@@ -26,17 +26,17 @@ def lecturaDatos(nombre_fich):
     min_max = []
     for i in range(len(data)):
         if min_max==[]:
-            for j in range(len(data[i])-1):
+            for j in range(len(data[i])):
                 min_max.append([data[i][j],data[i][j]])
         else:
-            for j in range(len(data[i])-1):
+            for j in range(len(data[i])):
                 if min_max[j][0]>data[i][j]:
                     min_max[j][0]=data[i][j]
                 if min_max[j][1]<data[i][j]:
                     min_max[j][1]=data[i][j]
 
     for i in range(len(data)):
-        for j in range(len(data[i])-1):
+        for j in range(len(data[i])):
             data[i][j] = (data[i][j]-min_max[j][0])/(min_max[j][1]-min_max[j][0])
     return data
 
