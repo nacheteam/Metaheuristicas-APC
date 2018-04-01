@@ -140,6 +140,21 @@
 	\end{algorithm}
 	
 	El resto de funciones de distancia siguen el mismo esquema pero cambiando la fórmula para obtener el valor de la misma.
+	
+	\subsection{Función MasComun}
+	
+	Esta función lo que hace es devolvernos el elemento que más se repite dentro de un vector, esto es utilizado en el algoritmo KNN para obtener la clase más común entre los k elementos con distancia mínima al dado.
+	
+	\begin{algorithm}
+		\caption{masComun(lista)}
+		\begin{algorithmic}
+			\STATE vector\_repeticiones $\leftarrow$ [ ]
+			\FOR{elemento en lista}
+				\STATE Contar el número de veces que aparece e introducirlo en el vector de repeticiones.
+			\ENDFOR
+			\STATE Obtener el elemento con mayor número de apariciones.
+		\end{algorithmic}
+	\end{algorithm}
 
 
 	\section{KNN}
