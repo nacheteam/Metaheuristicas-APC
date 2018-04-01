@@ -199,16 +199,57 @@
 			\RETURN particiones
 		\end{algorithmic}
 	\end{algorithm}
+	
+	\newpage
 
 	\section{KNN}
 	\label{sec:knn}
 
-
+	El algoritmo KNN ha sido utilizado en estas prácticas tanto como clasificador (y por tanto con el objetivo de obtener una valoración de un vector de pesos) como algoritmo de comparación del algoritmo de búsqueda local.
+	El guión de prácticas nos pedía implementar el algoritmo 1NN, pero yo he decidido implementarlo de forma genérica para poder comprobar cómo cambiaban los resultados cuando incrementamos el número de vecinos más cercanos.
+	
+	Este algoritmo toma como entrada un vector de pesos, un conjunto de datos de entrenamiento, otro de test y un valor k que nos indica cuántos vecinos más cercanos queremos tomar para clasificar cada dato. 
+	El procedimiento consiste en tomar cada dato del conjunto de test y hallar los k datos del conjunto de entrenamiento que tienen distancia mínima con el dato tomado del conjunto de test. De ahí lo que hacemos es clasificar el dato con la clase más frecuente de entre los k vecinos más cercanos calculados. De esta forma, intuitivamente, asignamos la misma clase a datos que están próximos entre sí. Una vez obtenida la clase de estos elementos lo que hacemos es comprobar cuántas clases hemos acertado al clasificar de esta forma. Con esto obtenemos tras la ejecución del algoritmo un número entre 0 y 100 que nos indica cual ha sido nuestra tasa de acierto (100 todo correcto, 0 ninguna correcta).
+	
+	Para emplear este algoritmo como comparación para los otros lo que hacemos es introducir como vector de pesos un vector con todas las posiciones a 1. De esta forma obtenemos la calificación que obtendríamos si no hubiéramos incluido en la fórmula de la distancia una ponderación con pesos.
+	
+	El pseudocódigo del algoritmo es:
+	\begin{algorithm}
+		\caption{KNN(w,datos\_entrenamiento, datos\_test, k)}
+		\begin{algorithmic}
+			\STATE clases $\leftarrow$ [ ]
+			\FOR{i en [0..longitud(datos\_test)-1]}
+				\STATE distancias $\leftarrow$ [ ]
+				\STATE minimos $\leftarrow$ [ ]
+				\FOR{j en [0..longitud(datos\_entrenamiento)-1]}
+					\IF{datos\_test[i]!=datos\_entrenamiento[j]}
+						\STATE distancias $\leftarrow$ [distancias,[j,distancia(datos\_entrenamiento[j], datos\_test[i],w)]]
+					\ENDIF
+					\STATE Ordenar la lista de distancias según los valores de distancias.
+					\STATE mínimos $\leftarrow$ los k primeros índices de la lista de distancias (distancias[i][0])
+					\STATE clases\_minimos $\leftarrow$ [ ]
+					\FOR{m en minimos}
+						\STATE clases\_minimos $\leftarrow$ [clases\_minimos, datos\_entrenamiento[m][longitud(datos\_entrenamiento[m]-1)]]
+					\STATE clases $\leftarrow$ [clases, masComun(clases\_minimos)]
+					\ENDFOR
+				\ENDFOR
+			\ENDFOR
+			\STATE bien\_clasificadas $\leftarrow$ 0
+			\FOR{c en clases, d en datos\_test}
+				\IF{c==d[longitud(d)-1]}
+					\STATE bien\_clasificadas $\leftarrow$ bien\_clasificadas+1
+				\ENDIF
+			\ENDFOR
+			\RETURN $\frac{bien\_clasificadas}{longitud(datos\_entrenamiento)}$
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Cabe notar que el número que devolvemos está entre 0 y 1, por lo que en los algoritmos de valoración debemos tener esto en cuenta para multiplicarlo por 100 y convertirlo en un porcentaje.
 
 	\section{Relief}
 	\label{sec:relief}
 
-
+	
 
 	\section{Búsqueda Local}
 	\label{sec:bl}
