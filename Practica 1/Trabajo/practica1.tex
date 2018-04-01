@@ -171,7 +171,34 @@
 			\RETURN norma
 		\end{algorithmic}
 	\end{algorithm}
+	
+	\subsection{Función de división de datos}
 
+	Esta función divide el conjunto de datos inicial en n particiones todas ellas respetando el porcentaje de ocurrencias de cada clase que tenía el conjunto de datos inicial.
+	
+	\begin{algorithm}
+		\caption{divideDatosFCV(data,n)}
+		\begin{algorithmic}
+			\STATE particiones $\leftarrow$ [ ]
+			\STATE tam\_particion $\leftarrow$ $\frac{longitud(data)}{n}$
+			\STATE clases $\leftarrow$ Posibles clases del conjunto data.
+			\STATE proporciones\_clases $\leftarrow$ [ ]
+			\FOR{clase en clases}
+				\STATE proporciones\_clases $\leftarrow$ [proporciones\_clases, nueva\_proporcion]
+			\ENDFOR
+			\FOR{i en 0..n}
+				\STATE particion $\leftarrow$ [ ]
+				\FOR{j en 0..numero\_clases}
+					\STATE numero\_elementos\_clase = proporciones\_clases[j]*tam\_particion
+					\FOR{k en 0..longitud(data)}
+						\STATE Introducir en particion el número de elementos de clase calculado para cada clase.
+					\ENDFOR
+				\ENDFOR
+			\ENDFOR
+			\STATE Si han sobrado datos sin colocar los ponemos en la última partición.
+			\RETURN particiones
+		\end{algorithmic}
+	\end{algorithm}
 
 	\section{KNN}
 	\label{sec:knn}
