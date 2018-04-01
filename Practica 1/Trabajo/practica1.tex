@@ -249,7 +249,68 @@
 	\section{Relief}
 	\label{sec:relief}
 
+	Este algoritmo es el que vamos a hacer competir con el de búsqueda local para comprobar cuál es el que nos da mejores resultados en términos generales. El algoritmo Relief es un algoritmo greedy que busca rapidez contra mejores resultados de clasificación.
 	
+	El algoritmo toma como entrada únicamente el conjunto de datos. Para cada elemento del conjunto buscamos el elemento de la misma clase más cercano y el elemento de la clase contraria más cercano de forma que tenemos al amigo y enemigos más cercanos. En la literatura es común encontrar estos elementos como near hit y near miss.
+	
+	Partiendo de un vector de pesos con todas las posiciones a 0 tomamos el amigo y enemigo más cercano y restamos a nuestro elemento del conjunto de datos tanto el amigo como el enemigo. Después de esto lo que hacemos es sumar la resta del enemigo y restar la resta del amigo, de forma que aumentamos la distancia que dicho vector de pesos produce para hacer que el amigo esté más cercano del dato que el enemigo.
+	
+	Esto ocurre ya que sumamos la distancia del elemento al enemigo haciendo que los pesos sean mayores para el mismo y restamos la distancia del elemento al amigo haciendo que nos acerque en distancia a dicha tupla.
+	
+	A continuación se describe el funcionamiento en pseudocódigo:
+	
+	\begin{algorithm}
+		\caption{elementoMinimaDistancia(e,lista)}
+		\begin{algorithmic}
+			\STATE distancias $\leftarrow$ [ ]
+			\FOR{l en lista}
+				\IF{l!=e}
+					\STATE distancias $\leftarrow$ [distancias, distancia(e,l,[1..1])]
+				\ELSE
+					\STATE distancias $\leftarrow$ [distancias, max(distancias)]
+				\ENDIF
+			\ENDFOR
+			\STATE indice\_menor\_distancia $\leftarrow$ índice del elemento de menor valor del vector distancias.
+			\RETURN lista[indice\_menor\_distancia]
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}
+		\caption{Relief(data)}
+		\begin{algorithmic}
+			\STATE w $\leftarrow$ vector de pesos a 0
+			\FOR{elemento en data}
+				\STATE clase $\leftarrow$ clase de elemento
+				\STATE amigos $\leftarrow$ [ ]
+				\STATE enemigos $\leftarrow$ [ ]
+				\FOR{e en data}
+					\IF{e!=elemento AND e[longitud(e)-1]==clase}
+						\STATE amigos $\leftarrow$ [amigos, e]
+					\ELSE
+						\STATE enemigos $\leftarrow$ [enemigos, e]
+					\ENDIF
+				\ENDFOR
+				\STATE amigo\_cercano $\leftarrow$ elementoMinimaDistancia(elemento, amigos)
+				\STATE enemigo\_cercano $\leftarrow$ elementoMinimaDistancia(elemento, enemigos)
+				\STATE resta\_enemigo $\leftarrow$ element-enemigo\_cercano
+				\STATE resta\_amigo $\leftarrow$ element-amigo\_cercano
+				\STATE w $\leftarrow$ w + resta\_enemigo - resta\_amigo
+				\STATE $w_{max}$ $\leftarrow$ máximo de w
+				\FOR{i en [0..longitud(w)-1]}
+					\IF{w[i]<0}
+						\STATE w[i] $\leftarrow$ 0
+					\ELSE
+						\STATE w[i] $\leftarrow$ $\frac{w[i]}{w_{max}}$
+					\ENDIF
+				\ENDFOR
+			\ENDFOR
+			\RETURN w
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Tenemos en primer lugar la función elementoMinimaDistancia que nos devuelve el elemento de la lista más cercano al elemento e. De esta forma podemos hallar el amigo y enemigo más cercano para el algoritmo Relief. Cabe destacar que para que el vector de pesos esté con números entre 0 y 1 tenemos que poner en cada iteración del algoritmo los elementos del vector negativos a 0 y el resto los normalizamos dividiendo por el máximo elemento del vector de forma que todas las posiciones nos queden entre 0 y 1.
+	
+	\newpage
 
 	\section{Búsqueda Local}
 	\label{sec:bl}
