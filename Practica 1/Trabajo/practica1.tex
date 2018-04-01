@@ -52,7 +52,7 @@
 	La calificación que se le asigna al vector w depende de dos cosas: la tasa de aciertos y la simplicidad.
 
 	La tasa de aciertos se mide contando el número de aciertos al emplear el clasificador descrito y la simplicidad se mide como el número de elementos del vector de pesos que son menores que 0.2, ya que estos pesos no son empleados por el clasificador, o lo que es lo mismo, son sustituidos por cero. Por lo tanto las calificaciones siguen las fórmulas:
-	$$Tasa\_acierto = 100\cdot \frac{nº aciertos}{nº datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº valores de w < 0.2}{nº de atributos}$$
+	$$Tasa\_acierto = 100\cdot \frac{nº  \ aciertos}{nº \ datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº \ valores \ de \ w \ < \ 0.2}{nº \ de \ atributos}$$
 	$$Tasa\_agregada = \frac{1}{2}\cdot Tasa\_acierto + \frac{1}{2}\cdot Tasa\_simplicidad$$
 	Cabe destacar que todas las tasas están expresadas en porcentajes, por lo tanto cuanto más cercano sea el valor a 100 mejor es la calificación.
 
@@ -84,7 +84,7 @@
 	A estos números me referiré como pesos asociados a las características, ya que lo que nos indican es el grado de importancia de dicha característica a la hora de clasificar los datos, siendo 1 el máximo de relevancia y 0 el mínimo.
 
 	Así mismo cabe destacar que nuestra intención en este problema es obtener una buena calificación de dicho vector de pesos. Esto lo medimos mediante las tasas de acierto y simplicidad que se definen como:
-	$$Tasa\_acierto = 100\cdot \frac{nº aciertos}{nº datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº valores de w < 0.2}{nº de atributos}$$
+	$$Tasa\_acierto = 100\cdot \frac{nº  \ aciertos}{nº \ datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº \ valores \ de \ w \ < \ 0.2}{nº \ de \ atributos}$$
 	$$Tasa\_agregada = \frac{1}{2}\cdot Tasa\_acierto + \frac{1}{2}\cdot Tasa\_simplicidad$$
 
 	La tasa de aciertos lo que nos mide es en un porcentaje cuántas instancias hemos clasificado correctamente mediante el algoritmo KNN usando el vector de pesos w.
