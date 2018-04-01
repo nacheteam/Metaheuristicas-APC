@@ -111,6 +111,11 @@
 					\STATE data $\leftarrow$ [data,linea]
 				\ENDIF
 			\ENDFOR
+			\FOR{tupla en data}
+				\FOR{atributo en tupla}
+				\STATE Normalizar.
+				\ENDFOR
+			\ENDFOR
 			\RETURN data
 		\end{algorithmic}
 	\end{algorithm}
@@ -123,15 +128,18 @@
 
 	Se debe tener en cuenta que e1 y e2 son ambos dos tuplas del conjunto de datos de las que vamos a obtener la distancia y w es el vector de pesos que toma parte en el cómputo.
 
-%	\begin{algorithm}
-%		\caption{distanciaEuclidea(e1,e2,w)}
-%		\begin{algorithmic}
-%			\STATE distancia=0
-%			\IF{longitud(e1)!=longitud(e2)}
-%			\ELSE
-%			\ENDIF
-%		\end{algorithmic}
-%	\end{algorithm}
+	\begin{algorithm}
+		\caption{distanciaEuclidea(e1,e2,w)}
+		\begin{algorithmic}
+			\IF{longitud(e1)!=longitud(e2)}
+				\STATE No se puede hallar la distancia.
+			\ELSE
+				\STATE distancia = $\sqrt{\sum_{i=1}^{longitud(e1)}w_i\cdot (e1_i - e2_i)^2}$
+			\ENDIF
+		\end{algorithmic}
+	\end{algorithm}
+	
+	El resto de funciones de distancia siguen el mismo esquema pero cambiando la fórmula para obtener el valor de la misma.
 
 
 	\section{KNN}
@@ -185,12 +193,12 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 1 & 68.7500 & 0.0000 & 34.3750 & 0.4497 & 78.9474 & 0.0000 & 39.4737 & 0.0572 & 66.1765 & 0.0000 & 33.0882 & 0.2653 \\ [0.5ex] \hline
+				Partición 2 & 75.0000 & 0.0000 & 37.5000 & 0.4471 & 76.3158 & 0.0000 & 38.1579 & 0.0562 & 75.0000 & 0.0000 & 37.5000 & 0.3069 \\ [0.5ex] \hline
+				Partición 3 & 67.1875 & 0.0000 & 33.5938 & 0.4397 & 86.8421 & 0.0000 & 43.4211 & 0.0553 & 63.2353 & 0.0000 & 31.6176 & 0.3257 \\ [0.5ex] \hline
+				Partición 4 & 65.6250 & 0.0000 & 32.8125 & 0.4419 & 57.8947 & 0.0000 & 28.9474 & 0.0555 & 60.2941 & 0.0000 & 30.1471 & 0.3130 \\ [0.5ex] \hline
+				Partición 5 & 68.7500 & 0.0000 & 34.3750 & 0.4435 & 69.7674 & 0.0000 & 34.8837 & 0.0605 & 72.7273 & 0.00000 & 36.3636 & 0.2775 \\ [0.5ex] \hline
+				Media & 69.0625 & 0.0000 & 34.5313 & 0.4444 & 73.9535 & 0.0000 & 36.9767 & 0.0570 & 67.4866 & 0.0000 & 33.7433 & 0.2977 \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tabla5NN}
@@ -250,12 +258,12 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 1 & 70.3125 & 94.5205 & 82.4165 & 0.9506 & 78.9474 & 86.9565 & 82.9519 & 0.1300 & 72.0588 & 55.5556 & 63.8072 & 0.4664 \\ [0.5ex] \hline
+				Partición 2 & 73.4375 & 94.5205 & 83.9790 & 0.9557 & 76.3158 & 86.9565 & 81.6362 & 0.1305 & 75.0000 & 55.5556 & 65.2778 & 0.6453 \\ [0.5ex] \hline
+				Partición 3 & 67.1875 & 94.5205 & 80.8540 & 0.9430 & 86.8421 & 86.9565 & 86.8993 & 0.1305 & 66.1765 & 80.0000 & 73.0882 & 0.7261 \\ [0.5ex] \hline
+				Partición 4 & 65.6250 & 94.5205 & 80.0728 & 0.9523 & 57.8947 & 86.9565 & 72.4256 & 0.1314 & 61.7647 & 55.5556 & 58.6601 & 0.6570 \\ [0.5ex] \hline
+				Partición 5 & 67.1875 & 76.7123 & 71.9499 & 0.9522 & 69.7674 & 95.6522 & 82.7098 & 0.1222 & 67.5325 & 71.1111 & 69.3218 & 0.4047 \\ [0.5ex] \hline
+				Media & 68.7500 & 90.9589 & 79.8545 & 0.9508 & 73.9535 & 88.6957 & 81.3246 & 0.1289 & 68.5065 & 63.5556 & 66.0310 & 0.5799 \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tablaReliefK5}
@@ -313,12 +321,12 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
-				Partición 5 &  &  &  &  &  &  &  &  &  &  &  & \\ [0.5ex] \hline
-				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 1 & 64.0625 & 43.8356 & 53.9491 & 241.0353 & 81.5789 & 34.7826 & 58.1808 & 11.7544 & 79.4118 & 24.4444 & 51.9281 & 42.3700 \\ [0.5ex] \hline
+				Partición 2 & 76.5625 & 46.5753 & 61.5689 & 251.2154 & 73.6842 & 26.0870 & 49.8856 & 9.0216 & 67.6471 & 62.2222 & 64.9346 & 135.2455 \\ [0.5ex] \hline
+				Partición 3 & 62.5000 & 53.4247 & 57.9623 & 257.2673 & 86.8421 & 43.4783 & 65.1602 & 13.4645 & 66.1765 & 37.7778 & 51.9771 & 135.2988 \\ [0.5ex] \hline
+				Partición 4 & 65.6250 & 52.0548 & 58.8399 & 207.7297 & 55.2632 & 52.1739 & 53.7285 & 16.7920 & 64.7059 & 46.6667 & 55.6863 & 124.9592 \\ [0.5ex] \hline
+				Partición 5 & 70.3125 & 53.4247 & 61.8686 & 316.8861 & 72.0930 & 21.7391 & 46.9161 & 9.1895 & 71.4286 & 17.7778 & 44.6032 & 44.4294 \\ [0.5ex] \hline
+				Media & 67.8125 & 49.8630 & 58.8378 & 254.8268 & 73.8923 & 35.6522 & 54.7722 & 12.0444 & 69.8739 & 37.7778 & 53.8259 & 96.4606 \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tablaBLK5}
