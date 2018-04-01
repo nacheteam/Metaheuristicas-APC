@@ -155,6 +155,22 @@
 			\STATE Obtener el elemento con mayor número de apariciones.
 		\end{algorithmic}
 	\end{algorithm}
+	
+	\subsection{Función de norma euclídea}
+	
+	Esta función toma una lista de elementos y devuelve la norma euclídea asociada al vector que representa la lista.
+	
+	\begin{algorithm}
+		\caption{normaEuclidea(e)}
+		\begin{algorithmic}
+			\STATE norma $\leftarrow$ 0
+			\FOR{ei en e}
+				\STATE norma $\leftarrow$ norma+$ei^2$
+			\ENDFOR
+			\STATE norma $\leftarrow$ $\sqrt{norma}$
+			\RETURN norma
+		\end{algorithmic}
+	\end{algorithm}
 
 
 	\section{KNN}
