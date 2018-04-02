@@ -1,0 +1,1 @@
+Se incluye el fichero .tex por si se quiere compilar una vez recibido el trabajo así como el PDF ya generado y las gráficas empleadas (contenidas en la carpeta Imagenes).
