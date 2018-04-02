@@ -46,7 +46,8 @@ def primerVector(n):
 def busquedaLocal(data,k):
     """
     @brief Función de busqueda local para hallar un vector de pesos.
-    @param nombre_datos Fichero con el que se quiere ajustar el vector de pesos.
+    @param data Lista con el conjunto de datos.
+    @param k Valor de vecinos que se quieren calcular en KNN.
     @return Devuelve un vector de pesos.
     """
     MAX_VECINOS = 20*(len(data[0]))
@@ -75,6 +76,7 @@ def ValoracionBusquedaLocal(nombre_datos,k):
     """
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
+    @param k Número de vecinos que se quieren calcular en KNN.
     @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método de búsqueda local.
     """
     data = auxiliar.lecturaDatos(nombre_datos)

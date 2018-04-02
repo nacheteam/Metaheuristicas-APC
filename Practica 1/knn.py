@@ -7,7 +7,8 @@ def KNN(w,particion, data_train,k):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
     @param w Vector de pesos.
-    @param data Datos usados para clasificar.
+    @param particion Datos a clasificar.
+    @param data_train Datos usados para clasificar.
     @param k Número de elementos con los que se compara cada dato.
     @return Devuelve un número entre 0 y 1 indicando el ratio de aciertos con el vector de pesos dado.
     """
@@ -39,7 +40,8 @@ def KNN(w,particion, data_train,k):
 def Valoracion(particion, data_train,k,w):
     """
     @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
-    @param nombre_datos Nombre del fichero de datos.
+    @param particion Datos a clasificar.
+    @param data_train Datos usados para clasificar.
     @param k Número de elementos con los que se compara cada dato en el knn.
     @param w Vector de pesos.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
@@ -60,6 +62,7 @@ def ValoracionKNN(nombre_datos,k):
     """
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
+    @param k Número de vecinos a calcular en KNN.
     @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método KNN con pesos a 1.
     """
     data = auxiliar.lecturaDatos(nombre_datos)

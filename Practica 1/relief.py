@@ -69,6 +69,7 @@ def ValoracionRelief(nombre_datos,k):
     """
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
+    @param k número de vecinos que se quieren calcular en KNN.
     @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método relief.
     """
     data = auxiliar.lecturaDatos(nombre_datos)
