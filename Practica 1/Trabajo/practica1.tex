@@ -69,7 +69,7 @@
 
 	Así mismo he implementado diferentes distancias a parte de la euclídea para comprobar si los resultados son mejores o peores en función de la distancia para cada conjunto de datos.
 
-	Para terminar, antes de analizar los datos, se debe considerar que los datos han sido redondeados a 4 decimales para no obtener tablas excesivamente largas. Si se desea obtener los datos completos se puede ejecutar el programa como se describe en la sección \hyperref[sec:programa]{\ref{sec:programa}}.
+	Para terminar, antes de analizar los datos, se debe considerar que los datos han sido redondeados a 4 decimales para no obtener tablas excesivamente largas. Si se desea obtener los datos completos se puede ejecutar el programa como se describe en la sección \hyperref[sec:procedimiento]{\ref{sec:procedimiento}}.
 
 
 	\section{Descripción común a todos los algoritmos}
@@ -391,6 +391,12 @@
 	Debe tomarse en cuenta que la función Valoracion(data,data,k,w) devuelve la tasa agregada teniendo en cuenta la simplicidad y la tasa de acierto como se ha descrito en el algoritmo KNN.
 	Este algoritmo, como ya discutiré en la parte de resultados, puede quedarse atrapado fácilmente en un máximo local y va a consumir mucho más tiempo, ya que cada llamada de la función valoración ejecuta el algoritmo KNN sobre dicho conjunto de datos sumando así mayor tiempo de ejecución que el de sus competidores.
 
+	\newpage
+	
+	\section{Procedimiento de desarrollo de la práctica}
+	\label{sec:procedimiento}
+	
+
 	\section{Resultados}
 	\label{sec:resultados}
 
@@ -573,9 +579,6 @@
 		\label{tablaBLK5}
 		\caption{Resultados Búsqueda Local con K=5}
 	\end{table}
-
-	\section{Ejecución del programa y explicación}
-	\label{sec:programa}
 
 
 \end{document}
