@@ -398,7 +398,7 @@
 	
 	El desarrollo de esta práctica lo he realizado en Python 3.5 implementando desde cero todos los métodos necesarios por mi cuenta. Para implementar los tres algoritmos principales de la práctica me he valido de las explicaciones del seminario 2, completando la información para entender el algoritmo (si era necesario) mediante internet. En cualquier caso los algoritmos implementados reflejan los esquemas del seminario 2 y no otros.
 		
-	Los archivos proporcionados de código son auxiliar.py donde se implementan los algoritmos y funciones comunes que se utilizan en todos o varios algoritmos con la intención de reutilizar las mismas. Así mismo el algoritmo KNN tiene su propio fichero donde está implementado y de igual forma lo tienen el algoritmo Relief y de búsqueda local. En cada uno de estos ficheros se incluye el algoritmo descrito en las secciones previas así como una función de valoración que se encarga de ejecutar el algoritmo para obtener el vector de pesos con 5 particiones y obtener las calificaciones obtenidas para cada una de las 5 particiones. De esta forma es más sencillo diseñar un script como el que se encuentra en el archivo resultados.py que toma dichas funciones y ejecuta para k=1,3,5 los algoritmos sobre los conjuntos de prueba. De esta forma obtenemos de manera automatizada todos los resultados que vemos en las tablas de la sección siguiente.
+	Los archivos proporcionados de código son auxiliar.py donde se implementan los algoritmos y funciones comunes que se utilizan en todos o varios algoritmos con la intención de reutilizar las mismas. Así mismo el algoritmo KNN tiene su propio fichero donde está implementado y de igual forma lo tienen el algoritmo Relief y de búsqueda local. En cada uno de estos ficheros se incluye el algoritmo descrito en las secciones previas así como una función de valoración que se encarga de ejecutar el algoritmo para obtener el vector de pesos con 5 particiones y obtener las calificaciones obtenidas para cada una de las 5 particiones. De esta forma es más sencillo diseñar un script como el que se encuentra en el archivo resultados.py que toma dichas funciones y ejecuta para k=1,3,5 los algoritmos sobre los conjuntos de prueba. De esta forma obtenemos de manera automatizada todos los resultados que vemos en las tablas de la sección siguiente. Cabe destacar el hecho de que empleo siempre valores impares de k. Esta estrategia se sigue de que no queremos que se produzcan empates, es decir, si tomáramos k=4 podría darse el caso de obtener 2 elementos de una clase y otros 2 de la contraria teniendo que decidir finalmente de forma aleatoria o por orden. Es preferible por tanto tomar valores impares para evitar situaciones de empate.
 		
 	Si se desea ejecutar el programa se recomienda compilar el código para que su ejecución sea mucho más rapida con el comando 'python3.5 -m compileall .'. Tras esto para ejecutar el script de resultados sólo tenemos que hacerlo como 'python3.5 resultados.py'.
 
@@ -425,7 +425,7 @@
 		\caption{Resultados 1NN}
 	\end{table}
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -445,7 +445,7 @@
 		\caption{Resultados 3NN}
 	\end{table}
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -464,8 +464,10 @@
 		\label{tabla5NN}
 		\caption{Resultados 5NN}
 	\end{table}
+	
+	\newpage
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -485,7 +487,7 @@
 		\caption{Resultados Relief con K=1}
 	\end{table}
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -505,7 +507,7 @@
 		\caption{Resultados Relief con K=3}
 	\end{table}
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -524,8 +526,10 @@
 		\label{tablaReliefK5}
 		\caption{Resultados Relief con K=5}
 	\end{table}
+	
+	\newpage
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -545,7 +549,7 @@
 		\caption{Resultados Búsqueda Local con K=1}
 	\end{table}
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -565,7 +569,7 @@
 		\caption{Resultados Búsqueda Local con K=3}
 	\end{table}
 
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -585,7 +589,9 @@
 		\caption{Resultados Búsqueda Local con K=5}
 	\end{table}
 	
-	\begin{table}[ht]
+	\newpage
+	
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -602,7 +608,7 @@
 		\caption{Resultados globales con K=1}
 	\end{table}
 	
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -619,7 +625,7 @@
 		\caption{Resultados globales con K=3}
 	\end{table}
 	
-	\begin{table}[ht]
+	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
 			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
@@ -635,6 +641,61 @@
 		\label{tablaGlobalK5}
 		\caption{Resultados globales con K=5}
 	\end{table}
+	
+	
+	Como se puede comprobar en las tablas los parámetros de ejecución de los casos han sido obtenidos variando el valor de k con 1,3,5 para comprobar si los resultados y tiempos variaban con mejor o peor tendencia. En cada tabla se puede observar que he obtenido la valoración de la tasa de simplicidad, la tasa de aciertos, la tasa agregada y el tiempo para cada algoritmo implementado y para cada conjunto de datos proporcionado en el guión de la práctica. Así mismo se proporciona la media de los resultados al final de cada tabla, siendo además las tres últimas tablas una recopilación de las medias para cada valor de k.
 
+	Cabe destacar que con el objeto de que el código y resultados sean replicables se ha fijado la semilla de números aleatorios con el valor 123456789.
+	
+	Para el análisis comparativo de los tres algoritmos he elaborado gráficas comparativas de los 3 en las tasas de clasificación, simplicidad y agregada así como en el tiempo.
+	
+	\includegraphics*[scale=1]{./Imagenes/K1/tasa_clas.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K1/tasa_simpl.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K1/tasa_agr.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K1/tiempo.png}
+	
+	Estas gráficas son para K=1. En las mismas podemos observar que el peor algoritmo es el 1NN, cosa que era de esperar ya que su calificación en simplicidad siempre es cero al ser el vector todo unos.
+	
+	En la tasa de clasificación podemos comprobar que todos están parejos aunque los dos mejores son Relief y búsqueda local, siendo el primero mejor en los conjuntos Ozone y Spectf-Heart y el segundo emjor en el conjunto Parkinsons. 
+	
+	En la tasa de simplicidad podemos ver que el mejor algoritmo sin duda es Relief qu siempre obtiene mejores valores que BL.
+	
+	Por último en el tiempo podemos ver que incluso 1NN y Relief se quedan casi fuera de la escala, ya que BL tarda mucho más en completarse que Relief y 1NN. Por lo tanto vamos a analizar estos datos un poco más en profundidad buscando una explicación e intentando quedarnos con el mejor de los algoritmos para estos conjuntos.
+	
+	En cuanto a la tasa de clasificación no podemos tomar una decisión clara, ya que los tres algoritmos tienen una valoración muy pareja por lo que debemos basarnos en el resto de gráficas para tomar una decisión. En cuanto a la tasa de simplicidad claramente el ganador es el algoritmo Relief. Esto puede producirse porque las clases están muy diferenciadas en dos clusters diferentes y por tanto al hacer la operación de resta con el enemigo más cercano hacemos una resta de una distancia muy grande produciendo que nuestro vector tenga muchos valores próximos a cero y por tanto obteniendo una tasa de simplicidad muy alta.
+	
+	Si observamos la tasa agregada para hacer una comparativa conjunta vemos que 1NN queda muy atrás del resto, indicándonos que hemos mejorado los resultados con respecto al vector con todas las posiciones a uno. En cuanto a BL y Relief vemos que en Spectf-Heart y Parkinsons están más parejos en cuanto a resultados, pero en Ozone vemos una gran mejora comparando Relief con BL. Esto si nos remitimos a las gráficas anteriores observamos que es gracias a la tasa de simplicidad que dicho algoritmo ha conseguido en el conjunto de datos. 
+	
+	Hasta este punto vemos que el algoritmo más ventajoso es Relief en cuanto a resultados, lo que nos lleva a mirar el tiempo para ver qué algoritmo es el mejor. Aquí observamos que el peor con diferencia es BL, cuyos resultados únicamente están próximos al resto de algoritmos en el conjunto Parkinsons, siendo en los otros dos conjuntos muy superiores al resto.
+	
+	Por lo tanto podemos sacar las siguientes conclusiones de los algoritmos:
+	\begin{enumerate}
+		\item Relief obtiene mayor tasa de simplicidad que el resto de algoritmos gracias a que los clusters correspondientes a cada clase están separados entre sí.
+		\item Búsqueda local es un algoritmo mucho más costoso que Relief en tiempo.
+		\item Búsqueda local se queda demasiado tiempo buscando soluciones, cosa que puede deberse a que se quede oscilando entorno a un máximo local de la función objetivo la mayoría del tiempo.
+	\end{enumerate}
+	
+	Por tanto para estos conjuntos de datos tenemos que el mejor algoritmo en términos generales es Relief, obteniendo mejores resultados en muchas de las situaciones a un coste en tiempo mucho menor que búsqueda local.
+	
+	\includegraphics*[scale=1]{./Imagenes/K3/tasa_clas.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K3/tasa_simpl.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K3/tasa_agr.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K3/tiempo.png}
+	
+	\includegraphics*[scale=1]{./Imagenes/K5/tasa_clas.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K5/tasa_simpl.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K5/tasa_agr.png}
+	\newline
+	\includegraphics*[scale=1]{./Imagenes/K5/tiempo.png}
+	
+	Si observamos el resto de gráficas para k=3,5 podemos observar que las conclusiones no varían ya que se mantienen los mismos resultados. Si podemos ver en las gráficas que conforme subimos el valor de k la tasa de clasificación de todos los algoritmos aumenta levemente. 
 
 \end{document}
