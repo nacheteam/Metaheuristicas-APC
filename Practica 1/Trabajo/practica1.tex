@@ -315,7 +315,81 @@
 	\section{Búsqueda Local}
 	\label{sec:bl}
 
-
+	El algoritmo de búsqueda local tiene como intención, al igual que el anterior, proporcionarnos un vector de pesos que maximice la tasa agregada que obtenemos como ya he mencionado anteriormente.
+	
+	Este algoritmo comienza con un vector de pesos aleatorio generado con una distribución uniforme en el intervalo [0,1], obteniendo a partir de ahí mejores vectores a cada iteración. La generación de vecinos viene dada por un operador que toma posiciones aleatorias del vector de pesos (sin repetición) y les suma un valor aleatorio generado con una distribución normal de media 0 y desviación 0.3. Tras esto hacemos igual que en el algoritmo Relief para normalizar el vector de pesos y que cumpla las restricciones del problema.
+	
+	Dado el vector de pesos inicial obtenemos su valoración de la tasa agregada (incluye la simplicidad y la tasa de aciertos). Generamos un vecino mediante la forma mencionada anteriormente y comprobamos si su tasa es mayor que la del vector de pesos actual. Si esto es así descartamos nuestro vector de pesos y tomamos al vecino, en caso contrario continuaremos explorando el vecindario hasta encontrar uno que mejore el resultado, agotar las posibilidades de vecinos o llegar a 15.000 evaluaciones de la función objetivo o $20\cdot n$ vecinos explorados donde n es el número de atributos de cada tupla de datos.
+	
+	De esta manera otorgamos una forma de parar a nuestro algoritmo y no excederse en la búsqueda.
+	
+	Las funciones que intervienen, en pseudocódigo, son las siguientes:
+	
+	\begin{algorithm}
+		\caption{mutacion(w,vector\_posiciones)}
+		\begin{algorithmic}
+			\STATE incremento $\leftarrow$ random.gauss(0,0.3)
+			\STATE i $\leftarrow$ random.int(0,longitud(vector\_posiciones)-1)
+			\STATE vector\_posiciones\_aux $\leftarrow$ [ ]
+			\STATE pos $\leftarrow$ vector\_posiciones[i]
+			\STATE w[pos] $\leftarrow$ w[pos]+incremento
+			\STATE $w_{max}$ $\leftarrow$ maximo(w)
+			\FOR{i en [0..longitud(w)-1]}
+				\IF{w[i]<0}
+					\STATE w[i] $\leftarrow$ 0
+				\ELSE
+					\STATE w[i] $\leftarrow$ $\frac{w[i]}{w_{max}}$
+				\ENDIF
+			\ENDFOR
+			\FOR{v en vector\_posiciones}
+				\IF{v!=pos}
+					\STATE vector\_posiciones\_aux $\leftarrow$ [vector\_posiciones\_aux, v]
+				\ENDIF
+			\ENDFOR
+			\RETURN w,vector\_posiciones\_aux
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}
+		\caption{primerVector(n)}
+		\begin{algorithmic}
+			\STATE w $\leftarrow$ [ ]
+			\FOR{i en [0..n-1]}
+				\STATE w $\leftarrow$ [w, random.uniforme(0,1)]
+			\ENDFOR
+			\RETURN w
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\begin{algorithm}
+		\caption{busquedaLocal(data,k)}
+		\begin{algorithmic}
+			\STATE MAX\_EVALUACIONES $\leftarrow$ 15000
+			\STATE MAX\_VECINOS $\leftarrow$ $20\cdot longitud(data[0])$
+			\STATE vecinos $\leftarrow$ 0
+			\STATE evaluaciones $\leftarrow$ 0
+			\STATE w $\leftarrow$ primerVector(longitud(data[0]))
+			\STATE vector\_posiciones $\leftarrow$ [0..longitud(w)-1]
+			\STATE valoracion\_actual $\leftarrow$ Valoracion(data,data,k,w)
+			\WHILE{evaluaciones<MAX\_EVALUACIONES AND vecinos<MAX\_VECINOS}
+				\STATE evaluaciones $\leftarrow$ evaluaciones+1
+				\STATE vecinos $\leftarrow$ vecinos+1
+				\STATE vecino, vector\_posiciones $\leftarrow$ mutacion(w,vector\_posiciones)
+				\STATE valoracion\_vecino $\leftarrow$ Valoracion(data,data,k,vecino)
+				\IF{valoracion\_vecino>valoracion\_actual}
+					\STATE w $\leftarrow$ vecino
+					\STATE valoracion\_actual $\leftarrow$ valoracion\_vecino
+					\STATE vector\_posiciones $\leftarrow$ [0..longitud(w)-1]
+				\ELSIF{vector\_posiciones==[ ]}
+					\RETURN w
+				\ENDIF
+			\ENDWHILE
+			\RETURN w
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Debe tomarse en cuenta que la función Valoracion(data,data,k,w) devuelve la tasa agregada teniendo en cuenta la simplicidad y la tasa de acierto como se ha descrito en el algoritmo KNN.
+	Este algoritmo, como ya discutiré en la parte de resultados, puede quedarse atrapado fácilmente en un máximo local y va a consumir mucho más tiempo, ya que cada llamada de la función valoración ejecuta el algoritmo KNN sobre dicho conjunto de datos sumando así mayor tiempo de ejecución que el de sus competidores.
 
 	\section{Resultados}
 	\label{sec:resultados}
