@@ -396,6 +396,11 @@
 	\section{Procedimiento de desarrollo de la práctica}
 	\label{sec:procedimiento}
 	
+	El desarrollo de esta práctica lo he realizado en Python 3.5 implementando desde cero todos los métodos necesarios por mi cuenta. Para implementar los tres algoritmos principales de la práctica me he valido de las explicaciones del seminario 2, completando la información para entender el algoritmo (si era necesario) mediante internet. En cualquier caso los algoritmos implementados reflejan los esquemas del seminario 2 y no otros.
+		
+	Los archivos proporcionados de código son auxiliar.py donde se implementan los algoritmos y funciones comunes que se utilizan en todos o varios algoritmos con la intención de reutilizar las mismas. Así mismo el algoritmo KNN tiene su propio fichero donde está implementado y de igual forma lo tienen el algoritmo Relief y de búsqueda local. En cada uno de estos ficheros se incluye el algoritmo descrito en las secciones previas así como una función de valoración que se encarga de ejecutar el algoritmo para obtener el vector de pesos con 5 particiones y obtener las calificaciones obtenidas para cada una de las 5 particiones. De esta forma es más sencillo diseñar un script como el que se encuentra en el archivo resultados.py que toma dichas funciones y ejecuta para k=1,3,5 los algoritmos sobre los conjuntos de prueba. De esta forma obtenemos de manera automatizada todos los resultados que vemos en las tablas de la sección siguiente.
+		
+	Si se desea ejecutar el programa se recomienda compilar el código para que su ejecución sea mucho más rapida con el comando 'python3.5 -m compileall .'. Tras esto para ejecutar el script de resultados sólo tenemos que hacerlo como 'python3.5 resultados.py'.
 
 	\section{Resultados}
 	\label{sec:resultados}
@@ -578,6 +583,57 @@
 		}
 		\label{tablaBLK5}
 		\caption{Resultados Búsqueda Local con K=5}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				1-NN & 79.0625 & 0.0000 & 39.5313 & 0.4380 & 80.6120 & 0.0000 & 40.3060 & 0.0546 & 68.5409 & 0.0000 & 34.2704 & 0.2876 \\ [0.5ex] \hline
+				Relief & 79.6875 & 97.5342 & 88.6109 & 1.0145 & 79.6818 & 43.4783 & 61.5800 & 0.1244 & 72.1925 & 48.0000 & 60.0963 & 0.5725 \\ [0.5ex] \hline
+				BL & 77.1875 & 42.7397 & 59.9636 & 277.4868 & 80.1469 & 33.0435 & 56.5952 & 10.1886 & 70.3400 & 38.6667 & 54.5033 & 85.4619 \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaGlobalK1}
+		\caption{Resultados globales con K=1}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				3-NN & 81.5625 & 0.0000 & 40.7813 & 0.4493 & 78.6291 & 0.0000 & 39.3146 & 0.0565 & 69.1635 & 0.0000 & 34.5817 & 0.3418 \\ [0.5ex] \hline
+				Relief & 81.2500 & 97.5342 & 89.3921 & 0.9432 & 78.6291 & 43.4783 & 61.0537 & 0.1301 & 69.5798 & 48.0000 & 58.7899 & 0.6325 \\ [0.5ex] \hline
+				BL & 81.2500 & 49.5890 & 65.4195 & 304.7740 & 77.1114 & 33.9130 & 55.5122 & 12.1991 & 69.1635 & 36.4444 & 52.8040 & 81.0234 \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaGlobalK3}
+		\caption{Resultados globales con K=3}
+	\end{table}
+	
+	\begin{table}[ht]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				5-NN & 80.9375 & 0.0000 & 40.4688 & 0.5133 & 79.1554 & 0.0000 & 39.5777 & 0.0624 & 69.9427 & 0.0000 & 34.9714 & 0.3648 \\ [0.5ex] \hline
+				Relief & 80.6250 & 97.5342 & 89.0796 & 1.0847 & 83.2436 & 43.4783 & 63.3609 & 0.1350 & 70.7563 & 48.0000 & 59.3782 & 0.7112 \\ [0.5ex] \hline
+				BL & 81.8750 & 44.3836 & 63.1293 & 324.8649 & 78.1028 & 40.8696 & 59.4862 & 14.7150 & 71.7418 & 55.5556 & 63.6487 & 162.8578 \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaGlobalK5}
+		\caption{Resultados globales con K=5}
 	\end{table}
 
 
