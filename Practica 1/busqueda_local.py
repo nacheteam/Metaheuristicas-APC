@@ -43,7 +43,7 @@ def primerVector(n):
         w.append(random.uniform(0,1))
     return w
 
-def busquedaLocal(data,nombre_datos,k):
+def busquedaLocal(data,k):
     """
     @brief Función de busqueda local para hallar un vector de pesos.
     @param nombre_datos Fichero con el que se quiere ajustar el vector de pesos.
@@ -89,7 +89,7 @@ def ValoracionBusquedaLocal(nombre_datos,k):
             if d not in particion:
                 datos_train.append(d)
         comienzo = time.time()
-        v = busquedaLocal(datos_train,nombre_datos,k)
+        v = busquedaLocal(datos_train,k)
         fin = time.time()
         vectores.append(v)
         tc,tr = knn.Valoracion(particion,datos_train, k,v)
