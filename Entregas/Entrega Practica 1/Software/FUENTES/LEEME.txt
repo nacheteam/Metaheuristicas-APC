@@ -13,7 +13,10 @@ Contiene la implementación del algoritmo clasificador KNN así como el algoritm
 - resultados.py:
 Es un script para ejecutar de forma automática todos los algoritmos con todos los ficheros y variando los valores de k=1,3,5
 
+- main.py:
+Este fichero ejecuta todos los algoritmos sobre un conjunto de datos que le pasemos por entrada estándar, con el valor de k que le demos por entrada estándar y
+con el número de particiones que le especifiquemos por entrada estándar.
+
 
 Nota:
-Si se quiere modificar la semilla del programa esta está en búsqueda local como una variable global al inicio del fichero.
-Si se quiere modificar el archivo o los valores de k se pueden cambiar en el fichero resultados.py al comienzo del mismo.
+Si se quiere modificar la semilla del programa esta está en busqueda_local.py como una variable global al inicio del fichero.
