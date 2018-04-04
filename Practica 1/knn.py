@@ -3,6 +3,16 @@ import time
 
 ALPHA=0.5
 
+def devuelveKminimos(distancias, k):
+    minimos = []
+    for i in range(k):
+        minimo = i
+        for j in range(len(distancias)):
+            if distancias[j][1]<distancias[minimo][1]:
+                minimo = j
+        minimos.append(distancias[minimo])
+    return minimos
+
 def KNN(w,particion, data_train,k):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
@@ -19,10 +29,9 @@ def KNN(w,particion, data_train,k):
         distancias = []
         minimos = []
         for j in range(len(data_train)):
-            if particion[i]!=data_train[j]:
-                distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
-        distancias.sort(key=lambda x: x[1])
-        minimos = [item[0] for item in distancias[:k]]
+            distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
+        min_distancias = devuelveKminimos(distancias,k)
+        minimos = [item[0] for item in min_distancias]
         clases_minimos = []
         for m in minimos:
             clases_minimos.append(data_train[m][-1])

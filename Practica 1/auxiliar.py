@@ -38,6 +38,7 @@ def lecturaDatos(nombre_fich):
     for i in range(len(data)):
         for j in range(len(data[i])-1):
             data[i][j] = (data[i][j]-min_max[j][0])/(min_max[j][1]-min_max[j][0])
+
     return data
 
 #Calcula la distancia euclídea de e1 a e2
@@ -50,11 +51,8 @@ def distanciaEuclidea(e1,e2,w):
     @return Devuelve la distancia entre e1 y e2.
     """
     distancia = 0
-    if len(e1)!=len(e2):
-        print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
-    else:
-        for i in range(len(e1)-1):
-                distancia+=w[i]*(e1[i]-e2[i])**2 if w!=-1 and w[i]>=0.2 else (e1[i]-e2[i])**2
+    for i in range(len(e1)-1):
+        distancia+=w[i]*(e1[i]-e2[i])**2
     distancia = math.sqrt(distancia)
     return distancia
 

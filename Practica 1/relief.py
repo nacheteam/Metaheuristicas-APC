@@ -11,9 +11,12 @@ def elementoMinimaDistancia(e,lista):
     @return Devuelve el elemento de la lista con menor distancia a e.
     """
     distancias = []
+    w = []
+    for i in range(len(lista)):
+        w.append(1)
     for l in lista:
         if l!=e:
-            distancias.append(auxiliar.distanciaEuclidea(e,l,-1))
+            distancias.append(auxiliar.distanciaEuclidea(e,l,w))
         else:
             distancias.append(-1)
 
