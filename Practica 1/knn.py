@@ -13,7 +13,7 @@ def devuelveKminimos(distancias, k):
         minimos.append(distancias[minimo])
     return minimos
 
-def KNN(w,particion, data_train,k):
+def KNN(w,particion, data_train,k,mismos_conjuntos):
     """
     @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
     @param w Vector de pesos.
@@ -23,19 +23,40 @@ def KNN(w,particion, data_train,k):
     @return Devuelve un número entre 0 y 1 indicando el ratio de aciertos con el vector de pesos dado.
     """
     clases = []
-
-    #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
-    for i in range(len(particion)):
+    if not mismos_conjuntos:
+        #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
+        for i in range(len(particion)):
+            distancias = []
+            minimos = []
+            for j in range(len(data_train)):
+                    distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
+            min_distancias = devuelveKminimos(distancias,k)
+            minimos = [item[0] for item in min_distancias]
+            clases_minimos = []
+            for m in minimos:
+                clases_minimos.append(data_train[m][-1])
+            clases.append(auxiliar.masComun(clases_minimos))
+    else:
         distancias = []
-        minimos = []
-        for j in range(len(data_train)):
-            distancias.append([j,auxiliar.distanciaEuclidea(data_train[j],particion[i],w)])
-        min_distancias = devuelveKminimos(distancias,k)
-        minimos = [item[0] for item in min_distancias]
-        clases_minimos = []
-        for m in minimos:
-            clases_minimos.append(data_train[m][-1])
-        clases.append(auxiliar.masComun(clases_minimos))
+        for i in range(len(particion)):
+            dis = []
+            for j in range(len(particion)):
+                dis.append([j,float('inf')])
+            distancias.append(dis)
+
+        for i in range(len(particion)):
+            for j in range(i,len(particion)):
+                if i!=j:
+                    distancias[i][j] = [distancias[i][j][0], auxiliar.distanciaEuclidea(particion[i],particion[j],w)]
+                    distancias[j][i] = [distancias[j][i][0], distancias[i][j][1]]
+
+        for i in range(len(particion)):
+            min_distancias = devuelveKminimos(distancias[i],k)
+            minimos = [item[0] for item in min_distancias]
+            clases_minimos = []
+            for m in minimos:
+                clases_minimos.append(particion[m][-1])
+            clases.append(auxiliar.masComun(clases_minimos))
 
     # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
     bien_clasificadas = 0
@@ -46,7 +67,7 @@ def KNN(w,particion, data_train,k):
     return bien_clasificadas/len(particion)
 
 
-def Valoracion(particion, data_train,k,w):
+def Valoracion(particion, data_train,k,w,mismos_conjuntos=False):
     """
     @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
     @param particion Datos a clasificar.
@@ -55,7 +76,7 @@ def Valoracion(particion, data_train,k,w):
     @param w Vector de pesos.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
     """
-    aciertos = KNN(w,particion, data_train,k)
+    aciertos = KNN(w,particion, data_train,k,mismos_conjuntos)
     simplicidad = 0
 
     pesos_bajos = 0

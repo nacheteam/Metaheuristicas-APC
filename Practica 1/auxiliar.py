@@ -52,7 +52,8 @@ def distanciaEuclidea(e1,e2,w):
     """
     distancia = 0
     for i in range(len(e1)-1):
-        distancia+=w[i]*(e1[i]-e2[i])**2
+        if w[i]>0.2:
+            distancia+=w[i]*(e1[i]-e2[i])**2
     distancia = math.sqrt(distancia)
     return distancia
 
