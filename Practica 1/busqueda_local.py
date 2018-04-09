@@ -22,11 +22,10 @@ def mutacion(w, vector_posiciones):
     pos = vector_posiciones[i]
     w[pos]+=incremento
     w_max = max(w)
-    for i in range(len(w)):
-        if w[i]<0:
-            w[i]=0
-        else:
-            w[i]=w[i]/w_max
+    if w[pos]<0:
+        w[pos] = 0
+    elif w[pos]>1:
+        w[pos] = 1
     for v in vector_posiciones:
         if v!=pos:
             vector_posiciones_aux.append(v)
