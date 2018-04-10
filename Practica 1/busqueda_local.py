@@ -54,21 +54,21 @@ def busquedaLocal(data,k):
     evaluaciones = 0
     w = primerVector(len(data[0]))
     vector_posiciones = list(range(len(w)))
-    tc,tr = knn.Valoracion(data,data,k,w,True)
+    tc,tr = knn.Valoracion(data,data,k,w[:len(w)-1],True)
     valoracion_actual = tc+tr
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
         vecinos+=1
         vecino, vector_posiciones = mutacion(w,vector_posiciones)
-        tc,tr = knn.Valoracion(data,data,k,vecino,True)
+        tc,tr = knn.Valoracion(data,data,k,vecino[:len(vecino)-1],True)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
             w = vecino
             valoracion_actual=valoracion_vecino
             vector_posiciones = list(range(len(w)))
         elif vector_posiciones==[]:
-            return w
-    return w
+            return w[:len(w)-1]
+    return w[:len(w)-1]
 
 
 def ValoracionBusquedaLocal(nombre_datos,k):
