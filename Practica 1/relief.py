@@ -16,7 +16,7 @@ def elementoMinimaDistancia(e,lista):
         w.append(1)
     for l in lista:
         if l!=e:
-            distancias.append(auxiliar.distanciaEuclidea(e,l,w))
+            distancias.append(auxiliar.distanciaEuclideaSimple(e,l,w))
         else:
             distancias.append(-1)
 
@@ -66,7 +66,7 @@ def Relief(data):
                 w[i]=0
             else:
                 w[i]=w[i]/w_max
-    return w
+    return w[:len(w)-1]
 
 def ValoracionRelief(nombre_datos,k):
     """

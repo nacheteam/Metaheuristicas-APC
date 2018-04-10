@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 def lecturaDatos(nombre_fich):
     """
@@ -41,6 +42,22 @@ def lecturaDatos(nombre_fich):
 
     return data
 
+def distanciaEuclideaSimple(e1,e2,w):
+    """
+    @brief Función que calcula la distancia euclídea.
+    @param e1 Elemento 1.
+    @param e2 Elemento 2.
+    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
+    @return Devuelve la distancia entre e1 y e2.
+    """
+
+    distancia = 0
+    for i in range(len(e1)-1):
+        if w[i]>0.2:
+            distancia+=w[i]*(e1[i]-e2[i])**2
+    distancia = math.sqrt(distancia)
+    return distancia
+
 #Calcula la distancia euclídea de e1 a e2
 def distanciaEuclidea(e1,e2,w):
     """
@@ -50,12 +67,13 @@ def distanciaEuclidea(e1,e2,w):
     @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
     @return Devuelve la distancia entre e1 y e2.
     """
-    distancia = 0
+
+    """distancia = 0
     for i in range(len(e1)-1):
         if w[i]>0.2:
             distancia+=w[i]*(e1[i]-e2[i])**2
-    distancia = math.sqrt(distancia)
-    return distancia
+    distancia = math.sqrt(distancia)"""
+    return np.sum(w*(e1-e2)**2)
 
 #Calcula la distancia Manhattan
 def distanciaManhattan(e1,e2,w):
