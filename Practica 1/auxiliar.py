@@ -55,7 +55,6 @@ def distanciaEuclideaSimple(e1,e2,w):
     for i in range(len(e1)-1):
         if w[i]>0.2:
             distancia+=w[i]*(e1[i]-e2[i])**2
-    distancia = math.sqrt(distancia)
     return distancia
 
 #Calcula la distancia euclídea de e1 a e2
