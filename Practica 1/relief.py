@@ -60,12 +60,12 @@ def Relief(data):
 
         w = list(map(operator.add, w, resta_enemigo))
         w = list(map(operator.sub, w, resta_amigo))
-        w_max = max(w)
-        for i in range(len(w)):
-            if w[i]<0:
-                w[i]=0
-            else:
-                w[i]=w[i]/w_max
+    w_max = max(w)
+    for i in range(len(w)):
+        if w[i]<0:
+            w[i]=0
+        else:
+            w[i]=w[i]/w_max
     return w[:len(w)-1]
 
 def ValoracionRelief(nombre_datos,k):
