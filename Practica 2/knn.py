@@ -36,7 +36,7 @@ def KNN(w,particion, data_train,k,mismos_conjuntos):
             distancias = []
             minimos = []
             for j in range(len(data_train_np)):
-                if particion_np[i]!=data_train_np[j]
+                if particion[i]!=data_train[j]:
                     distancias.append([j,auxiliar.distanciaEuclidea(data_train_np[j][:len(data_train_np[j])-1],particion_np[i][:len(particion_np[i])-1],w_np)])
             min_distancias = devuelveKminimos(distancias,k)
             minimos = [item[0] for item in min_distancias]
@@ -54,7 +54,7 @@ def KNN(w,particion, data_train,k,mismos_conjuntos):
 
         for i in range(len(particion_np)):
             for j in range(i,len(particion_np)):
-                if particion_np[i]!=particion_np[j]:
+                if particion[i]!=particion[j]:
                     distancias[i][j] = [distancias[i][j][0], auxiliar.distanciaEuclidea(particion_np[i][:len(particion_np[i])-1],particion_np[j][:len(particion_np[j])-1],w_np)]
                     distancias[j][i] = [distancias[j][i][0], distancias[i][j][1]]
 
