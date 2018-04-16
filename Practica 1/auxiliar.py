@@ -67,47 +67,7 @@ def distanciaEuclidea(e1,e2,w):
     @return Devuelve la distancia entre e1 y e2.
     """
 
-    """distancia = 0
-    for i in range(len(e1)-1):
-        if w[i]>0.2:
-            distancia+=w[i]*(e1[i]-e2[i])**2
-    distancia = math.sqrt(distancia)"""
     return np.sum(w*(e1-e2)**2)
-
-#Calcula la distancia Manhattan
-def distanciaManhattan(e1,e2,w):
-    """
-    @brief Función que calcula la distancia de Manhattan.
-    @param e1 Elemento 1.
-    @param e2 Elemento 2.
-    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
-    @return Devuelve la distancia entre e1 y e2.
-    """
-    distancia = 0
-    if len(e1)!=len(e2):
-        print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
-    else:
-        for i in range(len(e1)-1):
-                distancia+=w[i]*abs(e1[i]-e2[i]) if w!=-1 and w[i]>=0.2 else abs(e1[i]-e2[i])
-    return distancia
-
-#Calcula la distancia de Minkowski
-def distanciaMinkowski(e1,e2,w,k):
-    """
-    @brief Función que calcula la distancia de Minkowski.
-    @param e1 Elemento 1.
-    @param e2 Elemento 2.
-    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
-    @param k Factor para la distancia.
-    @return Devuelve la distancia entre e1 y e2.
-    """
-    distancia = 0
-    if len(e1)!=len(e2):
-        print("No se puede hallar la distancia euclídea porque hay diferente número de atributos.")
-    else:
-        for i in range(len(e1)-1):
-                distancia+=w[i]*abs((e1[i]-e2[i])**k) if w!=-1 and w[i]>=0.2 else abs((e1[i]-e2[i])**k)
-    return math.pow(distancia,1/k)
 
 #Función para obtener el elemento más común de una lista
 def masComun(lista):
@@ -117,17 +77,6 @@ def masComun(lista):
     @return Devuelve el elemento que más veces aparece en la lista.
     """
     return max(set(lista), key=lista.count)
-
-def normaEuclidea(e):
-    """
-    @brief Función que devuelve la norma euclídea de un vector e.
-    @param e Vector al que se le quiere calcular la norma.
-    @return Devuelve un valor real que es la raíz cuadrada de la suma de cada componente del vector al cuadrado.
-    """
-    norma = 0
-    for ei in e:
-        norma+=ei**2
-    return math.sqrt(norma)
 
 def divideDatosFCV(data, num_folds):
     """
