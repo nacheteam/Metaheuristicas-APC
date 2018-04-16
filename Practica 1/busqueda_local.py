@@ -50,7 +50,7 @@ def busquedaLocal(data,k):
     @return Devuelve un vector de pesos.
     """
     MAX_VECINOS = 20*(len(data[0]))
-    vecinos = 0
+    vecindarios = 0
     evaluaciones = 0
     w = primerVector(len(data[0]))
     vector_posiciones = list(range(len(w)))
@@ -58,16 +58,17 @@ def busquedaLocal(data,k):
     valoracion_actual = tc+tr
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
-        vecinos+=1
         vecino, vector_posiciones = mutacion(w,vector_posiciones)
         tc,tr = knn.Valoracion(data,data,k,vecino[:len(vecino)-1],True)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
+            vecindarios+=1
             w = vecino
             valoracion_actual=valoracion_vecino
             vector_posiciones = list(range(len(w)))
         elif vector_posiciones==[]:
-            return w[:len(w)-1]
+            vecindarios+=1
+            vector_posiciones=list(range(len(w)))
     return w[:len(w)-1]
 
 
