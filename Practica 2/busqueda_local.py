@@ -2,13 +2,14 @@ import random
 import auxiliar
 import knn
 import time
+import numpy as np
 
 MU = 0
 SIGMA = 0.3
 MAX_EVALUACIONES = 15000
 random.seed(123456789)
 
-def mutacion(w, vector_posiciones):
+def mutacion(w, pos):
     """
     @brief Dado un vector de pesos w se altera una de las posiciones que estén en vector_posiciones sumándole
     un valor generado por una distribución normal de media 0 y desviación 0.3.
@@ -17,19 +18,14 @@ def mutacion(w, vector_posiciones):
     @return Se devuelve el vector de pesos mutados y el vector de posiciones con la posición usada elminada.
     """
     incremento = random.gauss(MU,SIGMA)
-    i = random.randint(0,len(vector_posiciones)-1)
-    vector_posiciones_aux = []
-    pos = vector_posiciones[i]
+    pos_nueva =pos+1
     w[pos]+=incremento
     w_max = max(w)
     if w[pos]<0:
         w[pos] = 0
     elif w[pos]>1:
         w[pos] = 1
-    for v in vector_posiciones:
-        if v!=pos:
-            vector_posiciones_aux.append(v)
-    return w,vector_posiciones_aux
+    return w,pos_nueva
 
 def primerVector(n):
     """
@@ -49,27 +45,28 @@ def busquedaLocal(data,k):
     @param k Valor de vecinos que se quieren calcular en KNN.
     @return Devuelve un vector de pesos.
     """
-    MAX_VECINOS = 20*(len(data[0]))
-    vecindarios = 0
+    data_np = np.array(data)
+    MAX_VECINOS = 20*(len(data[0])-1)
+    vecinos = 0
     evaluaciones = 0
-    w = primerVector(len(data[0]))
-    vector_posiciones = list(range(len(w)))
-    tc,tr = knn.Valoracion(data,data,k,w[:len(w)-1],True)
+    w = primerVector(len(data[0])-1)
+    posicion_mutacion = 0
+    tc,tr = knn.Valoracion(data_np,data_np,k,w,True)
     valoracion_actual = tc+tr
-    while evaluaciones<MAX_EVALUACIONES and vecindarios<MAX_VECINOS:
+    while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
-        vecino, vector_posiciones = mutacion(w,vector_posiciones)
-        tc,tr = knn.Valoracion(data,data,k,vecino[:len(vecino)-1],True)
+        vecinos+=1
+        vecino, posicion_mutacion = mutacion(w,posicion_mutacion)
+        tc,tr = knn.Valoracion(data_np,data_np,k,vecino,True)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
-            vecindarios+=1
+            vecinos=0
             w = vecino
             valoracion_actual=valoracion_vecino
-            vector_posiciones = list(range(len(w)))
-        elif vector_posiciones==[]:
-            vecindarios+=1
-            vector_posiciones=list(range(len(w)))
-    return w[:len(w)-1]
+            posicion_mutacion = 0
+        elif posicion_mutacion==len(w):
+            posicion_mutacion=0
+    return w
 
 
 def ValoracionBusquedaLocal(nombre_datos,k):
@@ -85,7 +82,7 @@ def ValoracionBusquedaLocal(nombre_datos,k):
     valoraciones = []
     contador = 0
     for particion in particiones:
-        #print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        print("Completado " + str((contador/len(particiones))*100) + "%\n")
         datos_train = []
         for d in data:
             if d not in particion:

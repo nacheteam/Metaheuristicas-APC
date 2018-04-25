@@ -16,8 +16,11 @@ for k in [1,3,5]:
 
     for fichero in FICHEROS_DATOS:
         res_1nn = knn.ValoracionKNN(fichero,k)
+        print("Acabado KNN")
         res_relief = relief.ValoracionRelief(fichero,k)
+        print("Acabado Relief")
         res_bl = busqueda_local.ValoracionBusquedaLocal(fichero,k)
+        print("Acabado BL")
         resultados = [res_1nn, res_relief, res_bl]
         print("\n\n\n")
         print("############################################")

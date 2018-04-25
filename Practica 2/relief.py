@@ -2,6 +2,7 @@ import knn
 import auxiliar
 import operator
 import time
+import numpy as np
 
 def elementoMinimaDistancia(e,lista):
     """
@@ -90,7 +91,7 @@ def ValoracionRelief(nombre_datos,k):
         v = Relief(datos_train)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(particion, datos_train,k,v)
+        tc,tr = knn.Valoracion(np.array(particion), np.array(datos_train),k,v)
         val = [[tc,tr], fin-comienzo]
         valoraciones.append(val)
         contador+=1

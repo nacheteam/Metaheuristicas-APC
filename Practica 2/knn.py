@@ -1,79 +1,25 @@
 import auxiliar
 import time
 import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import DistanceMetric
 
 ALPHA=0.5
 
-def devuelveKminimos(distancias, k):
-    minimos = []
-    for i in range(k):
-        minimo = i
-        for j in range(len(distancias)):
-            if distancias[j][1]<distancias[minimo][1]:
-                minimo = j
-        minimos.append(distancias[minimo])
-    return minimos
-
-def KNN(w,particion, data_train,k,mismos_conjuntos):
-    """
-    @brief Función que da una valoración del vector de pesos w para el conjunto de datos nombre_datos.
-    @param w Vector de pesos.
-    @param particion Datos a clasificar.
-    @param data_train Datos usados para clasificar.
-    @param k Número de elementos con los que se compara cada dato.
-    @return Devuelve un número entre 0 y 1 indicando el ratio de aciertos con el vector de pesos dado.
-    """
-    particion_np = np.array(particion)
-    data_train_np = np.array(data_train)
-    w_np = np.array(w)
-    for i in range(len(w_np)):
-        if w_np[i]<0.2:
-            w_np[i]=0
+def KNNumpy(w_np,particion_np, data_train_np,k,mismos_conjuntos):
+    particion_np_sin_etiquetas = [particion_np[i][:-1] for i in range(len(particion_np))]
+    data_train_np_sin_etiquetas = [data_train_np[i][:-1] for i in range(len(data_train_np))]
+    labels_train = np.array([data_train_np[i][-1] for i in range(len(data_train_np))])
+    labels_particion = np.array([particion_np[i][-1] for i in range(len(particion_np))])
     clases = []
-    if not mismos_conjuntos:
-        #Para cada elemento de los datos calculo los k elementos más cercanos y luego clasifico en función de la clase más repetida entre los k escogidos.
-        for i in range(len(particion_np)):
-            distancias = []
-            minimos = []
-            for j in range(len(data_train_np)):
-                if particion[i]!=data_train[j]:
-                    distancias.append([j,auxiliar.distanciaEuclidea(data_train_np[j][:len(data_train_np[j])-1],particion_np[i][:len(particion_np[i])-1],w_np)])
-            min_distancias = devuelveKminimos(distancias,k)
-            minimos = [item[0] for item in min_distancias]
-            clases_minimos = []
-            for m in minimos:
-                clases_minimos.append(data_train_np[m][-1])
-            clases.append(auxiliar.masComun(clases_minimos))
-    else:
-        distancias = []
-        for i in range(len(particion_np)):
-            dis = []
-            for j in range(len(particion_np)):
-                dis.append([j,float('inf')])
-            distancias.append(dis)
+    w_np_m = np.tile(w_np,(len(data_train_np_sin_etiquetas),1))
+    for p in particion_np_sin_etiquetas:
+        p_m = np.tile(p,(len(data_train_np_sin_etiquetas),1))
+        dist = np.sum(w_np_m*(p_m-data_train_np_sin_etiquetas)**2,axis=1)
+        mins = np.argpartition(dist, k)[:k]
+        clases.append(auxiliar.masComun(list(labels_train[mins])))
 
-        for i in range(len(particion_np)):
-            for j in range(i,len(particion_np)):
-                if particion[i]!=particion[j]:
-                    distancias[i][j] = [distancias[i][j][0], auxiliar.distanciaEuclidea(particion_np[i][:len(particion_np[i])-1],particion_np[j][:len(particion_np[j])-1],w_np)]
-                    distancias[j][i] = [distancias[j][i][0], distancias[i][j][1]]
-
-        for i in range(len(particion_np)):
-            min_distancias = devuelveKminimos(distancias[i],k)
-            minimos = [item[0] for item in min_distancias]
-            clases_minimos = []
-            for m in minimos:
-                clases_minimos.append(particion_np[m][-1])
-            clases.append(auxiliar.masComun(clases_minimos))
-
-    # Comprobamos cual ha sido el porcentaje de éxito en la clasificación.
-    bien_clasificadas = 0
-    for (c,d) in zip(clases,particion_np):
-        if c==d[-1]:
-            bien_clasificadas+=1
-
-    return bien_clasificadas/len(particion_np)
-
+    return np.sum(clases == labels_particion)/len(labels_particion)
 
 def Valoracion(particion, data_train,k,w,mismos_conjuntos=False):
     """
@@ -84,7 +30,21 @@ def Valoracion(particion, data_train,k,w,mismos_conjuntos=False):
     @param w Vector de pesos.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
     """
-    aciertos = KNN(w,particion, data_train,k,mismos_conjuntos)
+    #global w_g
+    #w_g = w
+    #global dist
+    #dist = DistanceMetric.get_metric('minkowski',p=1)
+    #nbr = KNeighborsClassifier(n_neighbors=1,weights=pesos,algorithm='auto',leaf_size=30,metric='minkowski',p=1,metric_params=None,n_jobs=1)
+    #nbr.fit([data_train[i][:-1] for i in range(len(data_train))],[data_train[i][-1] for i in range(len(data_train))])
+    #print([particion[i][:-1] for i in range(len(particion))])
+    #print([particion[i][-1] for i in range(len(particion))])
+    #w_m = np.tile(w,(len(particion),1))
+    #print(str(len(w)) + "," + str(len(particion[0][:-1])))
+    #print(w_m)
+    #particion_formateada = [particion[i][:-1] for i in range(len(particion))]
+    #etiquetas = [particion[i][-1] for i in range(len(particion))]
+    #aciertos = nbr.score(particion_formateada,etiquetas)
+    aciertos = KNNumpy(w,np.array(particion), np.array(data_train),k,mismos_conjuntos)
     simplicidad = 0
 
     pesos_bajos = 0
@@ -111,6 +71,7 @@ def ValoracionKNN(nombre_datos,k):
     w = []
     for i in range(len(data[0])-1):
         w.append(1)
+    w=np.array(w)
     for particion in particiones:
         #print("Completado " + str((contador/len(particiones))*100) + "%\n")
         datos_train = []
@@ -118,7 +79,7 @@ def ValoracionKNN(nombre_datos,k):
             if d not in particion:
                 datos_train.append(d)
         comienzo = time.time()
-        tc,tr = Valoracion(particion, datos_train,k,w)
+        tc,tr = Valoracion(np.array(particion), np.array(datos_train),k,w)
         fin = time.time()
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
