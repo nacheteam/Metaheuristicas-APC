@@ -30,17 +30,8 @@ def Valoracion(particion, data_train,k,w,mismos_conjuntos=False):
     @param w Vector de pesos.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
     """
-    #global w_g
-    #w_g = w
-    #global dist
-    #dist = DistanceMetric.get_metric('minkowski',p=1)
-    #nbr = KNeighborsClassifier(n_neighbors=1,weights=pesos,algorithm='auto',leaf_size=30,metric='minkowski',p=1,metric_params=None,n_jobs=1)
+    #nbr = KNeighborsClassifier(n_neighbors=1,metric='wminkowski', metric_params={'w':w},n_jobs=1)
     #nbr.fit([data_train[i][:-1] for i in range(len(data_train))],[data_train[i][-1] for i in range(len(data_train))])
-    #print([particion[i][:-1] for i in range(len(particion))])
-    #print([particion[i][-1] for i in range(len(particion))])
-    #w_m = np.tile(w,(len(particion),1))
-    #print(str(len(w)) + "," + str(len(particion[0][:-1])))
-    #print(w_m)
     #particion_formateada = [particion[i][:-1] for i in range(len(particion))]
     #etiquetas = [particion[i][-1] for i in range(len(particion))]
     #aciertos = nbr.score(particion_formateada,etiquetas)
