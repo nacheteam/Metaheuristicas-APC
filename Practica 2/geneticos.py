@@ -6,7 +6,7 @@ import auxiliar
 TAM_POBLACION = 30
 PROB_CRUCE_AGG = 0.7
 PROB_MUTACION = 0.001
-MAX_EVALUACIONES = 15000
+MAX_EVALUACIONES = 100
 
 random.seed(123456789)
 
@@ -71,12 +71,9 @@ def GeneticoEstacionario(data,k,operador_cruce):
         poblacion = np.append(poblacion,[hijo2],axis=0)
         valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
-        indices_nueva_poblacion = np.argpartition(valoraciones, TAM_POBLACION)[:TAM_POBLACION]
+        indices_nueva_poblacion = np.argpartition(valoraciones, 2)[::-1][:TAM_POBLACION]
         poblacion = poblacion[indices_nueva_poblacion]
         evaluaciones+=TAM_POBLACION+2
     valoraciones_final = np.array([knn.Valoracion(data,data,k,w) for w in poblacion])
     valoraciones_final = np.sum(valoraciones_final,axis=1)
     return np.array(poblacion[np.argpartition(valoraciones_final,1)[0]])
-
-def GeneticoGeneracional(data,k,operador_cruce):
-    
