@@ -6,7 +6,7 @@ import numpy as np
 
 MU = 0
 SIGMA = 0.3
-MAX_EVALUACIONES = 15000
+MAX_EVALUACIONES_GL = 15000
 random.seed(123456789)
 
 def primerVector(n):
@@ -20,7 +20,7 @@ def primerVector(n):
         w.append(random.uniform(0,1))
     return w
 
-def busquedaLocal(data,k):
+def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL):
     """
     @brief Función de busqueda local para hallar un vector de pesos.
     @param data Lista con el conjunto de datos.
@@ -48,7 +48,7 @@ def busquedaLocal(data,k):
             posicion_mutacion = 0
         elif posicion_mutacion==len(w):
             posicion_mutacion=0
-    return w
+    return w,evaluaciones
 
 
 def ValoracionBusquedaLocal(nombre_datos,k):
@@ -70,7 +70,7 @@ def ValoracionBusquedaLocal(nombre_datos,k):
             if d not in particion:
                 datos_train.append(d)
         comienzo = time.time()
-        v = busquedaLocal(datos_train,k)
+        v,ev = busquedaLocal(datos_train,k)
         fin = time.time()
         vectores.append(v)
         tc,tr = knn.Valoracion(particion,datos_train, k,v)
