@@ -117,3 +117,22 @@ def divideDatosFCV(data, num_folds):
             folds[-1].append(data_aux[i])
 
     return folds
+
+
+def mutacion(w, pos):
+    """
+    @brief Dado un vector de pesos w se altera una de las posiciones que estén en vector_posiciones sumándole
+    un valor generado por una distribución normal de media 0 y desviación 0.3.
+    @param w Vector de pesos al que se le hace la mutación.
+    @param vector_posiciones Vector que contiene las posiciones que aún no han sido mutadas.
+    @return Se devuelve el vector de pesos mutados y el vector de posiciones con la posición usada elminada.
+    """
+    incremento = random.gauss(MU,SIGMA)
+    pos_nueva =pos+1
+    w[pos]+=incremento
+    w_max = max(w)
+    if w[pos]<0:
+        w[pos] = 0
+    elif w[pos]>1:
+        w[pos] = 1
+    return w,pos_nueva

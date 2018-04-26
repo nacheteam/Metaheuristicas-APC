@@ -9,24 +9,6 @@ SIGMA = 0.3
 MAX_EVALUACIONES = 15000
 random.seed(123456789)
 
-def mutacion(w, pos):
-    """
-    @brief Dado un vector de pesos w se altera una de las posiciones que estén en vector_posiciones sumándole
-    un valor generado por una distribución normal de media 0 y desviación 0.3.
-    @param w Vector de pesos al que se le hace la mutación.
-    @param vector_posiciones Vector que contiene las posiciones que aún no han sido mutadas.
-    @return Se devuelve el vector de pesos mutados y el vector de posiciones con la posición usada elminada.
-    """
-    incremento = random.gauss(MU,SIGMA)
-    pos_nueva =pos+1
-    w[pos]+=incremento
-    w_max = max(w)
-    if w[pos]<0:
-        w[pos] = 0
-    elif w[pos]>1:
-        w[pos] = 1
-    return w,pos_nueva
-
 def primerVector(n):
     """
     @brief Función que te devuelve un vector inicial de pesos con valores aleatorios según una distribución uniforme entre 0 y 1.
@@ -56,7 +38,7 @@ def busquedaLocal(data,k):
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
         vecinos+=1
-        vecino, posicion_mutacion = mutacion(w,posicion_mutacion)
+        vecino, posicion_mutacion = auxiliar.mutacion(w,posicion_mutacion)
         tc,tr = knn.Valoracion(data_np,data_np,k,vecino,True)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
