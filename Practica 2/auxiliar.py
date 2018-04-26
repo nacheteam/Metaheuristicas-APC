@@ -1,5 +1,9 @@
 import math
 import numpy as np
+import random
+
+MU = 0
+SIGMA = 0.3
 
 def lecturaDatos(nombre_fich):
     """
