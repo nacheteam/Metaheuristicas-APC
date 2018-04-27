@@ -164,7 +164,7 @@ def ValoracionGeneticoGeneracional(nombre_datos,k,operador_cruce):
         v = GeneticoGeneracional(datos_train,k,operador_cruce)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array(t[:-1] for t in datos_train),k,v,[p[-1] for p in datos_train], [t[-1] for t in particion])
+        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array([t[:-1] for t in datos_train]),k,v,np.array([p[-1] for p in datos_train]), np.array([t[-1] for t in particion]))
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1
