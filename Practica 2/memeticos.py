@@ -4,6 +4,7 @@ import knn
 import auxiliar
 import geneticos
 import busqueda_local
+import time
 
 TAM_POBLACION = 30
 PROB_CRUCE_AGG = 0.7

@@ -2,6 +2,7 @@ import random
 import numpy as np
 import knn
 import auxiliar
+import time
 
 TAM_POBLACION = 30
 PROB_CRUCE_AGG = 0.7
