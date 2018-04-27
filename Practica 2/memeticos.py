@@ -75,7 +75,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             gen = random.randint(0,ncar-1)
             poblacion[cr],pos = auxiliar.mutacion(poblacion[cr],gen)
 
-        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np) for w in poblacion])
+        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
         evaluaciones+=TAM_POBLACION
         peor_solucion_ind = np.argmin(valoraciones)
