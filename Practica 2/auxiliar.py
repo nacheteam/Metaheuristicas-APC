@@ -44,7 +44,15 @@ def lecturaDatos(nombre_fich):
         for j in range(len(data[i])-1):
             data[i][j] = (data[i][j]-min_max[j][0])/(min_max[j][1]-min_max[j][0])
 
-    return data
+    data_sin_repeticiones = []
+    for i in range(len(data)):
+        unico = True
+        for j in range(i,len(data)):
+            if data[i]==data[j]:
+                unico = False
+        data_sin_repeticiones.append(data[i])
+
+    return data_sin_repeticiones
 
 def distanciaEuclideaSimple(e1,e2,w):
     """
@@ -80,7 +88,9 @@ def masComun(lista):
     @param lista Lista de la que se obtiene el elemento más común.
     @return Devuelve el elemento que más veces aparece en la lista.
     """
-    return max(set(lista), key=lista.count)
+    (values,counts) = np.unique(lista,return_counts=True)
+    ind=np.argmax(counts)
+    return values[ind]
 
 def divideDatosFCV(data, num_folds):
     """

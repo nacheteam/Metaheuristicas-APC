@@ -67,7 +67,7 @@ def Relief(data):
             w[i]=0
         else:
             w[i]=w[i]/w_max
-    return w[:len(w)-1]
+    return np.array(w[:len(w)-1])
 
 def ValoracionRelief(nombre_datos,k):
     """
@@ -91,7 +91,7 @@ def ValoracionRelief(nombre_datos,k):
         v = Relief(datos_train)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(np.array(particion), np.array(datos_train),k,v)
+        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array([t[:-1] for t in datos_train]),k,v,np.array([p[-1] for p in datos_train]), np.array([t[-1] for t in particion]))
         val = [[tc,tr], fin-comienzo]
         valoraciones.append(val)
         contador+=1

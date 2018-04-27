@@ -27,19 +27,20 @@ def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL):
     @param k Valor de vecinos que se quieren calcular en KNN.
     @return Devuelve un vector de pesos.
     """
-    data_np = np.array(data)
+    labels_np = np.array([d[-1] for d in data])
+    data_np = np.array([d[:-1] for d in data])
     MAX_VECINOS = 20*(len(data[0])-1)
     vecinos = 0
     evaluaciones = 0
     w = primerVector(len(data[0])-1)
     posicion_mutacion = 0
-    tc,tr = knn.Valoracion(data_np,data_np,k,w,True)
+    tc,tr = knn.Valoracion(data_np,data_np,k,np.array(w),labels_np,labels_np)
     valoracion_actual = tc+tr
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
         vecinos+=1
         vecino, posicion_mutacion = auxiliar.mutacion(w,posicion_mutacion)
-        tc,tr = knn.Valoracion(data_np,data_np,k,vecino,True)
+        tc,tr = knn.Valoracion(data_np,data_np,k,np.array(vecino),labels_np,labels_np)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
             vecinos=0
@@ -48,7 +49,7 @@ def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL):
             posicion_mutacion = 0
         elif posicion_mutacion==len(w):
             posicion_mutacion=0
-    return w,evaluaciones
+    return np.array(w),evaluaciones
 
 
 def ValoracionBusquedaLocal(nombre_datos,k):
@@ -73,7 +74,7 @@ def ValoracionBusquedaLocal(nombre_datos,k):
         v,ev = busquedaLocal(datos_train,k)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(particion,datos_train, k,v)
+        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array([t[:-1] for t in datos_train]),k,v,np.array([p[-1] for p in datos_train]), np.array([t[-1] for t in particion]))
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1

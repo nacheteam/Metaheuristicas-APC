@@ -32,10 +32,10 @@ def cruceBLX(cromosoma1,cromosoma2):
             hijo.append(random.uniform(g2,g1))
     return np.array(hijo)
 
-def torneoBinario(data,poblacion,k):
+def torneoBinario(data,poblacion,k,labels_np):
     individuos = random.sample(range(TAM_POBLACION),2)
-    valoracion_ind1 = knn.Valoracion(data,data,k,poblacion[individuos[0]])
-    valoracion_ind2 = knn.Valoracion(data,data,k,poblacion[individuos[1]])
+    valoracion_ind1 = knn.Valoracion(data,data,k,poblacion[individuos[0]],labels_np,labels_np)
+    valoracion_ind2 = knn.Valoracion(data,data,k,poblacion[individuos[1]],labels_np,labels_np)
     if valoracion_ind1>valoracion_ind2:
         return individuos[0]
     return individuos[1]
@@ -50,17 +50,19 @@ def GeneticoEstacionario(data,k,operador_cruce):
     else:
         print("Has pasado un operador de cruce no válido.")
         return(-1)
-    data_np = np.array(data)
+    data_np = np.array([d[:-1] for d in data])
+    labels_np = np.array([d[-1] for d in data])
+
     poblacion = generaPoblacionInicial(len(data[0][:-1]))
     evaluaciones = 0
     while evaluaciones < MAX_EVALUACIONES:
         if num_padres==4:
-            padres = [torneoBinario(data,poblacion,k) for i in range(4)]
+            padres = [torneoBinario(data_np,poblacion,k,labels_np) for i in range(4)]
             hijo1 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
             hijo2 = operador_cruce(poblacion[padres[2]],poblacion[padres[3]])
             evaluaciones+=8
         else:
-            padres = [torneoBinario(data,poblacion,k) for i in range(2)]
+            padres = [torneoBinario(data_np,poblacion,k,labels_np) for i in range(2)]
             hijo1 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
             hijo2 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
             evaluaciones+=4
@@ -72,17 +74,18 @@ def GeneticoEstacionario(data,k,operador_cruce):
                 hijo2,pos=auxiliar.mutacion(hijo2,i)
         poblacion = np.append(poblacion,[hijo1],axis=0)
         poblacion = np.append(poblacion,[hijo2],axis=0)
-        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w) for w in poblacion])
+        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
         indices_nueva_poblacion = np.argpartition(valoraciones, 2)[::-1][:TAM_POBLACION]
         poblacion = poblacion[indices_nueva_poblacion]
         evaluaciones+=TAM_POBLACION+2
-    valoraciones_final = np.array([knn.Valoracion(data,data,k,w) for w in poblacion])
+    valoraciones_final = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
     valoraciones_final = np.sum(valoraciones_final,axis=1)
     return np.array(poblacion[np.argpartition(valoraciones_final,1)[0]])
 
 def GeneticoGeneracional(data,k,operador_cruce):
-    data_np = np.array(data)
+    data_np = np.array([d[:-1] for d in data])
+    labels_np = np.array([d[-1] for d in data])
     ncar = len(data[0][:-1])
     poblacion = generaPoblacionInicial(ncar)
     num_parejas = 0
@@ -96,7 +99,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
         return(-1)
 
     evaluaciones = TAM_POBLACION
-    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w) for w in poblacion])
+    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
     valoraciones = np.sum(valoraciones,axis=1)
     mejor_solucion_ind = np.argmax(valoraciones)
     mejor_solucion_valor = valoraciones[mejor_solucion_ind]
@@ -104,7 +107,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
     while evaluaciones<MAX_EVALUACIONES:
         for i in range(num_parejas):
             if operador_cruce==cruceAritmetico:
-                padres = [torneoBinario(data,poblacion,k) for i in range(4)]
+                padres = [torneoBinario(data_np,poblacion,k,labels_np) for i in range(4)]
                 hijos = []
                 evaluaciones+=8
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
@@ -114,7 +117,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
                 for p,i in zip(padres,range(4)):
                     poblacion[p] = hijos[i]
             else:
-                padres = [torneoBinario(data,poblacion,k) for i in range(2)]
+                padres = [torneoBinario(data_np,poblacion,k,labels_np) for i in range(2)]
                 hijos = []
                 evaluaciones+=4
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
@@ -126,7 +129,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
             gen = random.randint(0,ncar-1)
             poblacion[cr],pos = auxiliar.mutacion(poblacion[cr],gen)
 
-        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w) for w in poblacion])
+        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
         evaluaciones+=TAM_POBLACION
         peor_solucion_ind = np.argmin(valoraciones)
@@ -161,7 +164,7 @@ def ValoracionGeneticoGeneracional(nombre_datos,k,operador_cruce):
         v = GeneticoGeneracional(datos_train,k,operador_cruce)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(particion,datos_train, k,v)
+        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array(t[:-1] for t in datos_train),k,v,[p[-1] for p in datos_train], [t[-1] for t in particion])
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1
@@ -189,7 +192,7 @@ def ValoracionGeneticoEstacionario(nombre_datos,k,operador_cruce):
         v = GeneticoEstacionario(datos_train,k,operador_cruce)
         fin = time.time()
         vectores.append(v)
-        tc,tr = knn.Valoracion(particion,datos_train, k,v)
+        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array([t[:-1] for t in datos_train]),k,v,np.array([p[-1] for p in datos_train]), np.array([t[-1] for t in particion]))
         val = [[tc,tr],fin-comienzo]
         valoraciones.append(val)
         contador+=1
