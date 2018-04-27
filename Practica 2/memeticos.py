@@ -85,3 +85,31 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
         mejor_solucion_valor = valoraciones[mejor_solucion_ind]
         mejor_solucion = poblacion[mejor_solucion_ind]
     return np.array(mejor_solucion)
+
+def ValoracionMemetico(nombre_datos,k,operador_cruce,nGeneraciones,prob_bl,mejores):
+    """
+    @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
+    @param nombre_datos Nombre del fichero de datos.
+    @param k Número de vecinos que se quieren calcular en KNN.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método de búsqueda local.
+    """
+    data = auxiliar.lecturaDatos(nombre_datos)
+    particiones = auxiliar.divideDatosFCV(data,5)
+    vectores = []
+    valoraciones = []
+    contador = 0
+    for particion in particiones:
+        print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        datos_train = []
+        for d in data:
+            if d not in particion:
+                datos_train.append(d)
+        comienzo = time.time()
+        v = Memetico(datos_train,k,operador_cruce,nGeneraciones,prob_bl,mejores)
+        fin = time.time()
+        vectores.append(v)
+        tc,tr = knn.Valoracion(particion,datos_train, k,v)
+        val = [[tc,tr],fin-comienzo]
+        valoraciones.append(val)
+        contador+=1
+    return valoraciones
