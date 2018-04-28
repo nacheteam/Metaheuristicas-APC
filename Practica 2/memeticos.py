@@ -47,7 +47,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
                 valoraciones = np.sum(valoraciones,axis=1)
                 individuos = valoraciones.argsort()[-n_elem_bl:][::-1]
             for ind in individuos:
-                poblacion[ind],ev = busqueda_local.busquedaLocal(data,k,100)
+                poblacion[ind],ev = busqueda_local.busquedaLocal(data,k,2*len(data_np[0]))
                 evaluaciones+=ev
 
         contador_generaciones+=1
