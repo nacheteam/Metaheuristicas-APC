@@ -29,7 +29,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
         return(-1)
 
     evaluaciones = TAM_POBLACION
-    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
+    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
     valoraciones = np.sum(valoraciones,axis=1)
     mejor_solucion_ind = np.argmax(valoraciones)
     mejor_solucion_valor = valoraciones[mejor_solucion_ind]
@@ -43,11 +43,11 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             if not mejores:
                 individuos = random.sample(range(TAM_POBLACION),n_elem_bl)
             else:
-                valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
+                valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
                 valoraciones = np.sum(valoraciones,axis=1)
                 individuos = valoraciones.argsort()[-n_elem_bl:][::-1]
             for ind in individuos:
-                poblacion[ind],ev = busqueda_local.busquedaLocal(data,k,300)
+                poblacion[ind],ev = busqueda_local.busquedaLocal(data,k,100)
                 evaluaciones+=ev
 
         contador_generaciones+=1
@@ -63,7 +63,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
                 for p,i in zip(padres,range(4)):
                     poblacion[p] = hijos[i]
             else:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np) for i in range(2)]
+                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,True) for i in range(2)]
                 hijos = []
                 evaluaciones+=4
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
@@ -75,7 +75,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             gen = random.randint(0,ncar-1)
             poblacion[cr],pos = auxiliar.mutacion(poblacion[cr],gen)
 
-        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np) for w in poblacion])
+        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
         evaluaciones+=TAM_POBLACION
         peor_solucion_ind = np.argmin(valoraciones)

@@ -34,13 +34,13 @@ def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL):
     evaluaciones = 0
     w = primerVector(len(data[0])-1)
     posicion_mutacion = 0
-    tc,tr = knn.Valoracion(data_np,data_np,k,np.array(w),labels_np,labels_np)
+    tc,tr = knn.Valoracion(data_np,data_np,k,np.array(w),labels_np,labels_np,True)
     valoracion_actual = tc+tr
     while evaluaciones<MAX_EVALUACIONES and vecinos<MAX_VECINOS:
         evaluaciones+=1
         vecinos+=1
         vecino, posicion_mutacion = auxiliar.mutacion(w,posicion_mutacion)
-        tc,tr = knn.Valoracion(data_np,data_np,k,np.array(vecino),labels_np,labels_np)
+        tc,tr = knn.Valoracion(data_np,data_np,k,np.array(vecino),labels_np,labels_np,True)
         valoracion_vecino = tc+tr
         if valoracion_vecino>valoracion_actual:
             vecinos=0

@@ -6,7 +6,7 @@ from sklearn.neighbors import DistanceMetric
 
 ALPHA=0.5
 
-def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k):
+def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mismos_conjuntos):
     #particion_np_sin_etiquetas = [particion_np[i][:-1] for i in range(len(particion_np))]
     #data_train_np_sin_etiquetas = [data_train_np[i][:-1] for i in range(len(data_train_np))]
     #labels_train = np.array([data_train_np[i][-1] for i in range(len(data_train_np))])
@@ -20,7 +20,8 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k):
         w_np_m = np.tile(w_np,(tam_data_train_np,1))
         p_m = np.tile(p,(tam_data_train_np,1))
         dist = np.sum(w_np_m*(p_m-data_train_np)**2,axis=1)
-        dist[i]=float('inf')
+        if mismos_conjuntos:
+            dist[i]=float('inf')
         mins = np.argpartition(dist, k)[:k]
         clases.append(auxiliar.masComun(labels_train[mins]))
 
@@ -52,7 +53,7 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k):
     #print(clases)
     return np.sum(clases == labels_particion)/len(labels_particion)'''
 
-def Valoracion(particion, data_train,k,w,labels_train, labels_particion):
+def Valoracion(particion, data_train,k,w,labels_train, labels_particion,mismos_conjuntos=False):
     """
     @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
     @param particion Datos a clasificar.
@@ -69,7 +70,7 @@ def Valoracion(particion, data_train,k,w,labels_train, labels_particion):
     for i in range(len(w)):
         if w[i]<0.2:
             w[i]=0
-    aciertos = KNNumpy(w,np.array(particion), np.array(data_train),labels_train,labels_particion,k)
+    aciertos = KNNumpy(w,np.array(particion), np.array(data_train),labels_train,labels_particion,k,mismos_conjuntos)
     simplicidad = 0
 
     pesos_bajos = (np.where(w<0.2))[0].size
