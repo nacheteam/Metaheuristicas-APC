@@ -22,7 +22,7 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k):
                 data_train_np_loo.append(d)
         data_train_np_loo = np.array(data_train_np_loo)
         tam_data_train_np_loo = len(data_train_np_loo)
-        w_np_m = np.tile(w_np,(tam_data_train_np,1))
+        w_np_m = np.tile(w_np,(tam_data_train_np_loo,1))
         p_m = np.tile(p,(tam_data_train_np_loo,1))
         dist = np.sum(w_np_m*(p_m-data_train_np_loo)**2,axis=1)
         mins = np.argpartition(dist, k)[:k]
