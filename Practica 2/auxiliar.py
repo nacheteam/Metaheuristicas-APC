@@ -144,7 +144,6 @@ def mutacion(w, pos):
     incremento = random.gauss(MU,SIGMA)
     pos_nueva =pos+1
     w[pos]+=incremento
-    w_max = max(w)
     if w[pos]<0:
         w[pos] = 0
     elif w[pos]>1:
