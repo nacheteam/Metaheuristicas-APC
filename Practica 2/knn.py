@@ -11,14 +11,20 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k):
     #data_train_np_sin_etiquetas = [data_train_np[i][:-1] for i in range(len(data_train_np))]
     #labels_train = np.array([data_train_np[i][-1] for i in range(len(data_train_np))])
     #labels_particion = np.array([particion_np[i][-1] for i in range(len(particion_np))])
-
     tam_data_train_np = len(data_train_np)
 
     clases = []
-    w_np_m = np.tile(w_np,(tam_data_train_np,1))
+
     for p in particion_np:
-        p_m = np.tile(p,(tam_data_train_np,1))
-        dist = np.sum(w_np_m*(p_m-data_train_np)**2,axis=1)
+        data_train_np_loo = []
+        for d in data_train_np:
+            if not np.equal(d,p).all():
+                data_train_np_loo.append(d)
+        data_train_np_loo = np.array(data_train_np_loo)
+        tam_data_train_np_loo = len(data_train_np_loo)
+        w_np_m = np.tile(w_np,(tam_data_train_np,1))
+        p_m = np.tile(p,(tam_data_train_np_loo,1))
+        dist = np.sum(w_np_m*(p_m-data_train_np_loo)**2,axis=1)
         mins = np.argpartition(dist, k)[:k]
         clases.append(auxiliar.masComun(labels_train[mins]))
 
@@ -64,6 +70,9 @@ def Valoracion(particion, data_train,k,w,labels_train, labels_particion):
     #particion_formateada = [particion[i][:-1] for i in range(len(particion))]
     #etiquetas = [particion[i][-1] for i in range(len(particion))]
     #aciertos = nbr.score(particion_formateada,etiquetas)
+    for i in range(len(w)):
+        if w[i]<0.2:
+            w[i]=0
     aciertos = KNNumpy(w,np.array(particion), np.array(data_train),labels_train,labels_particion,k)
     simplicidad = 0
 
