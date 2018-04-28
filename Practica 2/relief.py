@@ -92,6 +92,7 @@ def ValoracionRelief(nombre_datos,k):
         fin = time.time()
         vectores.append(v)
         tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array([t[:-1] for t in datos_train]),k,v,np.array([p[-1] for p in datos_train]), np.array([t[-1] for t in particion]))
+        tr=0
         val = [[tc,tr], fin-comienzo]
         valoraciones.append(val)
         contador+=1
