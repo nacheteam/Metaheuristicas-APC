@@ -29,7 +29,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
         return(-1)
 
     evaluaciones = TAM_POBLACION
-    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True,True) for w in poblacion])
+    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
     valoraciones = np.sum(valoraciones,axis=1)
     mejor_solucion_ind = np.argmax(valoraciones)
     mejor_solucion_valor = valoraciones[mejor_solucion_ind]
