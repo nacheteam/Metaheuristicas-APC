@@ -9,7 +9,7 @@ FICHEROS_DATOS = ["../Data/ozone-320.arff","../Data/parkinsons.arff","../Data/sp
 ALGORITMOS = ["KNN", "RELIEF", "BL", "GeneticoEstacionarioBLX", "GeneticoEstacionarioAritmetico", "GeneticoGeneracionalBLX", "GeneticoGeneracionalAritmetico", "Memetico prob=1 BLX", "Memetico prob=0.1 BLX", "Memetico prob=0.1 a los mejores BLX", "Memetico prob=1 Aritmetico", "Memetico prob=0.1 Aritmetico", "Memetico prob=0.1 a los mejores Aritmetico"]
 NUM_PARTICIONES = 5
 
-for k in [1,3,5]:
+for k in [1]:
 
     print("############################################")
     print("El valor utilizado es K = " + str(k) + "\n")
