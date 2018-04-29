@@ -53,7 +53,7 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mi
     #print(clases)
     return np.sum(clases == labels_particion)/len(labels_particion)'''
 
-def Valoracion(particion, data_train,k,w,labels_train, labels_particion,mismos_conjuntos=False):
+def Valoracion(particion, data_train,k,w,labels_train, labels_particion,mismos_conjuntos=False,suma=False):
     """
     @brief Ejecuta el algoritmo knn y da una media de 0 a 100 de lo bueno que es el vector de pesos dados considerando la simplicidad y la tasa de aciertos.
     @param particion Datos a clasificar.
@@ -77,7 +77,10 @@ def Valoracion(particion, data_train,k,w,labels_train, labels_particion,mismos_c
     simplicidad = pesos_bajos/len(w)
     tasa_clas = 100*ALPHA*aciertos
     tasa_red = 100*(1-ALPHA)*simplicidad
-    return tasa_clas, tasa_red
+    if not suma:
+        return tasa_clas, tasa_red
+    else:
+        return tasa_clas+tasa_red
 
 def ValoracionKNN(nombre_datos,k):
     """
