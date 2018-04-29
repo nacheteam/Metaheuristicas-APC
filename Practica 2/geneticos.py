@@ -74,12 +74,12 @@ def GeneticoEstacionario(data,k,operador_cruce):
                 hijo2,pos=auxiliar.mutacion(hijo2,i)
         poblacion = np.append(poblacion,[hijo1],axis=0)
         poblacion = np.append(poblacion,[hijo2],axis=0)
-        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True,True) for w in poblacion])
+        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
         indices_nueva_poblacion = np.argpartition(valoraciones, 2)[::-1][:TAM_POBLACION]
         poblacion = poblacion[indices_nueva_poblacion]
         evaluaciones+=TAM_POBLACION+2
-    valoraciones_final = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True,True) for w in poblacion])
+    valoraciones_final = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
     valoraciones_final = np.sum(valoraciones_final,axis=1)
     return np.array(poblacion[np.argpartition(valoraciones_final,1)[0]])
 
@@ -99,7 +99,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
         return(-1)
 
     evaluaciones = TAM_POBLACION
-    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True,True) for w in poblacion])
+    valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
     valoraciones = np.sum(valoraciones,axis=1)
     mejor_solucion_ind = np.argmax(valoraciones)
     mejor_solucion_valor = valoraciones[mejor_solucion_ind]
@@ -129,7 +129,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
             gen = random.randint(0,ncar-1)
             poblacion[cr],pos = auxiliar.mutacion(poblacion[cr],gen)
 
-        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True,True) for w in poblacion])
+        valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
         evaluaciones+=TAM_POBLACION
         peor_solucion_ind = np.argmin(valoraciones)
