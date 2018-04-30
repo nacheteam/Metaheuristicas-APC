@@ -53,9 +53,8 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
         contador_generaciones+=1
         for i in range(num_parejas):
             if operador_cruce==geneticos.cruceAritmetico:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np) for i in range(4)]
+                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(4)]
                 hijos = []
-                evaluaciones+=8
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[2]],poblacion[padres[3]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[2]]))
@@ -63,9 +62,8 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
                 for p,i in zip(padres,range(4)):
                     poblacion[p] = hijos[i]
             else:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,True) for i in range(2)]
+                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,True,valoraciones) for i in range(2)]
                 hijos = []
-                evaluaciones+=4
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 for p,i in zip(padres,range(2)):
