@@ -12,14 +12,10 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mi
     clases = []
 
     for i in range(len(particion_np)):
-        p = particion_np[i]
-        w_np_m = np.tile(w_np,(tam_data_train_np,1))
-        p_m = np.tile(p,(tam_data_train_np,1))
-        dist = np.sum(w_np_m*(p_m-data_train_np)**2,axis=1)
+        dist = np.sum(np.tile(w_np,(tam_data_train_np,1))*(np.tile(particion_np[i],(tam_data_train_np,1))-data_train_np)**2,axis=1)
         if mismos_conjuntos:
             dist[i]=float('inf')
-        mins = np.argpartition(dist, k)[:k]
-        clases.append(auxiliar.masComun(labels_train[mins]))
+        clases.append(auxiliar.masComun(labels_train[np.argpartition(dist, k)[:k]]))
 
     return np.sum(clases == labels_particion)/len(labels_particion)
 
