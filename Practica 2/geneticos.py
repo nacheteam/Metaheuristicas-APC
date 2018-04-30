@@ -8,6 +8,7 @@ TAM_POBLACION = 30
 PROB_CRUCE_AGG = 0.7
 PROB_MUTACION = 0.001
 MAX_EVALUACIONES = 15000
+ALPHA = 0.3
 
 random.seed(123456789)
 
@@ -25,11 +26,17 @@ def cruceAritmetico(cromosoma1, cromosoma2):
 
 def cruceBLX(cromosoma1,cromosoma2):
     hijo = []
-    for g1,g2 in zip(cromosoma1,cromosoma2):
-        if g1<g2:
-            hijo.append(random.uniform(g1,g2))
-        else:
-            hijo.append(random.uniform(g2,g1))
+    max_c1 = np.amax(cromosoma1)
+    max_c2 = np.amax(cromosoma2)
+    min_c1 = np.amin(cromosoma1)
+    min_c2 = np.amin(cromosoma2)
+    max_intervalo = max_c1 if max_c1>max_c2 else max_c2
+    min_intervalo = min_c1 if min_c1<min_c2 else min_c2
+    delta = (max_intervalo-min_intervalo)*ALPHA
+    for i in range(len(cromosoma1)):
+        hijo.append(random.uniform(min_intervalo-delta,max_intervalo+delta))
+    max_hijo = np.amax(hijo)
+    hijo = np.divide(hijo,max_hijo)
     return np.array(hijo)
 
 def torneoBinario(data,poblacion,k,labels_np):
