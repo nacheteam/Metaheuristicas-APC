@@ -9,11 +9,11 @@ ALGORITMOS = ["KNN", "RELIEF", "BL", "GENETICO ESTACIONARIO BLX", "GENETICO ESTA
 fichero = input("Introduzca el fichero de datos: ")
 for i in range(len(ALGORITMOS)):
     print(str(i) + ": " + ALGORITMOS[i])
-algoritmo = int(input("Introduzca el número del algoritmo que quiere ejecutar:"))
-NUM_PARTICIONES = input("Introduzca el número de particiones de datos a realizar: ")
+algoritmo = int(input("Introduzca el número del algoritmo que quiere ejecutar: "))
+NUM_PARTICIONES = int(input("Introduzca el número de particiones de datos a realizar: "))
 k = int(input("Introduzca el valor de k: "))
 
-print("El valor utilizado es K = " + str(k) + "\n")
+print("\nEl valor utilizado es K = " + str(k) + "\n")
 
 resultados = []
 
@@ -65,9 +65,13 @@ for res in resultados:
     print(str(res[0][0]*2) + "-----" + str(res[0][1]*2) + "-----" + str(res[0][0]+res[0][1]) + "-----" + str(res[1]) + "\n")
 
 
-media_tc+=2*resultados[0][0]/NUM_PARTICIONES
-media_tr+=2*resultados[0][1]/NUM_PARTICIONES
-media_tiempo+=resultados[1]/NUM_PARTICIONES
+media_tiempo = 0
+media_tc = 0
+media_tr = 0
+for res in resultados:
+    media_tc+=2*res[0][0]/NUM_PARTICIONES
+    media_tr+=2*res[0][1]/NUM_PARTICIONES
+    media_tiempo+=res[1]/NUM_PARTICIONES
 
 print("MEDIAS: \n")
-print(ALGORITMOS[algoritmo] + str(media_tc) + " --- " + str(media_tr) + " --- " + str(0.5*media_tc+0.5*media_tr) + " --- " + str(media_tiempo) + "\n")
+print(ALGORITMOS[algoritmo] + ": " + str(media_tc) + " --- " + str(media_tr) + " --- " + str(0.5*media_tc+0.5*media_tr) + " --- " + str(media_tiempo) + "\n")
