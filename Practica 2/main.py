@@ -61,7 +61,8 @@ else:
     exit()
 print("Fichero de datos: " + fichero)
 print("Tasa clasificación --- Tasa simplicidad --- Tasa total --- Tiempo\n")
-print(str(resultados[0][0]*2) + "-----" + str(resultados[0][1]*2) + "-----" + str(resultados[0][0]+resultados[0][1]) + "-----" + str(resultados[1]) + "\n")
+for res in resultados:
+    print(str(res[0][0]*2) + "-----" + str(res[0][1]*2) + "-----" + str(res[0][0]+res[0][1]) + "-----" + str(res[1]) + "\n")
 
 
 media_tc+=2*resultados[0][0]/NUM_PARTICIONES
