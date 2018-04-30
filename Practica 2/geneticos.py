@@ -35,9 +35,10 @@ def cruceBLX(cromosoma1,cromosoma2):
     delta = (max_intervalo-min_intervalo)*ALPHA
     for i in range(len(cromosoma1)):
         hijo.append(random.uniform(min_intervalo-delta,max_intervalo+delta))
-    max_hijo = np.amax(hijo)
-    hijo = np.divide(hijo,max_hijo)
-    return np.array(hijo)
+    hijo = np.array(hijo)
+    hijo[hijo<0]=0
+    hijo[hijo>1]=1
+    return hijo
 
 def torneoBinario(data,poblacion,k,labels_np):
     individuos = random.sample(range(TAM_POBLACION),2)
