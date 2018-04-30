@@ -7,10 +7,6 @@ from sklearn.neighbors import DistanceMetric
 ALPHA=0.5
 
 def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mismos_conjuntos):
-    #particion_np_sin_etiquetas = [particion_np[i][:-1] for i in range(len(particion_np))]
-    #data_train_np_sin_etiquetas = [data_train_np[i][:-1] for i in range(len(data_train_np))]
-    #labels_train = np.array([data_train_np[i][-1] for i in range(len(data_train_np))])
-    #labels_particion = np.array([particion_np[i][-1] for i in range(len(particion_np))])
     tam_data_train_np = len(data_train_np)
 
     clases = []
@@ -26,32 +22,6 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mi
         clases.append(auxiliar.masComun(labels_train[mins]))
 
     return np.sum(clases == labels_particion)/len(labels_particion)
-
-'''def KNNumpy(w_np,particion_np, data_train_np,k,mismos_conjuntos):
-    particion_np_sin_etiquetas = [particion_np[i][:-1] for i in range(len(particion_np))]
-    data_train_np_sin_etiquetas = [data_train_np[i][:-1] for i in range(len(data_train_np))]
-    labels_train = np.array([data_train_np[i][-1] for i in range(len(data_train_np))])
-    labels_particion = np.array([particion_np[i][-1] for i in range(len(particion_np))])
-    clases = []
-    w_np_m = np.tile(w_np,(len(data_train_np_sin_etiquetas)*len(particion_np_sin_etiquetas),1))
-    data_train_np_sin_etiquetas_m = np.tile(data_train_np_sin_etiquetas,(len(particion_np_sin_etiquetas),1))
-    particion_np_sin_etiquetas_m = np.repeat(particion_np_sin_etiquetas,len(data_train_np_sin_etiquetas))
-    particion_np_sin_etiquetas_m = np.reshape(particion_np_sin_etiquetas_m,(len(particion_np_sin_etiquetas)*len(data_train_np_sin_etiquetas),len(particion_np_sin_etiquetas[0])))
-    #print(len(w_np_m))
-    #print(len(data_train_np_sin_etiquetas_m))
-    #print(len(particion_np_sin_etiquetas_m))
-    #print(particion_np_sin_etiquetas_m)
-    dist = np.sum(w_np_m*(particion_np_sin_etiquetas_m-data_train_np_sin_etiquetas_m)**2,axis=1)
-    dist = np.reshape(dist,(-1,len(data_train_np_sin_etiquetas)))
-    print(dist)
-    #print(dist[0:0+len(data_train_np_sin_etiquetas)])
-    f = np.vectorize(lambda x: np.argpartition(x,k)[:k])
-    mins = f(dist)
-    #print(mins)
-    #print(labels_train[mins[0]])
-    clases = [auxiliar.masComun(labels_train[m]) for m in mins]
-    #print(clases)
-    return np.sum(clases == labels_particion)/len(labels_particion)'''
 
 def Valoracion(particion, data_train,k,w,labels_train, labels_particion,mismos_conjuntos=False,suma=False):
     """
