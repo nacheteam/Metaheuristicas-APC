@@ -74,10 +74,10 @@ def GeneticoEstacionario(data,k,operador_cruce):
             hijo1 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
             hijo2 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
         for i in range(len(hijo1)):
-            if random.randint(1,1000)==1:
+            if random.randint(1,1000)<=PROB_MUTACION*1000:
                 hijo1,pos=auxiliar.mutacion(hijo1,i)
         for i in range(len(hijo2)):
-            if random.randint(1,1000)==1:
+            if random.randint(1,1000)<=PROB_MUTACION*1000:
                 hijo2,pos=auxiliar.mutacion(hijo2,i)
         poblacion = np.append(poblacion,[hijo1],axis=0)
         tc,tr = knn.Valoracion(data_np,data_np,k,poblacion[-1],labels_np,labels_np,True)
