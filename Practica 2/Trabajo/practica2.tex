@@ -1,7 +1,4 @@
-\documentclass[12pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[spanish]{babel}
-\usepackage{amsmath}
+\docla,a4{ar\usge[npu use[s]{busee{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -61,47 +58,47 @@
 
 	\section{Introducción de la práctica}
 	\label{sec:introPractica}
-	
+
 	En esta práctica he desarrollado algoritmos genéticos tanto estacionarios como generacionales con los dos operadores de cruce propuestos (aritmético y BLX) así como un algoritmo memético basado en el genético generacional.
-	
+
 	Al igual que en la práctica anterior el objetivo es ejecutar estos algoritmos sobre los conjuntos de datos dados para observar su comportamiento y realizar una comparativa entre los mismos. A los algoritmos mencionados anteriormente se les suman el 1NN con todos los pesos a uno, el greedy Relief y la búsqueda local (algoritmos implementados en la primera práctica).
-	
+
 	Igual que en la práctica anterior he realizado un procesamiento de los datos para eliminar tuplas repetidas, de forma que ya tenemos implementado el leave one out para conjuntos distintos en el KNN y además, he implementado una versión más rápida de KNN usando la librería NumPy con la intención de reducir tiempos en la búsqueda local, en los algoritmos genéticos y en los meméticos.
-	
+
 	En la práctica se desarrollará cómo he implementado los algoritmos genéticos (en sus dos variantes) incluyendo los operadores de cruce y mutación así como su adaptación a algoritmo memético.
-	
+
 	\newpage
-	
+
 	\section{Descripción común a todos los algoritmos}
-	
+
 	Los algoritmos empleados han sido el KNN, el algoritmo greedy Relief, la metaheurística de búsqueda local, un algoritmo genético estacionario, un algoritmo genético generacional y un memético basado en el algoritmo genético generacional.
-	
+
 	Estos algoritmos comparten ciertos métodos y operadores que pasaré a explicar en esta sección.
-	
+
 	Para empezar se debe destacar que la representación escogida para las soluciones es un vector de números reales, es decir, si n es el número de características:
 	$$w\in \mathbb{R}^n \ t.q. \ \forall i \ con \ 0\leq i < n \ se \ tiene \ w_i \in [0,1]$$
 	O lo que es lo mismo, un vector de tamaño n con todas las posiciones rellenas con números del intervalo [0,1].
-	
+
 	A estos números me referiré como pesos asociados a las características, ya que lo que nos indican es el grado de importancia de dicha característica a la hora de clasificar los datos, siendo 1 el máximo de relevancia y 0 el mínimo.
-	
+
 	Así mismo cabe destacar que nuestra intención en este problema es obtener una buena calificación de dicho vector de pesos. Esto lo medimos mediante las tasas de acierto y simplicidad que se definen como:
 	$$Tasa\_acierto = 100\cdot \frac{nº  \ aciertos}{nº \ datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº \ valores \ de \ w \ < \ 0.2}{nº \ de \ atributos}$$
 	$$Tasa\_agregada = \frac{1}{2}\cdot Tasa\_acierto + \frac{1}{2}\cdot Tasa\_simplicidad$$
-	
+
 	La tasa de aciertos lo que nos mide es en un porcentaje cuántas instancias hemos clasificado correctamente mediante el algoritmo KNN usando el vector de pesos w.
-	
+
 	La tasa de simplicidad nos mide cuántos de los valores que tiene el vector de pesos son menores que 0.2. Esto se hace ya que, como imposición del problema, tenemos que si alguno de los pesos es menor que 0.2 no debemos usarlo, o lo que es lo mismo, debemos sustituirlo por un 0 en la función de la distancia que luego describiré. Midiendo esto obtenemos un dato de cuanto sobreajuste ha tenido nuestro algoritmo a la hora de obtener el vector de pesos. Cuantas menos características necesitemos para discernir la clase a la que pertenece una instancia de los datos, más simple será clasificar dicha instancia. Se expresa en porcentaje indicando 0 como ninguna simplicidad y 100 como la máxima simplicidad.
-	
+
 	De esta forma combinando ambas tasas obtenemos la tasa agregada que nos hace la media entre ambas tasas, de forma que le asignamos la misma importancia a acertar en la clasificación de las instancias y a la simplicidad en la solución. Cabe destacar que es imposible obtener una tasa de un 100\% a no ser que los datos se compongan únicamente de un punto ya que ello implicaría que la simplicidad ha de ser un 100\% (todos las posiciones del vector menores que 0.2) y por tanto la distancia sería 0 en todos los casos. De esta forma aspiraremos a una calificación lo mas alta posible pero teniendo en cuenta las restricciones de la función objetivo construida.
-	
+
 	Las funciones y operadores de uso común los he agrupado en un fichero llamado auxiliar.py. Este fichero contiene las funciones de lectura de datos, distancias, una función que devuelve el elemento más común de una lista, la norma euclídea, una función para dividir los datos en el número de particiones que queramos manteniendo el porcentaje de elementos de cada clase que había en el conjunto de datos original y el operador de mutación.
-	
+
 	\subsection{Generación de soluciones aleatorias}
-	
+
 	En los algoritmos genéticos y meméticos partimos de una población de soluciones aleatorias que generamos con una distribución uniforme, de forma que partimos en un inicio con una población de 30 individuos con valores en los vectores de pesos entre 0 y 1 generados de forma aleatoria.
-	
+
 	Nótese que en nuestro caso TAM\_POBLACION=30.
-	
+
 	\begin{algorithm}
 		\caption{generaPoblacionInicial(longitud)}
 		\begin{algorithmic}
@@ -116,17 +113,17 @@
 			\RETURN poblacion
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\subsection{Operador de cruce BLX-$\alpha$}
-	
+
 	Este operador de cruce se usa tanto en los algoritmos genéticos como meméticos.
-	
-	Se toman dos padres, de los que hallamos el elemento más grande de su vector de pesos y el más pequeño para poder obtener el máximo y mínimo de los dos. Esto nos va a dar un intervalo de valores para nuestro hijo. 
-	
+
+	Se toman dos padres, de los que hallamos el elemento más grande de su vector de pesos y el más pequeño para poder obtener el máximo y mínimo de los dos. Esto nos va a dar un intervalo de valores para nuestro hijo.
+
 	El hijo se va a generar tomando valores aleatorios con una distribución uniforme que estén en el intervalo $[min\_padres - \delta , max\_padres + \delta]$, donde $\delta = max\_padres - min\_padres$. De esta forma podemos obtener el número que deseemos de hijos tan solo con dos padres, ya que los valores son aleatorios y por tanto los hijos obtenidos serán distintos.
-	
+
 	Nótese que en nuestro caso $\alpha=0.3$
-	
+
 	\begin{algorithm}
 		\caption{cruceBLX(cromosoma1, cromosoma2)}
 		\begin{algorithmic}
@@ -146,15 +143,15 @@
 			\RETURN hijo
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	Nótese que hemos tenido que truncar las soluciones, ya que el valor $\delta$ utilizado en el algoritmo puede provocar que el hijo que obtengamos tenga valores fuera del intervalo [0,1], cosa que no tendría sentido para nuestro problema.
-	
+
 	\subsection{Operador de cruce Aritmético}
-	
+
 	El operador de cruce aritmético toma, igual que en el caso anterior, dos padres y devuelve un hijo. En este caso el hijo que obtenemos es único, ya que lo vamos a calcular haciendo la media posición a posición respecto a los dos padres. Esto nos va a garantizar que los hijos estén en el intervalo de definición, no como en el BLX.
-	
+
 	Un inconveniente que puede presentar este algoritmo es que vamos a tener mucha menos posibilidad de obtener valores muy cercanos a 0 o a 1, ya que al realizar la media siempre vamos a ir alejándonos de estos valores.
-	
+
 	\begin{algorithm}
 		\caption{cruceAritmetico(cromosoma1,cromosoma2)}
 		\begin{algorithmic}
@@ -165,11 +162,11 @@
 			\RETURN hijo
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\subsection{Función de mutación}
-	
+
 	Esta función recibe como entrada un vector de pesos y una posición que es la que se desea mutar, devolviendo como resultado el vector de pesos ya mutado y la posición aumentada en una unidad (se usa para el algoritmo de búsqueda local aunque puede ignorarse).
-	
+
 	\begin{algorithm}[!h]
 		\caption{mutacion(w,pos)}
 		\begin{algorithmic}
@@ -180,13 +177,13 @@
 			\RETURN w,pos\_nueva
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	Esta función es usada en búsqueda local y en todos los genéticos y meméticos a la hora de realizar la mutación de los cromosomas.
-	
+
 	\subsection{Torneo Binario}
-	
+
 	Para la selección de los dos padres utilizamos el torneo binario. Para ello cogemos dos individuos de la población y los comparamos entre sí cogiendo al mejor de los dos. Al repetir esta operación dos veces obtenemos los dos padres que necesitamos.
-	
+
 	\begin{algorithm}
 		\caption{torneoBinario(data,poblacion,k,etiquetas,valoraciones)}
 		\begin{algorithmic}
@@ -200,26 +197,26 @@
 			\ENDIF
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\newpage
-	
+
 	\section{Genético Estacionario}
 	\label{sec:GE}
-	
+
 	El algoritmo genético estacionario se basa en la dinámica de poblaciones como todos los algoritmos genéticos, con la salvedad de que sólo evolucionamos y cruzamos una única pareja de padres para obtener sólo dos hijos en el caso de BLX y para el aritmético haremos lo mismo con cuatro padres para obtener dos hijos de igual forma.
-	
+
 	Partimos de una población inicial de 30 individuos generados de forma aleatoria tal y como se ha explicado en la parte común a todos los algoritmos.
-	
+
 	Tras la obtención de los dos hijos hacemos una mutación con probabilidad de 0.001 en cada gen (posición del vector de pesos).
-	
+
 	Estos dos hijos generados se sumarán a la población existente. Haremos una valoración de la población viendo cuáles son los 30 individuos con mejor puntuación y nos quedaremos con ellos. Esto puede implicar que si los dos hijos generados son peores que el resto de la población desecharemos a los 2 hijos generados y nos volveremos a quedar con la población que teníamos antes de realizar el cruce.
-	
+
 	Haciendo esto vamos a ir obteniendo a cada iteración dos individuos nuevos que se introducirán en la población mejorándola de forma gradual.
-	
+
 	Al final del algoritmo comprobamos cuál de los elementos de la población tiene mejor valoración para devolver al mejor individuo de nuestra población.
-	
+
 	Nótese que la constante TAM\_POBLACION es 30 en nuestro caso y MAX\_EVALUACIONES es 15000
-	
+
 	\begin{algorithm}
 		\caption{GeneticoEstacionario(data,k,operador\_cruce)}
 		\begin{algorithmic}
@@ -238,7 +235,7 @@
 			\WHILE{evaluaciones $<$ MAX\_EVALUACIONES}
 				\STATE padres $\leftarrow$ Padres escogidos por torneo binario según num\_padres
 				\STATE hijos $\leftarrow$ Obtenemos los hijos según operador\_cruce con los padres calculados.
-				\STATE 
+				\STATE
 				\STATE Muta cada gen de los hijos si uniforme(0,1) es menor que 0.001.
 				\STATE poblacion $\leftarrow$ [poblacion,hijos]
 				\STATE valoraciones $\leftarrow$ [valoraciones,valoraciones de los hijos]
@@ -249,22 +246,24 @@
 			\RETURN Devolver al individuo con mayor valoración de la población.
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	Donde el parámetro data y k se emplean en la llamada a KNN para obtener una calificación de cada individuo de la población para poder compararlos.
-	
+
+	\newpage
+
 	\section{Genético Generacional}
 	\label{sec:GG}
-	
+
 	El algoritmo genético generacional se basa en la dinámica de poblaciones al igual que el estacionario. Este algoritmo, al contrario que el anterior, intenta reemplazar toda o gran parte de la población a cada iteración del mismo de forma que a cada paso mejore una parte sustancial de la misma tras los cruces.
-	
+
 	En nuestro caso el porcentaje escogido es de un 70\% por lo que a cada iteración se generarán $0.7\cdot 30 = 21$ hijos que se introducirán en la población reemplazando a los padres.
-	
+
 	Así mismo vamos a ir guardando a cada paso el mejor individuo de cada generación con la intención de que si el peor de la población generada en esta iteración es peor que el mejor de la anterior lo reemplacemos.
-	
+
 	Esto también nos va a proveer de una forma sencilla de reconocer al mejor individuo una vez acabemos el algoritmo.
-	
+
 	También debemos de tener en cuenta que al igual que en el anterior algoritmo genético vamos a mutar la nueva población generada con una probabilidad de 0.001. En este caso al ser un número mayor de genes vamos a ahorrarnos la generación de números aleatorios mutando siempre un número fijo de los mismos que será $21\cdot num\_caracteristicas\cdot 0.001$.
-	
+
 	\begin{algorithm}
 		\caption{GeneticoGeneracional(data,k,operador\_cruce)}
 		\begin{algorithmic}
@@ -298,16 +297,18 @@
 			\RETURN Mejor de la población.
 		\end{algorithmic}
 	\end{algorithm}
-		
+
+	\newpage
+
 	\section{Meméticos}
 	\label{sec:memeticos}
-	
+
 	El algoritmo memético toma la misma estructura que el algoritmo genético generacional en cuanto a esquema de evolución, cruce y mutaciones, con la salvedad de que introducimos una fase de explotación en el mismo.
-	
+
 	La variante implementada toma el mismo algoritmo genético generacional y aplica al 10\% de los 30 individuos una búsqueda local para maximizar su valoración. De esta forma vamos a tener un tercio de la población con una valoración mejor que el resto. Esto lo que va a intentar hacer es maximizar y hacer la convergencia mucho más rápida que en los algoritmos genéticos.
-	
+
 	Así mismo este algoritmo está implementado con los dos operadores de cruce con la intención de comprobar cuál es el que nos da mejores resultados con respecto al otro.
-	
+
 	\begin{algorithm}
 		\caption{Memetico(data,k,operador\_cruce,nGeneraciones,prob\_bl,mejores=False)}
 		\begin{algorithmic}
@@ -359,12 +360,14 @@
 			\RETURN Mejor de la población.
 		\end{algorithmic}
 	\end{algorithm}
-		
-	Donde prob\_bl es el porcentaje de la población al que queremos aplicar la búsqueda local.	
-	
-	\section{KNN}
+
+	Donde prob\_bl es el porcentaje de la población al que queremos aplicar la búsqueda local.
+
+	\newpage
+
+	\section{Pseudocódigo KNN}
 	\label{sec:knn}
-	
+
 	\begin{algorithm}
 		\caption{KNN(w,datos\_test,datos\_entrenamiento, etiquetas\_entrenamiento, etiquetas\_test, k, mismos\_conjuntos)}
 		\begin{algorithmic}
@@ -384,12 +387,14 @@
 			\RETURN $\frac{Numero \ de \ elementos \ de \ clases \ que \ han \ acertado \ con \ respecto \ a \ etiquetas\_test}{longitud(etiquetas\_test)}$
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	Cabe notar que el número que devolvemos está entre 0 y 1, por lo que en los algoritmos de valoración debemos tener esto en cuenta para multiplicarlo por 100 y convertirlo en un porcentaje.
-	
-	\section{Relief}
+
+	\newpage
+
+	\section{Pseudocódigo Relief}
 	\label{sec:relief}
-	
+
 	\begin{algorithm}
 		\caption{elementoMinimaDistancia(e,lista)}
 		\begin{algorithmic}
@@ -405,7 +410,7 @@
 			\RETURN lista[indice\_menor\_distancia]
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\begin{algorithm}
 		\caption{Relief(data)}
 		\begin{algorithmic}
@@ -438,12 +443,12 @@
 			\RETURN w
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\newpage
-	
-	\section{Búsqueda Local}
+
+	\section{Pseudocódigo Búsqueda Local}
 	\label{sec:bl}
-	
+
 	\begin{algorithm}
 		\caption{primerVector(n)}
 		\begin{algorithmic}
@@ -454,7 +459,7 @@
 			\RETURN w
 		\end{algorithmic}
 	\end{algorithm}
-	
+
 	\begin{algorithm}
 		\caption{busquedaLocal(data,k)}
 		\begin{algorithmic}
@@ -481,15 +486,28 @@
 			\ENDWHILE
 			\RETURN w
 		\end{algorithmic}
-	\end{algorithm}	
-	
+	\end{algorithm}
+
+	\newpage
+
 	\section{Procedimiento de desarrollo de la práctica}
 	\label{sec:procedimiento}
 
-	
+	Las prácticas las he implementado usando python3.5. Los archivos utilizados tienen cada uno el nombre de la temática que tratan, teniendo por ejemplo geneticos.py como el fichero que contiene la implementación de los genéticos o por ejemplo auxiliar.py que es el fichero que contiene funciones que se usan de forma regular por todos los algoritmos o por varios de ellos.
+
+	Para la implementación no he usado ningún framework, aunque he probado a emplear Sklearn para la implementación del algoritmo KNN. Este algoritmo resultó ser más lento que mi versión implementada con la librería numpy por lo que no lo he utilizado al final.
+
+	La ejecución de las prácticas se puede hacer mediante dos programas: resultados.py o main.py.
+
+	En el caso de resultados.py se ejecutan todos los algoritmos sobre todos los conjuntos de datos de forma que obtenemos todo lo necesario para compararlos entre sí. Este fichero se puede ejecutar como 'python3.5 resultados.py'.
+
+	El fichero main.py permite la ejecución de un algoritmo concreto sobre un fichero de datos concreto obteniendo los resultados asociados a dicho fichero y algoritmo. Para ello se nos pide por la ruta del fichero de datos, el valor de la constante k para el KNN, el algoritmo que queremos evaluar y el número de particiones que vamos a hacer del conjunto de datos.
+
+	De igual modo si queremos cambiar la semilla usada en la generación de números aleatorios se puede encontrar al inicio de todos los ficheros de código para cambiarla.
+
 	\section{Resultados}
 	\label{sec:resultados}
-	
+
 	\begin{table}[ht]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -498,20 +516,20 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				Partición 1 & 71.8750 & 0.0000 & 35.9375 & 0.4403 & 76.3158 & 0.0000 & 38.1579 & 0.0546 & 70.5882 & 0.0000 & 35.2941 & 0.2561 \\ [0.5ex] \hline
-				Partición 2 & 84.3750 & 0.0000 & 42.1875 & 0.4341 & 81.5789 & 0.0000 & 40.7895 & 0.0527 & 77.9412 & 0.0000 & 38.9706 & 0.2959 \\ [0.5ex] \hline
-				Partición 3 & 71.8750 & 0.0000 & 35.9375 & 0.4329 & 94.7368 & 0.0000 & 47.3684 & 0.0543 & 67.6471 & 0.0000 & 33.8235 & 0.3161 \\ [0.5ex] \hline
-				Partición 4 & 81.2500 & 0.0000 & 40.6250 & 0.4340 & 73.6842 & 0.0000 & 36.8421 & 0.0530 & 60.2941 & 0.0000 & 30.1471 & 0.2984 \\ [0.5ex] \hline
-				Partición 5 & 85.9375 & 0.0000 & 42.9688 & 0.4484 & 76.7442 & 0.0000 & 38.3721 & 0.0586 & 66.2338 & 0.0000 & 33.1169 & 0.2715 \\ [0.5ex] \hline
-				Media & 79.0625 & 0.0000 & 39.5313 & 0.4380 & 80.6120 & 0.0000 & 40.3060 & 0.0546 & 68.5409 & 0.0000 & 34.2704 & 0.2876 \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tabla1NN}
 		\caption{Resultados 1NN}
 	\end{table}
-	
-	\newpage
-	
+
+
+
 	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -520,20 +538,20 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				Partición 1 & 71.8750 & 98.6301 & 85.2526 & 0.9703 & 78.9474 & 47.8261 & 63.3867 & 0.1254 & 75.0000 & 46.6667 & 60.8333 & 0.4568 \\ [0.5ex] \hline
-				Partición 2 & 87.5000 & 97.2603 & 92.3801 & 1.0143 & 81.5789 & 26.0869 & 53.8330 & 0.1267 & 73.5294 & 53.3333 & 63.4314 & 0.6407 \\ [0.5ex] \hline
-				Partición 3 & 71.8750 & 97.2603 & 84.5676 & 1.0385 & 86.8421 & 47.8261 & 67.3341 & 0.1263 & 67.6471 & 60.0000 & 63.8235 & 0.7070 \\ [0.5ex] \hline
-				Partición 4 & 81.2500 & 95.8904 & 88.5702 & 1.0530 & 78.9474 & 52.1739 & 65.5606 & 0.1254 & 72.0588 & 31.1111 & 51.5850 & 0.6594 \\ [0.5ex] \hline
-				Partición 5 & 85.9375 & 98.6301 & 92.2838 & 0.9963 & 72.0930 & 43.4783 & 57.7856 & 0.1180 & 72.7273 & 48.8889 & 60.8081 & 0.3986 \\ [0.5ex] \hline
-				Media & 79.6875 & 97.5342 & 88.6109 & 1.0145 & 79.6818 & 43.4783 & 61.5800 & 0.1244 & 72.1925 & 48.0000 & 60.0963 & 0.5725 \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tablaReliefK1}
 		\caption{Resultados Relief con K=1}
 	\end{table}
-	
-	\newpage
-	
+
+
+
 	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -542,21 +560,19 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				Partición 1 & 71.8750 & 34.2466 & 53.0608 & 186.6400 & 78.9474 & 26.0870 & 52.5172 & 9.0305 & 70.5882 & 35.5556 & 53.0719 & 52.5939 \\ [0.5ex] \hline
-				Partición 2 & 76.5625 & 54.7945 & 65.6785 & 436.2914 & 81.5789 & 39.1304 & 60.3547 & 6.8897 & 82.3529 & 24.4444 & 53.3987 & 92.8766 \\ [0.5ex] \hline
-				Partición 3 & 70.3125 & 30.1370 & 50.2247 & 185.3929 & 86.8421 & 17.3913 & 52.1167 & 4.3802 & 70.5882 & 57.7778 & 64.1830 & 120.7886 \\ [0.5ex] \hline
-				Partición 4 & 82.8125 & 54.7945 & 68.8035 & 354.7868 & 78.9474 & 52.1739 & 65.5606 & 21.2622 & 63.2353 & 31.1111 & 47.1732 & 70.7596 \\ [0.5ex] \hline
-				Partición 5 & 84.3750 & 39.7260 & 62.0505 & 224.3229 & 74.4186 & 30.4348 & 52.4267 & 9.3806 & 64.9351 & 44.4444 & 54.6898 & 90.2908 \\ [0.5ex] \hline
-				Media & 77.1875 & 42.7397 & 59.9636 & 277.4868 & 80.1469 & 33.0435 & 56.5952 & 10.1886 & 70.3400 & 38.6667 & 54.5033 & 85.4619 \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tablaBLK1}
 		\caption{Resultados Búsqueda Local con K=1}
 	\end{table}
-	
-	
-	\newpage
-	
+
+
 	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -565,15 +581,223 @@
 				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
 				\cline{2-13}
 				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
-				1-NN & 79.0625 & 0.0000 & 39.5313 & 0.4380 & 80.6120 & 0.0000 & 40.3060 & 0.0546 & 68.5409 & 0.0000 & 34.2704 & 0.2876 \\ [0.5ex] \hline
-				Relief & 79.6875 & 97.5342 & 88.6109 & 1.0145 & 79.6818 & 43.4783 & 61.5800 & 0.1244 & 72.1925 & 48.0000 & 60.0963 & 0.5725 \\ [0.5ex] \hline
-				BL & 77.1875 & 42.7397 & 59.9636 & 277.4868 & 80.1469 & 33.0435 & 56.5952 & 10.1886 & 70.3400 & 38.6667 & 54.5033 & 85.4619 \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaAGGBLXK1}
+		\caption{Resultados AGG-BLX con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaAGGCAK1}
+		\caption{Resultados AGG-CA con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaAGEBLXK1}
+		\caption{Resultados AGE-BLX con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaAGECAK1}
+		\caption{Resultados AGE-CA con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaMemetico10-1-BLXK1}
+		\caption{Resultados AM(10,1.0) BLX con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaMemetico10-01-BLXK1}
+		\caption{Resultados AM(10,0.1) BLX con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaMemetico10-01-mejores-BLXK1}
+		\caption{Resultados AM(10,0.1,mejores) BLX con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaMemetico10-1-CAK1}
+		\caption{Resultados AM(10,1.0) CA con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaMemetico10-01-CAK1}
+		\caption{Resultados AM(10,0.1) CA con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				Partición 1 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 2 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 3 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 4 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Partición 5 &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Media &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+			\end{tabular}
+		}
+		\label{tablaMemetico10-01-mejores-CAK1}
+		\caption{Resultados AM(10,0.1,mejores) CA con K=1}
+	\end{table}
+
+	\begin{table}[h!]
+		\centering
+		\resizebox{\textwidth}{!}{
+			\begin{tabular}{| c | c | c | c | c | c | c | c | c | c | c | c | c |}
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \multicolumn{4}{|c|}{Ozone} & \multicolumn{4}{| c|}{Parkinsons} & \multicolumn{4}{|c|}{Spectf-Heart} \\ [0.5ex]
+				\cline{2-13}
+				\multicolumn{1}{c|}{} & \%\_clas & \%\_red & Agr. & T (seg) & \%\_clas & \%\_red & Agr. & T  (seg) & \%\_clas & \%\_red & Agr. & T  (seg) \\ [0.5ex] \hline
+				1-NN &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				Relief &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				BL &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AGG-BLX &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AGG-CA &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AGE-BLX &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AGE-CA &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AM(10,1) BLX &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AM(10,0.1) BLX &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AM(10,0.1,mejores) BLX &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AM(10,1) CA &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AM(10,0.1) CA &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
+				AM(10,0.1,mejores) CA &  &  &  &  &  &  &  &  &  &  &  &  \\ [0.5ex] \hline
 			\end{tabular}
 		}
 		\label{tablaGlobalK1}
 		\caption{Resultados globales con K=1}
 	\end{table}
-	
-	
 
 \end{document}
