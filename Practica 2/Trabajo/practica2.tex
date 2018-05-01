@@ -183,10 +183,75 @@
 	
 	Esta función es usada en búsqueda local y en todos los genéticos y meméticos a la hora de realizar la mutación de los cromosomas.
 	
+	\subsection{Torneo Binario}
+	
+	Para la selección de los dos padres utilizamos el torneo binario. Para ello cogemos dos individuos de la población y los comparamos entre sí cogiendo al mejor de los dos. Al repetir esta operación dos veces obtenemos los dos padres que necesitamos.
+	
+	\begin{algorithm}
+		\caption{torneoBinario(data,poblacion,k,etiquetas,valoraciones)}
+		\begin{algorithmic}
+			\STATE individuos $\leftarrow$ 2 números aleatorios entre 0 y TAM\_POBLACION-1
+			\STATE valoracion\_ind1 $\leftarrow$ valoraciones[individuos[0]]
+			\STATE valoracion\_ind2 $\leftarrow$ valoraciones[individuos[1]]
+			\IF{valoracion\_ind1$>$valoracion\_ind2}
+				\RETURN individuos[0]
+			\ELSE
+				\RETURN individuos[1]
+			\ENDIF
+		\end{algorithmic}
+	\end{algorithm}
+	
 	\newpage
 	
 	\section{Genético Estacionario}
 	\label{sec:GE}
+	
+	El algoritmo genético estacionario se basa en la dinámica de poblaciones como todos los algoritmos genéticos, con la salvedad de que sólo evolucionamos y cruzamos una única pareja de padres para obtener sólo dos hijos en el caso de BLX y para el aritmético haremos lo mismo con cuatro padres para obtener dos hijos de igual forma.
+	
+	Partimos de una población inicial de 30 individuos generados de forma aleatoria tal y como se ha explicado en la parte común a todos los algoritmos.
+	
+	Tras la obtención de los dos hijos hacemos una mutación con probabilidad de 0.001 en cada gen (posición del vector de pesos).
+	
+	Estos dos hijos generados se sumarán a la población existente. Haremos una valoración de la población viendo cuáles son los 30 individuos con mejor puntuación y nos quedaremos con ellos. Esto puede implicar que si los dos hijos generados son peores que el resto de la población desecharemos a los 2 hijos generados y nos volveremos a quedar con la población que teníamos antes de realizar el cruce.
+	
+	Haciendo esto vamos a ir obteniendo a cada iteración dos individuos nuevos que se introducirán en la población mejorándola de forma gradual.
+	
+	Al final del algoritmo comprobamos cuál de los elementos de la población tiene mejor valoración para devolver al mejor individuo de nuestra población.
+	
+	Nótese que la constante TAM\_POBLACION es 30 en nuestro caso y MAX\_EVALUACIONES es 15000
+	
+	\begin{algorithm}
+		\caption{GeneticoEstacionario(data,k,operador\_cruce)}
+		\begin{algorithmic}
+			\STATE num\_padres $\leftarrow$ 0
+			\IF{operador\_cruce == cruceAritmetico}
+				\STATE num\_padres $\leftarrow$ 4
+			\ELSIF{operador\_cruce == cruceBLX}
+				\STATE num\_padres $\leftarrow$ 2
+			\ELSE
+				\STATE Error en el operador de cruce.
+			\ENDIF
+			\STATE
+			\STATE poblacion $\leftarrow$ generaPoblacionInicial(numero\_caracteristicas)
+			\STATE valoraciones $\leftarrow$ tasa\_agregada + tasa\_reduccion de cada individuo de la poblacion
+			\STATE evaluaciones $\leftarrow$ TAM\_POBLACION
+			\WHILE{evaluaciones $<$ MAX\_EVALUACIONES}
+				\STATE padres $\leftarrow$ Padres escogidos por torneo binario según num\_padres
+				\STATE hijos $\leftarrow$ Obtenemos los hijos según operador\_cruce con los padres calculados.
+				\STATE 
+				\STATE Muta cada gen de los hijos si uniforme(0,1) es menor que 0.001.
+				\STATE poblacion $\leftarrow$ [poblacion,hijos]
+				\STATE valoraciones $\leftarrow$ [valoraciones,valoraciones de los hijos]
+				\STATE Obtener los índices que los 30 mejores individuos de la población y quedarse con ellos.
+				\STATE Actualizar poblacion y valoraciones según los índices obtenidos.
+			\ENDWHILE
+			\RETURN Devolver al individuo con mayor valoración de la población.
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\section{Genético Generacional}
+	\label{sec:GG}
+	
 		
 	\section{KNN}
 	\label{sec:knn}
