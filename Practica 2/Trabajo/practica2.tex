@@ -96,115 +96,73 @@
 	
 	Las funciones y operadores de uso común los he agrupado en un fichero llamado auxiliar.py. Este fichero contiene las funciones de lectura de datos, distancias, una función que devuelve el elemento más común de una lista, la norma euclídea, una función para dividir los datos en el número de particiones que queramos manteniendo el porcentaje de elementos de cada clase que había en el conjunto de datos original y el operador de mutación.
 	
-	\subsection{Función de lectura de datos}
+	\subsection{Generación de soluciones aleatorias}
 	
-	La función de lectura de datos recibe la ruta del fichero arff y lee el contenido del mismo dando como resultado una lista de listas en la que cada una de ellas es una tupla o instancia de los datos.
+	En los algoritmos genéticos y meméticos partimos de una población de soluciones aleatorias que generamos con una distribución uniforme, de forma que partimos en un inicio con una población de 30 individuos con valores en los vectores de pesos entre 0 y 1 generados de forma aleatoria.
 	
-	El pseudocódigo de la función es:
+	Nótese que en nuestro caso TAM\_POBLACION=30.
 	
-	\begin{algorithm}[!h]
-		\caption{lecturaDatos(nombre\_fich)}
-		\label{algoritmoLecturaDatos}
+	\begin{algorithm}
+		\caption{generaPoblacionInicial(longitud)}
 		\begin{algorithmic}
-			\STATE data $\leftarrow$ [ ]
-			\FOR{linea de nombre\_fich}
-				\IF{se ha leído @data}
-					\STATE data $\leftarrow$ [data,linea]
-				\ENDIF
-			\ENDFOR
-			\FOR{tupla en data}
-				\FOR{atributo en tupla}
-					\STATE Normalizar.
+			\STATE poblacion $\leftarrow$ [ ]
+			\FOR{i=0 , ... , TAM\_POBLACION-1}
+				\STATE cromosoma $\leftarrow$ [ ]
+				\FOR{j=0 , ... , longitud-1}
+					\STATE cromosoma $\leftarrow$ [cromosoma,uniforme(0,1)]
 				\ENDFOR
+				\STATE poblacion $\leftarrow$ [poblacion,cromosoma]
 			\ENDFOR
-			\FOR{i=0,...,longitud(data)-1}
-				\FOR{j=i,...,longitud(data)-1}
-					\IF{data[i]==data[j]}
-						\STATE Eliminar data[i].
-					\ENDIF
-				\ENDFOR
-			\ENDFOR
-			\RETURN data
+			\RETURN poblacion
 		\end{algorithmic}
 	\end{algorithm}
 	
-	Para esta implementación en concreto nos apoyamos en que Python tiene polimorfismo para todos los tipos de datos sin necesidad de declarar las variables, de forma que no nos importa que los datos sean numéricos o de tipo string.
+	\subsection{Operador de cruce BLX-$\alpha$}
 	
-	Nótese así mismo que hemos eliminado los duplicados en el conjunto de datos gracias a los dos últimos bucles anidados.
+	Este operador de cruce se usa tanto en los algoritmos genéticos como meméticos.
 	
-	\subsection{Funcion de distancia}
+	Se toman dos padres, de los que hallamos el elemento más grande de su vector de pesos y el más pequeño para poder obtener el máximo y mínimo de los dos. Esto nos va a dar un intervalo de valores para nuestro hijo. 
 	
-	Se debe tener en cuenta que e1 y e2 son ambos dos tuplas del conjunto de datos de las que vamos a obtener la distancia y w es el vector de pesos que toma parte en el cómputo.
+	El hijo se va a generar tomando valores aleatorios con una distribución uniforme que estén en el intervalo $[min\_padres - \delta , max\_padres + \delta]$, donde $\delta = max\_padres - min\_padres$. De esta forma podemos obtener el número que deseemos de hijos tan solo con dos padres, ya que los valores son aleatorios y por tanto los hijos obtenidos serán distintos.
 	
-	\begin{algorithm}[!h]
-		\caption{distanciaEuclidea(e1,e2,w)}
+	Nótese que en nuestro caso $\alpha=0.3$
+	
+	\begin{algorithm}
+		\caption{cruceBLX(cromosoma1, cromosoma2)}
 		\begin{algorithmic}
-			\IF{longitud(e1)!=longitud(e2)}
-			\STATE No se puede hallar la distancia.
-			\ELSE
-			\STATE distancia = $\sum_{i=1}^{longitud(e1)}w_i\cdot (e1_i - e2_i)^2$
-			\ENDIF
+			\STATE hijo $\leftarrow$ [ ]
+			\STATE max\_c1 $\leftarrow$ máximo(cromosoma1)
+			\STATE max\_c2 $\leftarrow$ máximo(cromosoma2)
+			\STATE min\_c1 $\leftarrow$ mínimo(cromosoma1)
+			\STATE min\_c2 $\leftarrow$ mínimo(cromosoma2)
+			\STATE max\_intervalo $\leftarrow$ máximo(max\_c1,max\_c2)
+			\STATE min\_intervalo $\leftarrow$ mínimo(min\_c1,min\_c2)
+			\STATE delta $\leftarrow$ $(max\_intervalo-min\_intervalo)\cdot \alpha$
+			\FOR{i=0 , ... , longitud(cromosoma1)}
+				\STATE hijo $\leftarrow$ $[hijo,uniforme(min\_intervalo - \delta, max\_intervalo + \delta)]$
+			\ENDFOR
+			\STATE Si hay alguna posición negativa en el hijo se trunca a 0.
+			\STATE Si hay alguna posición mayor a 1 en el hijo se trunca a 1.
+			\RETURN hijo
 		\end{algorithmic}
 	\end{algorithm}
 	
-	Esta fórmula está integrada en el algoritmo KNN para realizarla de forma matricial, de forma que hacemos el cálculo mucho más rápido.
+	Nótese que hemos tenido que truncar las soluciones, ya que el valor $\delta$ utilizado en el algoritmo puede provocar que el hijo que obtengamos tenga valores fuera del intervalo [0,1], cosa que no tendría sentido para nuestro problema.
 	
-	\subsection{Función MasComun}
+	\subsection{Operador de cruce Aritmético}
 	
-	Esta función lo que hace es devolvernos el elemento que más se repite dentro de un vector, esto es utilizado en el algoritmo KNN para obtener la clase más común entre los k elementos con distancia mínima al dado.
+	El operador de cruce aritmético toma, igual que en el caso anterior, dos padres y devuelve un hijo. En este caso el hijo que obtenemos es único, ya que lo vamos a calcular haciendo la media posición a posición respecto a los dos padres. Esto nos va a garantizar que los hijos estén en el intervalo de definición, no como en el BLX.
 	
-	\begin{algorithm}[!h]
-		\caption{masComun(lista)}
+	Un inconveniente que puede presentar este algoritmo es que vamos a tener mucha menos posibilidad de obtener valores muy cercanos a 0 o a 1, ya que al realizar la media siempre vamos a ir alejándonos de estos valores.
+	
+	\begin{algorithm}
+		\caption{cruceAritmetico(cromosoma1,cromosoma2)}
 		\begin{algorithmic}
-			\STATE vector\_repeticiones $\leftarrow$ [ ]
-			\FOR{elemento en lista}
-			\STATE Contar el número de veces que aparece e introducirlo en el vector de repeticiones.
+			\STATE hijo $\leftarrow$ [ ]
+			\FOR{i=0 , ... , longitud(cromosoma1)}
+				\STATE hijo $\leftarrow$ [hijo,$\frac{cromosoma1[i]+cromosoma2[i]}{2}$]
 			\ENDFOR
-			\STATE Obtener el elemento con mayor número de apariciones.
-		\end{algorithmic}
-	\end{algorithm}
-	
-	\subsection{Función de norma euclídea}
-	
-	Esta función toma una lista de elementos y devuelve la norma euclídea asociada al vector que representa la lista.
-	
-	\begin{algorithm}[!h]
-		\caption{normaEuclidea(e)}
-		\begin{algorithmic}
-			\STATE norma $\leftarrow$ 0
-			\FOR{ei en e}
-			\STATE norma $\leftarrow$ norma+$ei^2$
-			\ENDFOR
-			\STATE norma $\leftarrow$ $\sqrt{norma}$
-			\RETURN norma
-		\end{algorithmic}
-	\end{algorithm}
-	
-	\subsection{Función de división de datos}
-	
-	Esta función divide el conjunto de datos inicial en n particiones todas ellas respetando el porcentaje de ocurrencias de cada clase que tenía el conjunto de datos inicial.
-	
-	\begin{algorithm}[!h]
-		\caption{divideDatosFCV(data,n)}
-		\begin{algorithmic}
-			\STATE particiones $\leftarrow$ [ ]
-			\STATE tam\_particion $\leftarrow$ $\frac{longitud(data)}{n}$
-			\STATE clases $\leftarrow$ Posibles clases del conjunto data.
-			\STATE proporciones\_clases $\leftarrow$ [ ]
-			\FOR{clase en clases}
-			\STATE proporciones\_clases $\leftarrow$ [proporciones\_clases, nueva\_proporcion]
-			\ENDFOR
-			\FOR{i en 0..n}
-			\STATE particion $\leftarrow$ [ ]
-			\FOR{j en 0..numero\_clases}
-			\STATE numero\_elementos\_clase = proporciones\_clases[j]*tam\_particion
-			\FOR{k en 0..longitud(data)}
-			\STATE Introducir en particion el número de elementos de clase calculado para cada clase.
-			\ENDFOR
-			\ENDFOR
-			\ENDFOR
-			\STATE Si han sobrado datos sin colocar los ponemos en la última partición.
-			\RETURN particiones
+			\RETURN hijo
 		\end{algorithmic}
 	\end{algorithm}
 	
@@ -226,21 +184,13 @@
 	Esta función es usada en búsqueda local y en todos los genéticos y meméticos a la hora de realizar la mutación de los cromosomas.
 	
 	\newpage
+	
+	\section{Genético Estacionario}
+	\label{sec:GE}
 		
 	\section{KNN}
 	\label{sec:knn}
 	
-	El algoritmo KNN ha sido utilizado en estas prácticas tanto como clasificador (y por tanto con el objetivo de obtener una valoración de un vector de pesos) como algoritmo de comparación.
-	El guión de prácticas nos pedía implementar el algoritmo 1NN, pero yo he decidido implementarlo de forma genérica para poder comprobar cómo cambiaban los resultados cuando incrementamos el número de vecinos más cercanos.
-	
-	Este algoritmo toma como entrada un vector de pesos, un conjunto de datos de entrenamiento con sus etiquetas de clase, otro de test con el conjunto de etiquetas también, un valor k que nos indica cuántos vecinos más cercanos queremos tomar para clasificar cada dato y un booleano que nos indica si los dos conjuntos pasados son iguales (cosa que ocurre por ejemplo en la búsqueda local, genéticos y el memético) con la intención de aplicar el leave-one-out. 
-	El procedimiento consiste en tomar cada dato del conjunto de test y hallar los k datos del conjunto de entrenamiento que tienen distancia mínima con el dato tomado del conjunto de test. De ahí lo que hacemos es clasificar el dato con la clase más frecuente de entre los k vecinos más cercanos calculados. De esta forma, intuitivamente, asignamos la misma clase a datos que están próximos entre sí. Una vez obtenida la clase de estos elementos lo que hacemos es comprobar cuántas clases hemos acertado al clasificar de esta forma. Con esto obtenemos tras la ejecución del algoritmo un número entre 0 y 100 que nos indica cual ha sido nuestra tasa de acierto (100 todo correcto, 0 ninguna correcta).
-	
-	Para emplear este algoritmo como comparación para los otros lo que hacemos es introducir como vector de pesos un vector con todas las posiciones a 1. De esta forma obtenemos la calificación que obtendríamos si no hubiéramos incluido en la fórmula de la distancia una ponderación con pesos.
-	
-	Nótese que para esta implementación el vector de pesos pasado tiene, en las posiciones con valor inicial menor que 0.29, ceros. Esto se hace con la intención de mejorar la eficiencia del algoritmo.
-	
-	El pseudocódigo del algoritmo es:
 	\begin{algorithm}
 		\caption{KNN(w,datos\_test,datos\_entrenamiento, etiquetas\_entrenamiento, etiquetas\_test, k, mismos\_conjuntos)}
 		\begin{algorithmic}
@@ -265,16 +215,6 @@
 	
 	\section{Relief}
 	\label{sec:relief}
-	
-	El algoritmo Relief es un algoritmo greedy que busca rapidez en detrimento de mejores resultados de clasificación.
-	
-	El algoritmo toma como entrada únicamente el conjunto de datos. Para cada elemento del conjunto buscamos el elemento de la misma clase más cercano y el elemento de la clase contraria más cercano de forma que tenemos al amigo y enemigos más cercanos. En la literatura es común encontrar estos elementos como near hit y near miss.
-	
-	Partiendo de un vector de pesos con todas las posiciones a 0 tomamos el amigo y enemigo más cercano y restamos a nuestro elemento del conjunto de datos tanto el amigo como el enemigo. Después de esto lo que hacemos es sumar la resta del enemigo y restar la resta del amigo, de forma que aumentamos la distancia que dicho vector de pesos produce para hacer que el amigo esté más cercano del dato que el enemigo.
-	
-	Esto ocurre ya que sumamos la distancia del elemento al enemigo haciendo que los pesos sean mayores para el mismo y restamos la distancia del elemento al amigo haciendo que nos acerque en distancia a dicha tupla.
-	
-	A continuación se describe el funcionamiento en pseudocódigo:
 	
 	\begin{algorithm}
 		\caption{elementoMinimaDistancia(e,lista)}
@@ -325,22 +265,10 @@
 		\end{algorithmic}
 	\end{algorithm}
 	
-	Tenemos en primer lugar la función elementoMinimaDistancia que nos devuelve el elemento de la lista más cercano al elemento e. De esta forma podemos hallar el amigo y enemigo más cercano para el algoritmo Relief. Cabe destacar que para que el vector de pesos esté con números entre 0 y 1 tenemos que poner al final del algoritmo los elementos del vector negativos a 0 y el resto los normalizamos dividiendo por el máximo elemento del vector de forma que todas las posiciones nos queden entre 0 y 1.
-	
 	\newpage
 	
 	\section{Búsqueda Local}
 	\label{sec:bl}
-	
-	El algoritmo de búsqueda local tiene como intención, al igual que el anterior, proporcionarnos un vector de pesos que maximice la tasa agregada que obtenemos como ya he mencionado anteriormente.
-	
-	Este algoritmo comienza con un vector de pesos aleatorio generado con una distribución uniforme en el intervalo [0,1], obteniendo a partir de ahí mejores vectores a cada iteración. La generación de vecinos viene dada por un operador que toma posiciones aleatorias del vector de pesos (sin repetición) y les suma un valor aleatorio generado con una distribución normal de media 0 y desviación 0.3. Tras esto truncamos el vector de pesos para que cumpla las restricciones del problema.
-	
-	Dado el vector de pesos inicial obtenemos su valoración de la tasa agregada (incluye la simplicidad y la tasa de aciertos). Generamos un vecino mediante la forma mencionada anteriormente y comprobamos si su tasa es mayor que la del vector de pesos actual. Si esto es así descartamos nuestro vector de pesos y tomamos al vecino, en caso contrario continuaremos explorando el vecindario hasta encontrar uno que mejore el resultado, agotar las posibilidades de vecinos o llegar a 15.000 evaluaciones de la función objetivo o $20\cdot n$ vecinos explorados donde n es el número de atributos de cada tupla de datos.
-	
-	De esta manera otorgamos una forma de parar a nuestro algoritmo y no excederse en la búsqueda.
-	
-	Las funciones que intervienen, en pseudocódigo, son las siguientes:
 	
 	\begin{algorithm}
 		\caption{primerVector(n)}
@@ -379,15 +307,7 @@
 			\ENDWHILE
 			\RETURN w
 		\end{algorithmic}
-	\end{algorithm}
-	
-	Debe tomarse en cuenta que la función Valoracion(data,data,k,w) devuelve la tasa agregada teniendo en cuenta la simplicidad y la tasa de acierto como se ha descrito en el algoritmo KNN.
-	Este algoritmo, como ya discutiré en la parte de resultados, puede quedarse atrapado fácilmente en un máximo local y va a consumir mucho más tiempo, ya que cada llamada de la función valoración ejecuta el algoritmo KNN sobre dicho conjunto de datos sumando así mayor tiempo de ejecución que el de sus competidores.
-	
-	\section{Genético Estacionario}
-	\label{sec:GE}
-	
-	
+	\end{algorithm}	
 	
 	\section{Procedimiento de desarrollo de la práctica}
 	\label{sec:procedimiento}
