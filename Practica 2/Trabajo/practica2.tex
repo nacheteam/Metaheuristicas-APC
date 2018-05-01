@@ -11,7 +11,7 @@
 %         Paquetes usados sólo para esta entrega         %
 %--------------------------------------------------------%
 
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 
@@ -289,16 +289,79 @@
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 					\ENDIF
 					\STATE Sustituye los padres por los hijos generados
-					\STATE Muta la nueva población con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
-					\STATE Actualiza las valoraciones de los individuos.
-					\STATE Si el peor de la nueva población es peor que el mejor de la anterior lo sustituimos.
-					\STATE Actualiza el mejor de la población.
 				\ENDFOR
-				\RETURN Mejor de la población.
+				\STATE Muta la nueva población con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+				\STATE Actualiza las valoraciones de los individuos.
+				\STATE Si el peor de la nueva población es peor que el mejor de la anterior lo sustituimos.
+				\STATE Actualiza el mejor de la población.
 			\ENDWHILE
+			\RETURN Mejor de la población.
 		\end{algorithmic}
 	\end{algorithm}
 		
+	\section{Meméticos}
+	\label{sec:memeticos}
+	
+	El algoritmo memético toma la misma estructura que el algoritmo genético generacional en cuanto a esquema de evolución, cruce y mutaciones, con la salvedad de que introducimos una fase de explotación en el mismo.
+	
+	La variante implementada toma el mismo algoritmo genético generacional y aplica al 10\% de los 30 individuos una búsqueda local para maximizar su valoración. De esta forma vamos a tener un tercio de la población con una valoración mejor que el resto. Esto lo que va a intentar hacer es maximizar y hacer la convergencia mucho más rápida que en los algoritmos genéticos.
+	
+	Así mismo este algoritmo está implementado con los dos operadores de cruce con la intención de comprobar cuál es el que nos da mejores resultados con respecto al otro.
+	
+	\begin{algorithm}
+		\caption{Memetico(data,k,operador\_cruce,nGeneraciones,prob\_bl,mejores=False)}
+		\begin{algorithmic}
+			\STATE poblacion $\leftarrow$ generaPoblacionInicial(num\_caracteristicas)
+			\STATE mutaciones $\leftarrow$ PROB\_MUTACION*TAM\_POBLACION*num\_caracteristicas
+			\STATE num\_parejas $\leftarrow$ TAM\_POBLACION*PROB\_CRUCE
+			\STATE valoraciones $\leftarrow$ valoraciones de la población
+			\STATE mejor\_solucion $\leftarrow$ Mejor solución de la población.
+			\STATE contador\_generaciones $\leftarrow$ 1
+			\WHILE{evaluaciones $<$ MAX\_EVALUACIONES}
+				\IF{contador\_generaciones\%nGeneraciones==0}
+					\STATE n\_elem\_bl $\leftarrow$ prob\_bl*TAM\_POBLACION
+					\STATE individuos $\leftarrow$ [ ]
+					\IF{not mejores}
+						\STATE individuos $\leftarrow$ Tomar n\_elem\_bl de forma aleatoria desde 0,...,TAM\_POBLACION-1
+					\ELSE
+						\STATE individuos $\leftarrow$ Toma los 0.1*TAM\_POBLACION mejores de la poblacion
+					\ENDIF
+					\FOR{ind en individuos}
+						\STATE Aplica la búsqueda local a poblacion[ind]
+						\STATE Actualiza el número de evaluaciones.
+					\ENDFOR
+					\STATE Actualiza las valoraciones
+					\STATE Actualiza las evaluaciones.
+				\ENDIF
+				\STATE
+				\FOR{i=0 , ... , num\_parejas-1}
+					\IF{operador\_cruce==cruceAritmetico}
+						\STATE hijos $\leftarrow$ [ ]
+						\STATE padres $\leftarrow$ genera 4 padres con torneoBinario
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[2],padres[3])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[2])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[1],padres[2])]
+					\ELSE
+						\STATE hijos $\leftarrow$ [ ]
+						\STATE padres $\leftarrow$ genera 2 padres con torneoBinario
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
+					\ENDIF
+					\STATE Sustituye los padres por los hijos generados
+				\ENDFOR
+				\STATE Muta la nueva población con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+				\STATE Actualiza las valoraciones de los individuos.
+				\STATE Si el peor de la nueva población es peor que el mejor de la anterior lo sustituimos.
+				\STATE Actualiza el mejor de la población.
+				\STATE contador\_generaciones $\leftarrow$ contador\_generaciones + 1
+			\ENDWHILE
+			\RETURN Mejor de la población.
+		\end{algorithmic}
+	\end{algorithm}
+		
+	Donde prob\_bl es el porcentaje de la población al que queremos aplicar la búsqueda local.	
+	
 	\section{KNN}
 	\label{sec:knn}
 	
