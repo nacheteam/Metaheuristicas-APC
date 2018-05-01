@@ -244,14 +244,60 @@
 				\STATE valoraciones $\leftarrow$ [valoraciones,valoraciones de los hijos]
 				\STATE Obtener los índices que los 30 mejores individuos de la población y quedarse con ellos.
 				\STATE Actualizar poblacion y valoraciones según los índices obtenidos.
+				\STATE evaluaciones $\leftarrow$ evaluaciones+2
 			\ENDWHILE
 			\RETURN Devolver al individuo con mayor valoración de la población.
 		\end{algorithmic}
 	\end{algorithm}
 	
+	Donde el parámetro data y k se emplean en la llamada a KNN para obtener una calificación de cada individuo de la población para poder compararlos.
+	
 	\section{Genético Generacional}
 	\label{sec:GG}
 	
+	El algoritmo genético generacional se basa en la dinámica de poblaciones al igual que el estacionario. Este algoritmo, al contrario que el anterior, intenta reemplazar toda o gran parte de la población a cada iteración del mismo de forma que a cada paso mejore una parte sustancial de la misma tras los cruces.
+	
+	En nuestro caso el porcentaje escogido es de un 70\% por lo que a cada iteración se generarán $0.7\cdot 30 = 21$ hijos que se introducirán en la población reemplazando a los padres.
+	
+	Así mismo vamos a ir guardando a cada paso el mejor individuo de cada generación con la intención de que si el peor de la población generada en esta iteración es peor que el mejor de la anterior lo reemplacemos.
+	
+	Esto también nos va a proveer de una forma sencilla de reconocer al mejor individuo una vez acabemos el algoritmo.
+	
+	También debemos de tener en cuenta que al igual que en el anterior algoritmo genético vamos a mutar la nueva población generada con una probabilidad de 0.001. En este caso al ser un número mayor de genes vamos a ahorrarnos la generación de números aleatorios mutando siempre un número fijo de los mismos que será $21\cdot num\_caracteristicas\cdot 0.001$.
+	
+	\begin{algorithm}
+		\caption{GeneticoGeneracional(data,k,operador\_cruce)}
+		\begin{algorithmic}
+			\STATE poblacion $\leftarrow$ generaPoblacionInicial(num\_caracteristicas)
+			\STATE mutaciones $\leftarrow$ PROB\_MUTACION*TAM\_POBLACION*num\_caracteristicas
+			\STATE num\_parejas $\leftarrow$ TAM\_POBLACION*PROB\_CRUCE
+			\STATE valoraciones $\leftarrow$ valoraciones de la población
+			\STATE mejor\_solucion $\leftarrow$ Mejor solución de la población.
+			\WHILE{evaluaciones $<$ MAX\_EVALUACIONES}
+				\FOR{i=0 , ... , num\_parejas-1}
+					\IF{operador\_cruce==cruceAritmetico}
+						\STATE hijos $\leftarrow$ [ ]
+						\STATE padres $\leftarrow$ genera 4 padres con torneoBinario
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[2],padres[3])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[2])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[1],padres[2])]
+					\ELSE
+						\STATE hijos $\leftarrow$ [ ]
+						\STATE padres $\leftarrow$ genera 2 padres con torneoBinario
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
+						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
+					\ENDIF
+					\STATE Sustituye los padres por los hijos generados
+					\STATE Muta la nueva población con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+					\STATE Actualiza las valoraciones de los individuos.
+					\STATE Si el peor de la nueva población es peor que el mejor de la anterior lo sustituimos.
+					\STATE Actualiza el mejor de la población.
+				\ENDFOR
+				\RETURN Mejor de la población.
+			\ENDWHILE
+		\end{algorithmic}
+	\end{algorithm}
 		
 	\section{KNN}
 	\label{sec:knn}
