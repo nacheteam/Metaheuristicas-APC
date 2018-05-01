@@ -43,12 +43,13 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             if not mejores:
                 individuos = random.sample(range(TAM_POBLACION),n_elem_bl)
             else:
-                valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
-                valoraciones = np.sum(valoraciones,axis=1)
                 individuos = valoraciones.argsort()[-n_elem_bl:][::-1]
             for ind in individuos:
                 poblacion[ind],ev = busqueda_local.busquedaLocal(data,k,2*len(data_np[0]))
                 evaluaciones+=ev
+            valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
+            valoraciones = np.sum(valoraciones,axis=1)
+            evaluaciones+=TAM_POBLACION
 
         contador_generaciones+=1
         for i in range(num_parejas):

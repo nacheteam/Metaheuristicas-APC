@@ -20,7 +20,7 @@ def primerVector(n):
         w.append(random.uniform(0,1))
     return w
 
-def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL):
+def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL,w_param=-1):
     """
     @brief Función de busqueda local para hallar un vector de pesos.
     @param data Lista con el conjunto de datos.
@@ -32,7 +32,7 @@ def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL):
     MAX_VECINOS = 20*(len(data[0])-1)
     vecinos = 0
     evaluaciones = 0
-    w = primerVector(len(data[0])-1)
+    w = primerVector(len(data[0])-1) if w_param==-1 else w_param
     posicion_mutacion = 0
     tc,tr = knn.Valoracion(data_np,data_np,k,np.array(w),labels_np,labels_np,True)
     valoracion_actual = tc+tr
