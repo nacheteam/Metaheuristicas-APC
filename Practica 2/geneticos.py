@@ -13,6 +13,12 @@ ALPHA = 0.3
 random.seed(123456789)
 
 def generaPoblacionInicial(longitud,tam_poblacion=TAM_POBLACION):
+    '''
+    @brief Función que devuelve una población inicial de vectores de pesos generados de forma aleatoria.
+    @param longitud Longitud de cada vector de pesos.
+    @param tam_poblacion Tamaño de la población a generar.
+    @return Devuelve un vector de numpy que contiene tam_poblacion vectores aleatorios con valores entre 0 y 1 de tamaño longitud.
+    '''
     poblacion = []
     for i in range(tam_poblacion):
         cromosoma = []
@@ -22,9 +28,22 @@ def generaPoblacionInicial(longitud,tam_poblacion=TAM_POBLACION):
     return np.array(poblacion)
 
 def cruceAritmetico(cromosoma1, cromosoma2):
+    '''
+    @brief Operador de cruce aritmético.
+    @param cromosoma1 Padre usado en el cruce.
+    @param cromosoma2 Padre usado en el cruce.
+    @return Devuelve un vector de pesos que contiene la media de los valores de cromosoma1 y cromosoma2.
+    '''
     return np.divide((cromosoma1+cromosoma2),2)
 
 def cruceBLX(cromosoma1,cromosoma2):
+    '''
+    @brief Operador de cruce BLX
+    @param cromosoma1 Padre usado en el cruce.
+    @param cromosoma2 Padre usado en el cruce.
+    @return Devuelve un hijo que contiene valores aleatorios en el intervalo
+    delimitado por el valor mínimo y máximo de cromosoma1 y cromosoma2 más/menos ALPHA=0.3*longitud_intervalo
+    '''
     hijo = []
     max_c1 = np.amax(cromosoma1)
     max_c2 = np.amax(cromosoma2)
@@ -40,7 +59,14 @@ def cruceBLX(cromosoma1,cromosoma2):
     hijo[hijo>1]=1
     return hijo
 
-def torneoBinario(data,poblacion,k,labels_np,valoraciones,tam_poblacion=TAM_POBLACION):
+def torneoBinario(poblacion,valoraciones,tam_poblacion=TAM_POBLACION):
+    '''
+    @brief Función que devuelve el mejor padre de dos escogidos de forma aleatoria.
+    @param poblacion Población de vectores de pesos.
+    @param valoraciones Array que contiene las valoraciones de cada individuo de la población.
+    @param tam_poblacion Tamaño de la población, por defecto es TAM_POBLACION=30.
+    @return Devuelve el mejor individuo de los dos cogidos aleatoriamente.
+    '''
     individuos = random.sample(range(tam_poblacion),2)
     valoracion_ind1 = valoraciones[individuos[0]]
     valoracion_ind2 = valoraciones[individuos[1]]
@@ -50,6 +76,13 @@ def torneoBinario(data,poblacion,k,labels_np,valoraciones,tam_poblacion=TAM_POBL
 
 
 def GeneticoEstacionario(data,k,operador_cruce):
+    '''
+    @brief Algoritmo genético estacionario.
+    @param data Conjunto de datos.
+    @param k Número de vecinos para el KNN.
+    @param operador_cruce Operador de cruce usado.
+    @return Devuelve el mejor individuo de la población final.
+    '''
     num_padres = 0
     if operador_cruce==cruceAritmetico:
         num_padres=4
@@ -66,11 +99,11 @@ def GeneticoEstacionario(data,k,operador_cruce):
     evaluaciones = TAM_POBLACION
     while evaluaciones < MAX_EVALUACIONES:
         if num_padres==4:
-            padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(4)]
+            padres = [torneoBinario(poblacion,valoraciones) for i in range(4)]
             hijo1 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
             hijo2 = operador_cruce(poblacion[padres[2]],poblacion[padres[3]])
         else:
-            padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(2)]
+            padres = [torneoBinario(poblacion,valoraciones) for i in range(2)]
             hijo1 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
             hijo2 = operador_cruce(poblacion[padres[0]],poblacion[padres[1]])
         for i in range(len(hijo1)):
@@ -95,6 +128,12 @@ def GeneticoEstacionario(data,k,operador_cruce):
     return np.array(poblacion[np.argmax(valoraciones_final)])
 
 def GeneticoGeneracional(data,k,operador_cruce):
+    '''
+    @brief Algoritmo genético Generacional.
+    @param data Conjunto de datos.
+    @param k Número de vecinos en el KNN.
+    @param operador_cruce Operador usado para cruzar individuos.
+    '''
     data_np = np.array([d[:-1] for d in data])
     labels_np = np.array([d[-1] for d in data])
     ncar = len(data[0][:-1])
@@ -119,13 +158,13 @@ def GeneticoGeneracional(data,k,operador_cruce):
         hijos = []
         for i in range(num_parejas):
             if operador_cruce==cruceAritmetico:
-                padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(4)]
+                padres = [torneoBinario(poblacion,valoraciones) for i in range(4)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[2]],poblacion[padres[3]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[2]]))
                 hijos.append(operador_cruce(poblacion[padres[1]],poblacion[padres[2]]))
             else:
-                padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(2)]
+                padres = [torneoBinario(poblacion,valoraciones) for i in range(2)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
         for i in range(mutaciones):
@@ -134,7 +173,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
             hijos[cr],pos = auxiliar.mutacion(hijos[cr],gen)
 
         for i in range(len(hijos),TAM_POBLACION):
-            hijos.append(poblacion[torneoBinario(data_np,poblacion,k,labels_np,valoraciones)])
+            hijos.append(poblacion[torneoBinario(poblacion,valoraciones)])
 
         poblacion = np.array(hijos)
 
@@ -156,7 +195,7 @@ def ValoracionGeneticoGeneracional(nombre_datos,k,operador_cruce):
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método de búsqueda local.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético generacional.
     """
     data = auxiliar.lecturaDatos(nombre_datos)
     particiones = auxiliar.divideDatosFCV(data,5)
@@ -184,7 +223,7 @@ def ValoracionGeneticoEstacionario(nombre_datos,k,operador_cruce):
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método de búsqueda local.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético estacionario.
     """
     data = auxiliar.lecturaDatos(nombre_datos)
     particiones = auxiliar.divideDatosFCV(data,5)

@@ -7,6 +7,17 @@ import numpy as np
 ALPHA=0.5
 
 def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mismos_conjuntos):
+    '''
+    @brief Función que implementa el KNN devolviendo el porcentaje de aciertos conseguido con el vector de pesos dado.
+    @param w_np Vector de pesos con valores entre 0 y 1 y de tipo numpy.
+    @param particion_np Conjunto de test.
+    @param data_train_np Conjunto de entrenamiento.
+    @param labels_train Clases del conjunto de entrenamiento.
+    @param labels_particion Clases del conjunto de test.
+    @param k Número de vecinos para el KNN.
+    @param mismos_conjuntos Valor booleano que nos indica si los conjuntos data_train_np y particion_np son iguales.
+    @return Devuelve un float entre 0 y 1 donde 0 significa ningún acierto y 1 la mayor tasa de aciertos.
+    '''
     tam_data_train_np = len(data_train_np)
 
     clases = []
@@ -14,7 +25,7 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mi
     for i in range(len(particion_np)):
         dist = np.sum(np.tile(w_np,(tam_data_train_np,1))*(np.tile(particion_np[i],(tam_data_train_np,1))-data_train_np)**2,axis=1)
         if mismos_conjuntos:
-            dist[i]=float('inf') # Leave one out
+            dist[i]=float('inf')
         clases.append(auxiliar.masComun(labels_train[np.argpartition(dist, k)[:k]]))
 
     return np.sum(clases == labels_particion)/len(labels_particion)
@@ -26,6 +37,10 @@ def Valoracion(particion, data_train,k,w,labels_train, labels_particion,mismos_c
     @param data_train Datos usados para clasificar.
     @param k Número de elementos con los que se compara cada dato en el knn.
     @param w Vector de pesos.
+    @param labels_train Clases del conjunto de entrenamiento.
+    @param labels_particion Clases del conjunto de test.
+    @param mismos_conjuntos Booleano que indica si los conjuntos de test y entrenamiento son iguales. Por defecto está a false.
+    @param suma Booleano que nos indica si queremos que de devuelva la suma de las tasas. Por defecto está a false.
     @return Número del 0 al 100 que da una valoración del vector de pesos dado. 0 es el mínimo 100 el máximo.
     """
     #nbr = KNeighborsClassifier(n_neighbors=1,algorithm='auto',metric='wminkowski', metric_params={'w':w},n_jobs=1)

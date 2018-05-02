@@ -9,7 +9,7 @@ def lecturaDatos(nombre_fich):
     """
     @brief Función que lee un fichero con formato arff y devuelve una lista con los datos.
     @param nombre_fich Nombre del fichero arff para leer.
-    @return Lista con los datos formateados.
+    @return Lista con los datos formateados quitando los elementos repetidos.
     """
     data = []
     f = open(nombre_fich, "r")
@@ -72,10 +72,10 @@ def distanciaEuclideaSimple(e1,e2,w):
 #Calcula la distancia euclídea de e1 a e2
 def distanciaEuclidea(e1,e2,w):
     """
-    @brief Función que calcula la distancia euclídea.
+    @brief Función que calcula la distancia euclídea con numpy.
     @param e1 Elemento 1.
     @param e2 Elemento 2.
-    @param w Vector de pesos. Si w=-1 se toma como vector de pesos todo unos.
+    @param w Vector de pesos.
     @return Devuelve la distancia entre e1 y e2.
     """
 
@@ -138,7 +138,7 @@ def mutacion(w, pos):
     @brief Dado un vector de pesos w se altera una de las posiciones que estén en vector_posiciones sumándole
     un valor generado por una distribución normal de media 0 y desviación 0.3.
     @param w Vector de pesos al que se le hace la mutación.
-    @param vector_posiciones Vector que contiene las posiciones que aún no han sido mutadas.
+    @param pos Posición que se quiere mutar del vector w.
     @return Se devuelve el vector de pesos mutados y el vector de posiciones con la posición usada elminada.
     """
     incremento = random.gauss(MU,SIGMA)

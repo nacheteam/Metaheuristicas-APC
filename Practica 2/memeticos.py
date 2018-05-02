@@ -14,6 +14,16 @@ MAX_EVALUACIONES = 15000
 random.seed(123456789)
 
 def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
+    '''
+    @brief Algoritmo memético.
+    @param data Conjunto de datos.
+    @param k Número de vecinos para el KNN.
+    @param operador_cruce Operador de cruce usado.
+    @param nGeneraciones Número de generaciones en las que se ejecutará la búsqueda local.
+    @param prob_bl Porcentaje de individuos a los que se aplica la búsqueda local.
+    @param mejores Booleano que indica si aplicamos la búsqueda local sobre los mejores individuos de la población.
+    @return Devuelve al mejor individuo de la población final.
+    '''
     data_np = np.array([d[:-1] for d in data])
     labels_np = np.array([d[-1] for d in data])
     ncar = len(data[0][:-1])
@@ -55,13 +65,13 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
         hijos = []
         for i in range(num_parejas):
             if operador_cruce==geneticos.cruceAritmetico:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones,TAM_POBLACION) for i in range(4)]
+                padres = [geneticos.torneoBinario(poblacion,valoraciones,TAM_POBLACION) for i in range(4)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[2]],poblacion[padres[3]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[2]]))
                 hijos.append(operador_cruce(poblacion[padres[1]],poblacion[padres[2]]))
             else:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones,TAM_POBLACION) for i in range(2)]
+                padres = [geneticos.torneoBinario(poblacion,valoraciones,TAM_POBLACION) for i in range(2)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
         for i in range(mutaciones):
@@ -70,7 +80,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             hijos[cr],pos = auxiliar.mutacion(hijos[cr],gen)
 
         for i in range(len(hijos),TAM_POBLACION):
-            hijos.append(poblacion[geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones,TAM_POBLACION)])
+            hijos.append(poblacion[geneticos.torneoBinario(poblacion,valoraciones,TAM_POBLACION)])
 
         poblacion = np.array(hijos)
 
@@ -92,7 +102,7 @@ def ValoracionMemetico(nombre_datos,k,operador_cruce,nGeneraciones,prob_bl,mejor
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el método de búsqueda local.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo memético.
     """
     data = auxiliar.lecturaDatos(nombre_datos)
     particiones = auxiliar.divideDatosFCV(data,5)

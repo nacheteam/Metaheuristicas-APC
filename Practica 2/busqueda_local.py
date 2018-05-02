@@ -25,6 +25,8 @@ def busquedaLocal(data,k,MAX_EVALUACIONES=MAX_EVALUACIONES_GL,w_param=-1):
     @brief Función de busqueda local para hallar un vector de pesos.
     @param data Lista con el conjunto de datos.
     @param k Valor de vecinos que se quieren calcular en KNN.
+    @param MAX_EVALUACIONES Número máximo de evaluaciones, por defecto es MAX_EVALUACIONES_GL=15000
+    @param w_param Vector de pesos del que se quiere arrancar la búsqueda local. Por defecto el valor es -1, con lo que se toma una solución inicial aleatoria.
     @return Devuelve un vector de pesos.
     """
     labels_np = np.array([d[-1] for d in data])
