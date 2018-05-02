@@ -3,6 +3,7 @@ import numpy as np
 import knn
 import auxiliar
 import time
+from numba import jit
 
 TAM_POBLACION = 30
 PROB_CRUCE_AGG = 0.7
@@ -36,6 +37,7 @@ def cruceAritmetico(cromosoma1, cromosoma2):
     '''
     return np.divide((cromosoma1+cromosoma2),2)
 
+@jit
 def cruceBLX(cromosoma1,cromosoma2):
     '''
     @brief Operador de cruce BLX
