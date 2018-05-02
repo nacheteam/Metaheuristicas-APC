@@ -6,7 +6,7 @@ import geneticos
 import busqueda_local
 import time
 
-TAM_POBLACION = 30
+TAM_POBLACION = 10
 PROB_CRUCE_AGG = 0.7
 PROB_MUTACION = 0.001
 MAX_EVALUACIONES = 15000
@@ -17,7 +17,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
     data_np = np.array([d[:-1] for d in data])
     labels_np = np.array([d[-1] for d in data])
     ncar = len(data[0][:-1])
-    poblacion = geneticos.generaPoblacionInicial(ncar)
+    poblacion = geneticos.generaPoblacionInicial(ncar,TAM_POBLACION)
     num_parejas = 0
     mutaciones = int(PROB_MUTACION*TAM_POBLACION*ncar)
     if operador_cruce==geneticos.cruceAritmetico:
@@ -54,14 +54,14 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
         contador_generaciones+=1
         hijos = []
         for i in range(num_parejas):
-            if operador_cruce==cruceAritmetico:
-                padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(4)]
+            if operador_cruce==geneticos.cruceAritmetico:
+                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones,TAM_POBLACION) for i in range(4)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[2]],poblacion[padres[3]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[2]]))
                 hijos.append(operador_cruce(poblacion[padres[1]],poblacion[padres[2]]))
             else:
-                padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(2)]
+                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones,TAM_POBLACION) for i in range(2)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
         for i in range(mutaciones):
@@ -70,7 +70,7 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             hijos[cr],pos = auxiliar.mutacion(hijos[cr],gen)
 
         for i in range(len(hijos),TAM_POBLACION):
-            hijos.append(poblacion[torneoBinario(data_np,poblacion,k,labels_np,valoraciones)])
+            hijos.append(poblacion[geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones,TAM_POBLACION)])
 
         poblacion = np.array(hijos)
 

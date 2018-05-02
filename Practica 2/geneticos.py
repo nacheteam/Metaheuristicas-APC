@@ -12,9 +12,9 @@ ALPHA = 0.3
 
 random.seed(123456789)
 
-def generaPoblacionInicial(longitud):
+def generaPoblacionInicial(longitud,tam_poblacion=TAM_POBLACION):
     poblacion = []
-    for i in range(TAM_POBLACION):
+    for i in range(tam_poblacion):
         cromosoma = []
         for j in range(longitud):
             cromosoma.append(random.uniform(0,1))
@@ -40,8 +40,8 @@ def cruceBLX(cromosoma1,cromosoma2):
     hijo[hijo>1]=1
     return hijo
 
-def torneoBinario(data,poblacion,k,labels_np,valoraciones):
-    individuos = random.sample(range(TAM_POBLACION),2)
+def torneoBinario(data,poblacion,k,labels_np,valoraciones,tam_poblacion=TAM_POBLACION):
+    individuos = random.sample(range(tam_poblacion),2)
     valoracion_ind1 = valoraciones[individuos[0]]
     valoracion_ind2 = valoraciones[individuos[1]]
     if valoracion_ind1>valoracion_ind2:
