@@ -1,8 +1,8 @@
 import auxiliar
 import time
 import numpy as np
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.neighbors import DistanceMetric
+#from sklearn.neighbors import KNeighborsClassifier
+#from sklearn.neighbors import DistanceMetric
 
 ALPHA=0.5
 
@@ -14,7 +14,7 @@ def KNNumpy(w_np,particion_np, data_train_np,labels_train, labels_particion,k,mi
     for i in range(len(particion_np)):
         dist = np.sum(np.tile(w_np,(tam_data_train_np,1))*(np.tile(particion_np[i],(tam_data_train_np,1))-data_train_np)**2,axis=1)
         if mismos_conjuntos:
-            dist[i]=float('inf')
+            dist[i]=float('inf') # Leave one out
         clases.append(auxiliar.masComun(labels_train[np.argpartition(dist, k)[:k]]))
 
     return np.sum(clases == labels_particion)/len(labels_particion)
