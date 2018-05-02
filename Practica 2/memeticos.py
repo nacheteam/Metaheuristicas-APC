@@ -52,27 +52,27 @@ def Memetico(data,k,operador_cruce,nGeneraciones,prob_bl,mejores=False):
             evaluaciones+=TAM_POBLACION
 
         contador_generaciones+=1
+        hijos = []
         for i in range(num_parejas):
-            if operador_cruce==geneticos.cruceAritmetico:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(4)]
-                hijos = []
+            if operador_cruce==cruceAritmetico:
+                padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(4)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[2]],poblacion[padres[3]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[2]]))
                 hijos.append(operador_cruce(poblacion[padres[1]],poblacion[padres[2]]))
-                for p,i in zip(padres,range(4)):
-                    poblacion[p] = hijos[i]
             else:
-                padres = [geneticos.torneoBinario(data_np,poblacion,k,labels_np,True,valoraciones) for i in range(2)]
-                hijos = []
+                padres = [torneoBinario(data_np,poblacion,k,labels_np,valoraciones) for i in range(2)]
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
                 hijos.append(operador_cruce(poblacion[padres[0]],poblacion[padres[1]]))
-                for p,i in zip(padres,range(2)):
-                    poblacion[p] = hijos[i]
         for i in range(mutaciones):
-            cr = random.randint(0,TAM_POBLACION-1)
+            cr = random.randint(0,len(hijos)-1)
             gen = random.randint(0,ncar-1)
-            poblacion[cr],pos = auxiliar.mutacion(poblacion[cr],gen)
+            hijos[cr],pos = auxiliar.mutacion(hijos[cr],gen)
+
+        for i in range(len(hijos),TAM_POBLACION):
+            hijos.append(poblacion[torneoBinario(data_np,poblacion,k,labels_np,valoraciones)])
+
+        poblacion = np.array(hijos)
 
         valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
         valoraciones = np.sum(valoraciones,axis=1)
