@@ -1,4 +1,7 @@
-\docla,a4{ar\usge[npu use[s]{busee{amsmath}
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
@@ -273,23 +276,23 @@
 			\STATE valoraciones $\leftarrow$ valoraciones de la población
 			\STATE mejor\_solucion $\leftarrow$ Mejor solución de la población.
 			\WHILE{evaluaciones $<$ MAX\_EVALUACIONES}
+				\STATE hijos $\leftarrow$ [ ]
 				\FOR{i=0 , ... , num\_parejas-1}
 					\IF{operador\_cruce==cruceAritmetico}
-						\STATE hijos $\leftarrow$ [ ]
 						\STATE padres $\leftarrow$ genera 4 padres con torneoBinario
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[2],padres[3])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[2])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[1],padres[2])]
 					\ELSE
-						\STATE hijos $\leftarrow$ [ ]
 						\STATE padres $\leftarrow$ genera 2 padres con torneoBinario
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 					\ENDIF
-					\STATE Sustituye los padres por los hijos generados
 				\ENDFOR
-				\STATE Muta la nueva población con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+				\STATE Muta la nueva población de hijos con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+				\STATE Rellena la población de hijos con padres haciendo torneos binarios.
+				\STATE poblacion $\leftarrow$ hijos
 				\STATE Actualiza las valoraciones de los individuos.
 				\STATE Si el peor de la nueva población es peor que el mejor de la anterior lo sustituimos.
 				\STATE Actualiza el mejor de la población.
@@ -335,23 +338,23 @@
 					\STATE Actualiza las evaluaciones.
 				\ENDIF
 				\STATE
+				\STATE hijos $\leftarrow$ [ ]
 				\FOR{i=0 , ... , num\_parejas-1}
 					\IF{operador\_cruce==cruceAritmetico}
-						\STATE hijos $\leftarrow$ [ ]
 						\STATE padres $\leftarrow$ genera 4 padres con torneoBinario
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[2],padres[3])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[2])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[1],padres[2])]
 					\ELSE
-						\STATE hijos $\leftarrow$ [ ]
 						\STATE padres $\leftarrow$ genera 2 padres con torneoBinario
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 						\STATE hijos $\leftarrow$ [hijos,operador\_cruce(padres[0],padres[1])]
 					\ENDIF
-					\STATE Sustituye los padres por los hijos generados
 				\ENDFOR
-				\STATE Muta la nueva población con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+				\STATE Muta la nueva población de hijos con probabilidad 0.001 con una distribución $gauss(\mu=0,\sigma=0.3)$
+				\STATE Rellena la población de hijos con padres haciendo torneos binarios.
+				\STATE poblacion $\leftarrow$ hijos
 				\STATE Actualiza las valoraciones de los individuos.
 				\STATE Si el peor de la nueva población es peor que el mejor de la anterior lo sustituimos.
 				\STATE Actualiza el mejor de la población.
