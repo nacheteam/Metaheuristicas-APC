@@ -826,5 +826,17 @@
 	Podemos estudiar la situación que se ha producido en el generacional BLX, ya que la población ha tenido una variación muy pequeña a lo largo del tiempo y además ha ido obteniendo valores en un entorno muy reducido cercano al 90\%.
 	
 	Por esto podemos decir que una posible mejora para los algoritmos genéticos es que si no obtenemos una mejora tras haber pasado un número dado de generaciones entonces debería parar. Esto nos ahorraría según estas gráficas de convergencia la mayoría de las iteraciones en el genético generacional con cruce aritmético y en el estacionario con cruce BLX. En el caso del generacional BLX sería más complicado saber que debemos parar, ya que los valores ahí si tienen un movimiento notable.
+	
+	\subsection{Calibrando la tasa de mutación}
+	
+	Durante el transcurso de esta práctica se nos ha pedido que tomemos como ratio de mutación 0.001, es decir, de los nuevos individuos que generamos debemos mutar el 0.001\% de sus genes. Este ratio nos está dejando como resultado una mutación muy pobre de forma que no notamos la diferencia entre dejarla o no hacer mutación alguna.
+	
+	Por ello, y con el propósito de añadir más diversidad al algoritmo he experimentado cambiando las tasas de mutación de 0.001 a 0.2, obteniendo los siguientes resultados sobre el fichero de datos ozone-320.arff:
+	
+	\includegraphics[scale=1]{../Graficas/Imagenes/Mutacion/mutacion.png}
+
+	Podemos observar que en el peor de los casos hemos empeorado un poco los resultados obtenidos con la mutación a 0.001 pero hay 4 algoritmos en los que obtenemos una mejora sustancial al poner la tasa de mutación a 0.2.
+	
+	Esto es debido a que el ratio de mutación que teníamos previamente no añadía la diversidad suficiente al modelo como para poder escapar de los máximos locales. Ahora al mutar muchos más genes hacemos el cambio suficiente como para pasar por ejemplo en el genético generacional con cruce aritmético de un 63\% de acierto a un 83\%, lo que supone una mejora muy notable.
 
 \end{document}
