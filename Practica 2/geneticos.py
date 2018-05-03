@@ -3,7 +3,6 @@ import numpy as np
 import knn
 import auxiliar
 import time
-from numba import jit
 
 TAM_POBLACION = 30
 PROB_CRUCE_AGG = 0.7
@@ -37,7 +36,6 @@ def cruceAritmetico(cromosoma1, cromosoma2):
     '''
     return np.divide((cromosoma1+cromosoma2),2)
 
-@jit
 def cruceBLX(cromosoma1,cromosoma2):
     '''
     @brief Operador de cruce BLX
@@ -153,6 +151,11 @@ def GeneticoGeneracional(data,k,operador_cruce):
     evaluaciones = TAM_POBLACION
     valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
     valoraciones = np.sum(valoraciones,axis=1)
+
+
+    valoraciones_finales = [valoraciones]
+
+
     mejor_solucion_ind = np.argmax(valoraciones)
     mejor_solucion_valor = valoraciones[mejor_solucion_ind]
     mejor_solucion = poblacion[mejor_solucion_ind]
@@ -190,7 +193,12 @@ def GeneticoGeneracional(data,k,operador_cruce):
         mejor_solucion_ind = np.argmax(valoraciones)
         mejor_solucion_valor = valoraciones[mejor_solucion_ind]
         mejor_solucion = poblacion[mejor_solucion_ind]
-    return np.array(mejor_solucion)
+
+
+        valoraciones_finales.append(valoraciones)
+
+
+    return np.array(mejor_solucion),valoraciones_finales
 
 def ValoracionGeneticoGeneracional(nombre_datos,k,operador_cruce):
     """
