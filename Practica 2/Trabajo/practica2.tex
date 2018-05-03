@@ -802,5 +802,29 @@
 		\label{tablaGlobalK1}
 		\caption{Resultados globales con K=1}
 	\end{table}
+	
+	\newpage
+	
+	\subsection{Análisis de los datos}
+	
+	\newpage
+	
+	\subsection{Análisis de la convergencia}
+	
+	Para comprobar la eficiencia de los algoritmos genéticos he comprobado cómo converge el valor medio de las valoraciones a lo largo de las iteraciones y la generación de las poblaciones. Esto lo he hecho estudiando la media de la valoración (tasa agregada+tasa reducción) de las poblaciones a lo largo del algoritmo obteniendo las siguientes gráficas:
+	
+	
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Convergencia/convergencia_estacionario_blx.png}
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Convergencia/convergencia_estacionario_aritmetico.png}
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Convergencia/convergencia_generacional_blx.png}
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Convergencia/convergencia_generacional_aritmetico.png}
+
+	En estas gráficas observamos que el algoritmo genético estacionario con cruce aritmético ha tenido una convergencia muy progresiva aprovechando todas las iteraciones de las generaciones.
+	
+	En cambio en los algoritmos genéticos generacionales y el estacionario BLX podemos comprobar que la mayoría de las iteraciones han sido desaprovechadas ya que la población ha convergido muy rápidamente. 
+	
+	Podemos estudiar la situación que se ha producido en el generacional BLX, ya que la población ha tenido una variación muy pequeña a lo largo del tiempo y además ha ido obteniendo valores en un entorno muy reducido cercano al 90\%.
+	
+	Por esto podemos decir que una posible mejora para los algoritmos genéticos es que si no obtenemos una mejora tras haber pasado un número dado de generaciones entonces debería parar. Esto nos ahorraría según estas gráficas de convergencia la mayoría de las iteraciones en el genético generacional con cruce aritmético y en el estacionario con cruce BLX. En el caso del generacional BLX sería más complicado saber que debemos parar, ya que los valores ahí si tienen un movimiento notable.
 
 \end{document}
