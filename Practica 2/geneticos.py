@@ -151,11 +151,6 @@ def GeneticoGeneracional(data,k,operador_cruce):
     evaluaciones = TAM_POBLACION
     valoraciones = np.array([knn.Valoracion(data_np,data_np,k,w,labels_np,labels_np,True) for w in poblacion])
     valoraciones = np.sum(valoraciones,axis=1)
-
-
-    valoraciones_finales = [valoraciones]
-
-
     mejor_solucion_ind = np.argmax(valoraciones)
     mejor_solucion_valor = valoraciones[mejor_solucion_ind]
     mejor_solucion = poblacion[mejor_solucion_ind]
@@ -193,12 +188,7 @@ def GeneticoGeneracional(data,k,operador_cruce):
         mejor_solucion_ind = np.argmax(valoraciones)
         mejor_solucion_valor = valoraciones[mejor_solucion_ind]
         mejor_solucion = poblacion[mejor_solucion_ind]
-
-
-        valoraciones_finales.append(valoraciones)
-
-
-    return np.array(mejor_solucion),valoraciones_finales
+    return np.array(mejor_solucion)
 
 def ValoracionGeneticoGeneracional(nombre_datos,k,operador_cruce):
     """
