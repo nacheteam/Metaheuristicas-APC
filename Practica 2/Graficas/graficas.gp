@@ -43,3 +43,22 @@ set term png
 set output "./Imagenes/Convergencia/convergencia_generacional_blx.png"
 replot
 set term x11
+
+
+################################################################################
+#                                GRAFICAS MUTACION                             #
+################################################################################
+
+set title "Mutacion=0.001 vs Mutacion=0.2"
+set auto x
+set yrange [0:100]
+set style data histogram
+set style fill solid border -1
+set boxwidth 0.9
+set xtic rotate by -45 scale 0
+plot "./Mutacion/mutacion.dat" using 2:xticlabels(1) title "Mutacion=0.2", "./Mutacion/sin_mutacion.dat" using 2:xticlabels(1) title "Mutacion=0.001"
+
+set term png
+set output "./Imagenes/Mutacion/mutacion.png"
+replot
+set term x11
