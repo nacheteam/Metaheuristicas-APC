@@ -125,7 +125,7 @@
 
 	Se toman dos padres, de los que hallamos el elemento más grande de su vector de pesos y el más pequeño para poder obtener el máximo y mínimo de los dos. Esto nos va a dar un intervalo de valores para nuestro hijo.
 
-	El hijo se va a generar tomando valores aleatorios con una distribución uniforme que estén en el intervalo $[min\_padres - \delta , max\_padres + \delta]$, donde $\delta = max\_padres - min\_padres$. De esta forma podemos obtener el número que deseemos de hijos tan solo con dos padres, ya que los valores son aleatorios y por tanto los hijos obtenidos serán distintos.
+	El hijo se va a generar tomando valores aleatorios con una distribución uniforme que estén en el intervalo $[min\_padres - \delta , max\_padres + \delta]$, donde $\delta = \alpha \cdot (max\_padres - min\_padres)$. De esta forma podemos obtener el número que deseemos de hijos tan solo con dos padres, ya que los valores son aleatorios y por tanto los hijos obtenidos serán distintos.
 
 	Nótese que en nuestro caso $\alpha=0.3$
 
@@ -139,7 +139,7 @@
 			\STATE min\_c2 $\leftarrow$ mínimo(cromosoma2)
 			\STATE max\_intervalo $\leftarrow$ máximo(max\_c1,max\_c2)
 			\STATE min\_intervalo $\leftarrow$ mínimo(min\_c1,min\_c2)
-			\STATE delta $\leftarrow$ $(max\_intervalo-min\_intervalo)\cdot \alpha$
+			\STATE $\delta$ $\leftarrow$ $(max\_intervalo-min\_intervalo)\cdot \alpha$
 			\FOR{i=0 , ... , longitud(cromosoma1)}
 				\STATE hijo $\leftarrow$ $[hijo,uniforme(min\_intervalo - \delta, max\_intervalo + \delta)]$
 			\ENDFOR
@@ -500,13 +500,15 @@
 
 	Las prácticas las he implementado usando python3.5. Los archivos utilizados tienen cada uno el nombre de la temática que tratan, teniendo por ejemplo geneticos.py como el fichero que contiene la implementación de los genéticos o por ejemplo auxiliar.py que es el fichero que contiene funciones que se usan de forma regular por todos los algoritmos o por varios de ellos.
 
-	Para la implementación no he usado ningún framework, aunque he probado a emplear Sklearn para la implementación del algoritmo KNN. Este algoritmo resultó ser más lento que mi versión implementada con la librería numpy por lo que no lo he utilizado al final.
+	Para la implementación no he usado ningún framework, aunque he probado a emplear Sklearn para la implementación del algoritmo KNN. El algoritmo empleado por el clasificador dado por Sklearn resultó ser más lento que mi versión implementada con la librería NumPy por lo que no lo he utilizado al final.
 
 	La ejecución de las prácticas se puede hacer mediante dos programas: resultados.py o main.py.
 
 	En el caso de resultados.py se ejecutan todos los algoritmos sobre todos los conjuntos de datos de forma que obtenemos todo lo necesario para compararlos entre sí. Este fichero se puede ejecutar como 'python3.5 resultados.py'.
 
-	El fichero main.py permite la ejecución de un algoritmo concreto sobre un fichero de datos concreto obteniendo los resultados asociados a dicho fichero y algoritmo. Para ello se nos pide por la ruta del fichero de datos, el valor de la constante k para el KNN, el algoritmo que queremos evaluar y el número de particiones que vamos a hacer del conjunto de datos.
+	El fichero main.py permite la ejecución de un algoritmo concreto sobre un fichero de datos concreto obteniendo los resultados asociados a dicho fichero y algoritmo. Para ello se nos pide 
+	
+	 la ruta del fichero de datos, el valor de la constante k para el KNN, el algoritmo que queremos evaluar y el número de particiones que vamos a hacer del conjunto de datos.
 
 	De igual modo si queremos cambiar la semilla usada en la generación de números aleatorios se puede encontrar al inicio de todos los ficheros de código para cambiarla.
 
@@ -818,7 +820,7 @@
 	
 	\subsection{Análisis de los datos}
 	
-	Como podemos observar los algoritmos genéticos y meméticos han supuesto una mejor ante la búsqueda local estudiada en la práctica anterior. Como se puede comprobar los meméticos son los que se han quedado más atrás en cuanto a valoración de la tasa agregada teniendo en torno a un 50\% de calificación en media para los ficheros Ozone y Spectf-Heart y un 60\% para el fichero Parkinsons. Por contra los algoritmos que mejor resultado han arrojado han sido los genéticos teniendo hasta por encima de un 70\% el algoritmo genético estacionario en todos los ficheros. 
+	Como podemos observar los algoritmos genéticos y meméticos han supuesto una mejora ante la búsqueda local estudiada en la práctica anterior. Como se puede comprobar los meméticos son los que se han quedado más atrás en cuanto a valoración de la tasa agregada teniendo en torno a un 50\% de calificación en media para los ficheros Ozone y Spectf-Heart y un 60\% para el fichero Parkinsons. Por contra los algoritmos que mejor resultado han arrojado han sido los genéticos teniendo hasta por encima de un 70\% el algoritmo genético estacionario en todos los ficheros. 
 	
 	Podemos comprobar que los algoritmos implementados en esta práctica no han sido especialmente rápidos comparados con la búsqueda local, pero al mejorar tanto la valoración podemos decir que arrojan un valor añadido con respecto a la metaheurística implementada en la práctica 1.
 	
@@ -830,7 +832,7 @@
 	\includegraphics[scale=0.5]{../Graficas/Imagenes/Tiempos/tiempos_parkinsons.png}
 	\includegraphics[scale=0.5]{../Graficas/Imagenes/Tiempos/tiempos_spectf-heart.png}
 	
-	Podemos comprobar que uno de los algoritmos toma mucho más tiempo en todos los ficheros comparado con el resto de los mismos. El algoritmo genéticos generacional con cruce aritmético llega a consumir más de 1100 segundos en el archivo de datos Ozone, lo cual supone que, por ejemplo, el algoritmo genético generacional con cruce aritmético sea una mejor opción en estos conjuntos de datos ya que obtenemos tasas mucho más altas con un coste en tiempo de menos de la mitad con respecto al generacional con cruce aritmético.
+	Podemos comprobar que uno de los algoritmos toma mucho más tiempo en todos los ficheros comparado con el resto de los mismos. El algoritmo genético generacional con cruce aritmético llega a consumir más de 1100 segundos en el archivo de datos Ozone, lo cual supone que por ejemplo, el algoritmo genético generacional con cruce aritmético sea una mejor opción en estos conjuntos de datos ya que obtenemos tasas mucho más altas con un coste en tiempo de menos de la mitad con respecto al generacional con cruce aritmético.
 	
 	\newpage
 	
