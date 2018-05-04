@@ -14,6 +14,8 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{float}
+
 
 
 
@@ -508,6 +510,8 @@
 
 	De igual modo si queremos cambiar la semilla usada en la generación de números aleatorios se puede encontrar al inicio de todos los ficheros de código para cambiarla.
 
+	\newpage
+
 	\section{Resultados}
 	\label{sec:resultados}
 
@@ -529,6 +533,7 @@
 		}
 		\label{tabla1NN}
 		\caption{Resultados 1NN}
+		
 	\end{table}
 
 
@@ -675,6 +680,8 @@
 		\label{tablaMemetico10-1-BLXK1}
 		\caption{Resultados AM(10,1.0) BLX con K=1}
 	\end{table}
+	
+	\newpage
 
 	\begin{table}[h!]
 		\centering
@@ -756,6 +763,8 @@
 		\caption{Resultados AM(10,0.1) CA con K=1}
 	\end{table}
 
+	\newpage
+
 	\begin{table}[h!]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -775,6 +784,8 @@
 		\label{tablaMemetico10-01-mejores-CAK1}
 		\caption{Resultados AM(10,0.1,mejores) CA con K=1}
 	\end{table}
+
+	\newpage
 
 	\begin{table}[h!]
 		\centering
@@ -807,6 +818,20 @@
 	
 	\subsection{Análisis de los datos}
 	
+	Como podemos observar los algoritmos genéticos y meméticos han supuesto una mejor ante la búsqueda local estudiada en la práctica anterior. Como se puede comprobar los meméticos son los que se han quedado más atrás en cuanto a valoración de la tasa agregada teniendo en torno a un 50\% de calificación en media para los ficheros Ozone y Spectf-Heart y un 60\% para el fichero Parkinsons. Por contra los algoritmos que mejor resultado han arrojado han sido los genéticos teniendo hasta por encima de un 70\% el algoritmo genético estacionario en todos los ficheros. 
+	
+	Podemos comprobar que los algoritmos implementados en esta práctica no han sido especialmente rápidos comparados con la búsqueda local, pero al mejorar tanto la valoración podemos decir que arrojan un valor añadido con respecto a la metaheurística implementada en la práctica 1.
+	
+	Así mismo podemos observar que los algoritmos que peores resultados han arrojado han sido los meméticos los cuales sólo superan el 60\% en el fichero Parkinsons acercándose mucho a las tasas obtenidas por la búsqueda local en Ozone y Spectf-Heart. Esta desmejora del algoritmo puede venir dada porque la búsqueda local no es capaz de mejorar los individuos escogidos de la población, por lo que el tiempo e iteraciones empleados en la búsqueda local producen menos mejora que el tiempo empleado en el algoritmo generacional puro. Esto implicaría que cada vez que llamamos a la búsqueda local estamos perdiendo $2\cdot n$ iteraciones donde n es el número de características.
+	
+	En cuanto al tiempo podemos hacer una comparativa de todos los algoritmos en cada uno de los ficheros:
+	
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Tiempos/tiempos_ozone.png}
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Tiempos/tiempos_parkinsons.png}
+	\includegraphics[scale=0.5]{../Graficas/Imagenes/Tiempos/tiempos_spectf-heart.png}
+	
+	Podemos comprobar que uno de los algoritmos toma mucho más tiempo en todos los ficheros comparado con el resto de los mismos. El algoritmo genéticos generacional con cruce aritmético llega a consumir más de 1100 segundos en el archivo de datos Ozone, lo cual supone que, por ejemplo, el algoritmo genético generacional con cruce aritmético sea una mejor opción en estos conjuntos de datos ya que obtenemos tasas mucho más altas con un coste en tiempo de menos de la mitad con respecto al generacional con cruce aritmético.
+	
 	\newpage
 	
 	\subsection{Análisis de la convergencia}
@@ -826,6 +851,8 @@
 	Podemos estudiar la situación que se ha producido en el generacional BLX, ya que la población ha tenido una variación muy pequeña a lo largo del tiempo y además ha ido obteniendo valores en un entorno muy reducido cercano al 90\%.
 	
 	Por esto podemos decir que una posible mejora para los algoritmos genéticos es que si no obtenemos una mejora tras haber pasado un número dado de generaciones entonces debería parar. Esto nos ahorraría según estas gráficas de convergencia la mayoría de las iteraciones en el genético generacional con cruce aritmético y en el estacionario con cruce BLX. En el caso del generacional BLX sería más complicado saber que debemos parar, ya que los valores ahí si tienen un movimiento notable.
+	
+	\newpage
 	
 	\subsection{Calibrando la tasa de mutación}
 	
