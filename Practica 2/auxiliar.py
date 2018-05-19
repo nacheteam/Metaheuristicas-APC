@@ -24,10 +24,12 @@ def lecturaDatos(nombre_fich):
             son_datos=True
         if linea_data:
             data.append((linea.rstrip()).split(","))
+    #Convertimos explícitamente los elementos de cada tupla a float
     for i in range(len(data)):
         for j in range(len(data[i])):
             data[i][j] = float(data[i][j])
 
+    #Normalizamos.
     min_max = []
     for i in range(len(data)):
         if min_max==[]:
@@ -44,6 +46,7 @@ def lecturaDatos(nombre_fich):
         for j in range(len(data[i])-1):
             data[i][j] = (data[i][j]-min_max[j][0])/(min_max[j][1]-min_max[j][0])
 
+    #Eliminamos las tuplas repetidas más de una vez.
     data_sin_repeticiones = []
     for i in range(len(data)):
         unico = True
@@ -105,9 +108,11 @@ def divideDatosFCV(data, num_folds):
     folds = []
     usados = []
     tam_fold = int(len(data_aux)/num_folds)
+    #Tomamos las clases de cada tupla de datos.
     for d in data_aux:
         if d[-1] not in clases:
             clases.append(d[-1])
+    #Calculamos un número entre 0 y 1 que nos dice las proporciones de cada clase.
     for clase in clases:
         num = 0
         for d in data_aux:
@@ -115,6 +120,7 @@ def divideDatosFCV(data, num_folds):
                 num+=1
         proporciones_clases.append(num/len(data_aux))
 
+    #Tomamos que cada partición tenga el mismo porcentaje de elementos de cada clase.
     for i in range(num_folds):
         fold = []
         for j in range(len(clases)):
@@ -126,6 +132,7 @@ def divideDatosFCV(data, num_folds):
                     num_elementos_clase-=1
         folds.append(fold)
 
+    #Hacemos una lista que contenga las particiones y la devolvemos.
     for i in range(len(data_aux)):
         if i not in usados:
             folds[-1].append(data_aux[i])
@@ -141,9 +148,12 @@ def mutacion(w, pos):
     @param pos Posición que se quiere mutar del vector w.
     @return Se devuelve el vector de pesos mutados y el vector de posiciones con la posición usada elminada.
     """
+    #Tomamos un incremento dado por una distribución gauss con MU y SIGMA dados.
     incremento = random.gauss(MU,SIGMA)
     pos_nueva =pos+1
+    #Incrementamos.
     w[pos]+=incremento
+    #Truncamos.
     if w[pos]<0:
         w[pos] = 0
     elif w[pos]>1:
