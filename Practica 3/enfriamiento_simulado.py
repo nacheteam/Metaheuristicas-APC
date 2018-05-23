@@ -1,6 +1,7 @@
 import numpy as np
 import knn
 import auxiliar
+import time
 
 MU = 0.3
 PHI = 0.3
@@ -76,3 +77,39 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
         t = enfriamiento(t,beta)
 
     return sol
+
+
+def ValoracionEnfriamientoSimulado(nombre_datos,k):
+    """
+    @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
+    @param nombre_datos Nombre del fichero de datos.
+    @param k Número de vecinos que se quieren calcular en KNN.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético estacionario.
+    """
+    #Inicializa los datos con los del fichero y las particiones
+    data = auxiliar.lecturaDatos(nombre_datos)
+    particiones = auxiliar.divideDatosFCV(data,5)
+    vectores = []
+    valoraciones = []
+    contador = 0
+
+    #Para cada partición
+    for particion in particiones:
+        print("Completado " + str((contador/len(particiones))*100) + "%\n")
+        datos_train = []
+        for d in data:
+            if d not in particion:
+                datos_train.append(d)
+        comienzo = time.time()
+
+        #Aplicamos el algoritmo enfriamiento simulado con el conjunto de entrenamiento data-particion
+        v = EnfriamientoSimulado(datos_train,k)
+        fin = time.time()
+        vectores.append(v)
+
+        #Hallamos la valoración de la solución
+        tc,tr = knn.Valoracion(np.array([p[:-1] for p in particion]), np.array([t[:-1] for t in datos_train]),k,v,np.array([p[-1] for p in datos_train]), np.array([t[-1] for t in particion]))
+        val = [[tc,tr],fin-comienzo]
+        valoraciones.append(val)
+        contador+=1
+    return valoraciones
