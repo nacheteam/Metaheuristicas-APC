@@ -12,13 +12,13 @@ def mutacionILS(solucion,MU=MU,SIGMA=SIGMA):
     num_mutaciones = int(0.1*len(solucion))
 
     #Tomamos una lista de indices de tamaño num_mutaciones
-    sample = numpy.arange(len(solucion))
-    numpy.random.shuffle(sample)
+    sample = np.arange(len(solucion))
+    np.random.shuffle(sample)
     sample = sample[:num_mutaciones]
 
     #Mutamos la solución usando el algoritmo de mutacion ya conocido
     for i in sample:
-        solucion[i] = auxiliar.mutacion(w,i,MU,SIGMA)
+        solucion,pos = auxiliar.mutacion(solucion,i,MU,SIGMA)
 
     return solucion
 
@@ -41,7 +41,7 @@ def ILS(data,k,MAX_EVALS=15000):
     while evaluaciones < MAX_EVALS:
 
         #Generamos una solución inicial
-        solucion = np.uniform(0,1,ncar)
+        solucion = np.random.uniform(0,1,ncar)
         valoracion = knn.Valoracion(data_np, data_np,k,solucion,labels_np, labels_np,True,True)
 
         #Comprobamos la mejor solución
@@ -50,7 +50,7 @@ def ILS(data,k,MAX_EVALS=15000):
             valoracion_mejor_solucion = valoracion
 
         #Genero la solución mejorada con BL
-        mejorada,ev = busqueda_local.busquedaLocal(data,k,1000,solucion):
+        mejorada,ev = busqueda_local.busquedaLocal(data,k,1000,list(solucion))
         evaluaciones+=ev
         valoracion_mejorada = knn.Valoracion(data_np, data_np,k,mejorada,labels_np, labels_np,True,True)
 
@@ -73,9 +73,10 @@ def ILS(data,k,MAX_EVALS=15000):
             #Genero la solución mutada y le aplico la búsqueda local
             mutada = mutacionILS(mejor_local)
             valoracion_mutada = knn.Valoracion(data_np, data_np,k,mutada,labels_np, labels_np,True,True)
-            mutada_mejorada = busqueda_local.busquedaLocal(data,k,1000,mutada)
+            mutada_mejorada,ev = busqueda_local.busquedaLocal(data,k,1000,list(mutada))
             valoracion_mutada_mejorada = knn.Valoracion(data_np, data_np,k,mutada_mejorada,labels_np, labels_np,True,True)
             evaluaciones+=2
+            evaluaciones+=ev
 
             #Actualizamos el mejor local
             mejor_local =  np.copy(mutada) if valoracion_mutada>valoracion_mutada_mejorada else np.copy(mutada_mejorada)
@@ -86,7 +87,7 @@ def ILS(data,k,MAX_EVALS=15000):
                 mejor_solucion = np.copy(mejor_local)
                 valoracion_mejor_solucion = valoracion_mejor_local
 
-    return mejor_solucion
+    return np.array(mejor_solucion)
 
 def ValoracionILS(nombre_datos,k):
     """
