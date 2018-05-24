@@ -1,0 +1,27 @@
+- auxiliar.py:
+Contiene funciones de propósito general que se emplean en todos los algoritmos como la función de lectura de datos, distancia o separación del conjunto de datos en particiones.
+
+- relief.py:
+Contiene la implementación del algoritmo Relief.
+
+- busqueda_local.py:
+Contiene la implementación del algoritmo de búsqueda local.
+
+- knn.py:
+Contiene la implementación del algoritmo clasificador KNN así como el algoritmo de comparación KNN con todos los pesos a 1.
+
+- resultados.py:
+Es un script para ejecutar de forma automática todos los algoritmos con todos los ficheros.
+
+- main.py:
+Este fichero ejecuta el algoritmo que queramos sobre el fichero que queramos con un número de particiones escogidas por terminal y un valor de k.
+
+- geneticos.py:
+Contiene la implementación de los algoritmos genéticos.
+
+- memeticos.py:
+Contiene la implementación de los algoritmos meméticos.
+
+
+Nota:
+Si se quiere modificar la semilla del programa esta está en busqueda_local.py como una variable global al inicio del fichero.
