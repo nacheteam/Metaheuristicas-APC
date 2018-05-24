@@ -140,7 +140,7 @@ def divideDatosFCV(data, num_folds):
     return folds
 
 
-def mutacion(w, pos):
+def mutacion(w, pos,MU=MU,SIGMA=SIGMA):
     """
     @brief Dado un vector de pesos w se altera una de las posiciones que estén en vector_posiciones sumándole
     un valor generado por una distribución normal de media 0 y desviación 0.3.
