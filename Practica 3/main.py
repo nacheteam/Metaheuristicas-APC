@@ -4,9 +4,12 @@ import auxiliar
 import busqueda_local
 import geneticos
 import memeticos
+import enfriamiento_simulado
+import ils
+import evolucion_diferencial
 
 #Todos los algoritmos implementados
-ALGORITMOS = ["KNN", "RELIEF", "BL", "GENETICO ESTACIONARIO BLX", "GENETICO ESTACIONARIO ARITMETICO", "GENETICO GENERACIONAL BLX", "GENETICO GENERACIONAL ARITMETICO", "MEMETICO P=1 SIN MEJORES BLX","MEMETICO P=0.1 SIN MEJORES BLX","MEMETICO P=0.1 CON MEJORES BLX", "MEMETICO P=1 SIN MEJORES ARITMETICO","MEMETICO P=0.1 SIN MEJORES ARITMETICO","MEMETICO P=0.1 CON MEJORES ARITMETICO"]
+ALGORITMOS = ["KNN", "RELIEF", "BL", "GeneticoEstacionarioBLX", "GeneticoEstacionarioAritmetico", "GeneticoGeneracionalBLX", "GeneticoGeneracionalAritmetico", "Memetico prob=1 BLX", "Memetico prob=0.1 BLX", "Memetico prob=0.1 a los mejores BLX", "Memetico prob=1 Aritmetico", "Memetico prob=0.1 Aritmetico", "Memetico prob=0.1 a los mejores Aritmetico","ES","ILS","DE Rand1","DE CTB1"]
 fichero = input("Introduzca el fichero de datos: ")
 for i in range(len(ALGORITMOS)):
     print(str(i) + ": " + ALGORITMOS[i])
@@ -57,6 +60,18 @@ elif algoritmo==11:
 elif algoritmo==12:
     res_memetico_01_aritmetico_mejores = memeticos.ValoracionMemetico(fichero,k,geneticos.cruceAritmetico,10,0.1,True)
     resultados=res_memetico_01_aritmetico_mejores
+elif algoritmo==13:
+    res_es = enfriamiento_simulado.ValoracionEnfriamientoSimulado(fichero,k)
+    resultados=res_es
+elif algoritmo==14:
+    res_ils = ils.ValoracionILS(fichero,k)
+    resultados = res_ils
+elif algoritmo==15:
+    res_DE_rand1 = evolucion_diferencial.ValoracionDERand1(fichero,k)
+    resultados = res_DE_rand1
+elif algoritmo==16:
+    res_DE_CTB1 = evolucion_diferencial.ValoracionDECTB1(fichero,k)
+    resultados = res_DE_CTB1
 else:
     print("El número no es válido")
     exit()
