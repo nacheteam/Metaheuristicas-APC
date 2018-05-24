@@ -5,12 +5,14 @@ import time
 
 MU = 0.3
 PHI = 0.3
+#K = 1.3806485279e-23
 K = 1
 
 np.random.seed(123456789)
 
 def enfriamiento(tk,beta):
     return tk/(1.0+beta*tk)
+    #return 0.95*tk
 
 def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
     #Se toman las tuplas y sus clases
@@ -27,15 +29,16 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
     valoracion_mejor_sol = valoracion
 
     #Temperatura inicial. Probablemente mal (reemplazar por 100-valoracion)
-    T0 = (MU*valoracion)/np.log(PHI)
+    T0 = (MU*(valoracion))/(-np.log(PHI))
 
     #Temperatura final
     #Si la temperatura inicial es menor que la inicial entonces bajamos la temperatura final
     TF = 1e-03 if 1e-03>T0 else T0-1e-03
 
-    #Número de enfriamientos y máximos vecinos
+    #Número de enfriamientos, máximos vecinos y máximos éxitos
     max_vecinos = 10.0*ncar
     M = MAX_EVALS/max_vecinos
+    max_exitos = 0.1*max_vecinos
 
     #Beta
     beta = (T0-TF)/(M*T0*TF)
@@ -45,13 +48,13 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
     evaluaciones = 1
 
     #Bucle principal
-    while t<=TF and evaluaciones<MAX_EVALS:
+    while t>TF and evaluaciones<MAX_EVALS:
         #Inicializo el número de vecinos considerados
         vecinos = 0
         #Booleano que indica si el vecino ha sido aceptado como solución
-        aceptada = False
+        aceptados = 0
         #Mientras que no se acepte la solución y no se halla considerado el máximo número de vecinos
-        while not aceptada and vecinos<max_vecinos:
+        while aceptados<max_exitos and vecinos<max_vecinos:
             vecinos+=1
             evaluaciones+=1
 
@@ -60,14 +63,14 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
             valoracion_vecino = knn.Valoracion(data_np,data_np,k,vecino,labels_np,labels_np,True,True)
 
             #Diferencia entre las valoraciones
-            delta = valoracion_vecino - valoracion
+            delta = valoracion - valoracion_vecino
 
             #Si la solución es mejor o un valor aleatorio cumple la condicion
             if delta<0 or np.random.uniform(0,1)<np.exp(-delta/(t*K)):
                 #Aceptamos la solución
                 sol = vecino
                 valoracion = valoracion_vecino
-                aceptada = True
+                aceptados += 1
 
                 #Actualizamos la mejor solución si es necesario
                 if valoracion_mejor_sol<valoracion:
@@ -76,7 +79,7 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
         #Disminuyo la temperatura
         t = enfriamiento(t,beta)
 
-    return sol
+    return np.array(sol),evaluaciones,t,TF,T0
 
 
 def ValoracionEnfriamientoSimulado(nombre_datos,k):
