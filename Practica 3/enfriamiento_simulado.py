@@ -79,7 +79,7 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
         #Disminuyo la temperatura
         t = enfriamiento(t,beta)
 
-    return np.array(sol),evaluaciones,t,TF,T0
+    return np.array(sol)
 
 
 def ValoracionEnfriamientoSimulado(nombre_datos,k):
