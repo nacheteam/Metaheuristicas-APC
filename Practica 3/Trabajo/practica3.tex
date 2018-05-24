@@ -141,7 +141,13 @@
 	\section{Búsqueda Local Reiterada}
 	\label{sec:ILS}
 	
+	La búsqueda local reiterada es un algoritmo que se basa en realizar mutaciones a una solución e ir aplicando el algoritmo de búsqueda local a estas soluciones mutadas quedándote con la mejor de ellas en el proceso.
 	
+	La intención de este algoritmo es realizar un reinicio controlado de las soluciones e ir aplicando la búsqueda local a estas soluciones pseudoaleatorias (no son aleatorias puras ya que son una mutación de una solución aleatoria mejorada con búsqueda local).
+	
+	Estas mutaciones permiten al algoritmo simple de búsqueda local escaparse de los máximos locales ya que en el proceso de mutación podemos obtener una solución peor que la actual y luego mejorarla mediante el uso de la búsqueda local.
+	
+	El procedimiento de mutación es similar al usado en los algoritmos genéticos y el usado durante todo el desarrollo de las tres prácticas.
 
 	\section{Pseudocódigo Genético Estacionario}
 	\label{sec:GE}
