@@ -57,6 +57,91 @@
 
 
 	\newpage
+	
+	\section{Enfriamiento Simulado}
+	\label{sec:ES}
+	
+	El algoritmo de enfriamiento simulado basa su comportamiento en varios factores numéricos entre los que podemos encontrar a la temperatura inicial, temperatura final y el esquema de enfriamiento que nos va a indicar cuanta exploración y explotación va a tener el algoritmo en función de la solución inicial conseguida.
+	
+	En primer lugar la temperatura inicial la calculamos con las constantes $\mu$ y $\phi$ que vienen determinadas mediante el guión por el valor 0.3 ambas. Esto nos indica que tenemos probabilidad 0.3 de aceptar una solución un 30\% peor que la que estamos considerando actualmente.
+	
+	A raíz de esto podemos definir la temperatura inicial como $T0 = \frac{\mu  \cdot C(S_0)}{-\log(\phi)}$ donde $C(S_0)$ es el coste de la solución inicial.
+	
+	Así mismo definimos la temperatura final como $TF=10^{-3}$. Como podemos tener la casuística de que desde el inicio del algoritmo la temperatura inicial ya sea menor que la final he definido la temperatura final como $TF=10^{-3}$ si esta constante es menor que la temperatura inicial o como $TF=T0-10^{-3}$ para tener así un margen de aplicación del algoritmo.
+	
+	El esquema de enfriamiento propuesto ha sido el esquema de enfriamiento de Cauchy modificado que nos otorga una convergencia mayor al decrementar la temperatura de forma más rápida que una lineal. Estas dos formas serán comparadas posteriormente en el análisis de resultados. El esquema de enfriamiento de Cauchy viene dado por las fórmulas:
+	
+	\vspace{10px}
+	
+	$\beta = \frac{T_0 - T_f}{M\cdot T_0\cdot T_f}$
+	
+	\vspace{10px}
+	
+	$T_{k+1} = \frac{T_k}{1+\beta \cdot T_k}$
+	
+	\vspace{10px}
+	
+	Donde M es el número de enfriamientos a realizar.
+	
+	A parte de estas constantes debemos tener en cuenta que el algoritmo está limitado a 15000 evaluaciones y el procedimiento de enfriamiento se aplica cuando hemos visitado $10\cdot D$ vecinos donde D es la dimensión del problema o cuando se han aceptado $0.1\cdot 10\cdot D$ vecinos como soluciones por el procedimiento.
+	
+	A continuación se describe el algoritmo en pseudocódigo: 
+	
+	\begin{algorithm}
+		\caption{GeneticoEstacionario(data,k,operador\_cruce)}
+		\begin{algorithmic}
+			\STATE ncar $\leftarrow$ número de características
+			\STATE sol  $\leftarrow$ solución inicial aleatoria
+			\STATE valoracion $\leftarrow$ valoración de la solución inicial
+			\STATE mejor\_sol $\leftarrow$ sol
+			\STATE valoracion\_mejor\_sol $\leftarrow$ valoracion
+			\STATE
+			\STATE $T_0$ $\leftarrow$ $\frac{\mu  \cdot C(S_0)}{-\log(\phi)}$
+			\STATE
+			\IF{T0$<$$10^{-3}$}
+				\STATE $T_f$ $\leftarrow$ $10^{-3}$
+			\ELSE
+				\STATE $T_f$  $\leftarrow$ T0-$10^{-3}$
+			\ENDIF
+			\STATE max\_vecinos $\leftarrow$ 10*ncar
+			\STATE M $\leftarrow$ $\frac{MAX\_EVALS}{max\_vecinos}$
+			\STATE max\_exitos $\leftarrow$ 0.1*max\_vecinos
+			\STATE
+			\STATE $\beta$ $\leftarrow$ $\frac{T_0-T_f}{M*T_0*T_f}$
+			\STATE
+			\STATE t $\leftarrow$ $T_0$
+			\STATE evaluaciones $\leftarrow$ 1
+			\WHILE{t$>$$T_f$ and evaluaciones$<$MAX\_EVALS}
+				\STATE vecinos $\leftarrow$ 0
+				\STATE aceptados $\leftarrow$ 0
+				\WHILE{aceptados$<$max\_exitos and vecinos$<$max\_vecinos}
+					\STATE vecinos $\leftarrow$ vecinos + 1
+					\STATE evaluaciones $\leftarrow$ evaluaciones + 1
+					\STATE vecino $\leftarrow$ Mutación de una posición aleatoria
+					\STATE valoracion\_vecino $\leftarrow$ Valoración del vecino
+					\STATE delta $\leftarrow$ valoracion - valoracion\_vecino
+					\IF{delta$<$0 or valorAleatorio(0,1)$<$exp(-delta/(t*K))}
+						\STATE sol $\leftarrow$ vecino
+						\STATE valoracion $\leftarrow$ valoracion\_vecino
+						\STATE aceptados $\leftarrow$ aceptados + 1
+						
+						\IF{valoracion\_mejor\_sol$<$valoracion}
+							\STATE mejor\_sol $\leftarrow$ sol
+							\STATE valoracion\_mejor\_sol $\leftarrow$ valoracion
+						\ENDIF
+					\ENDIF
+				\ENDWHILE
+				\STATE t $\leftarrow$ t/(1.0+$\beta$*t)
+			\ENDWHILE
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\newpage
+	
+	\section{Búsqueda Local Reiterada}
+	\label{sec:ILS}
+	
+	
 
 	\section{Pseudocódigo Genético Estacionario}
 	\label{sec:GE}
