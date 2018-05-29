@@ -5,8 +5,6 @@ import time
 
 MU = 0.3
 PHI = 0.3
-#K = 1.3806485279e-23
-K = 1
 
 np.random.seed(123456789)
 
@@ -37,6 +35,7 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
 
     #Número de enfriamientos, máximos vecinos y máximos éxitos
     max_vecinos = 10.0*ncar
+    K=1
     M = MAX_EVALS/max_vecinos
     max_exitos = 0.1*max_vecinos
 
@@ -78,6 +77,7 @@ def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
                     valoracion_mejor_sol = valoracion
         #Disminuyo la temperatura
         t = enfriamiento(t,beta)
+        K+=1
 
     return np.array(sol)
 
