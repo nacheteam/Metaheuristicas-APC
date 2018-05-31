@@ -111,6 +111,7 @@
 			\STATE
 			\STATE t $\leftarrow$ $T_0$
 			\STATE evaluaciones $\leftarrow$ 1
+			\STATE K $\leftarrow$ 1
 			\WHILE{t$>$$T_f$ and evaluaciones$<$MAX\_EVALS}
 				\STATE vecinos $\leftarrow$ 0
 				\STATE aceptados $\leftarrow$ 0
@@ -132,6 +133,7 @@
 					\ENDIF
 				\ENDWHILE
 				\STATE t $\leftarrow$ t/(1.0+$\beta$*t)
+				\STATE K $\leftarrow$ K+1
 			\ENDWHILE
 		\end{algorithmic}
 	\end{algorithm}
