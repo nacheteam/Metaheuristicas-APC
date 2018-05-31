@@ -88,7 +88,7 @@
 	A continuación se describe el algoritmo en pseudocódigo: 
 	
 	\begin{algorithm}
-		\caption{GeneticoEstacionario(data,k,operador\_cruce)}
+		\caption{EnfriamientoSimulado(data,k,MAX\_EVALS)}
 		\begin{algorithmic}
 			\STATE ncar $\leftarrow$ número de características
 			\STATE sol  $\leftarrow$ solución inicial aleatoria
@@ -150,6 +150,10 @@
 	Estas mutaciones permiten al algoritmo simple de búsqueda local escaparse de los máximos locales ya que en el proceso de mutación podemos obtener una solución peor que la actual y luego mejorarla mediante el uso de la búsqueda local.
 	
 	El procedimiento de mutación es similar al usado en los algoritmos genéticos y el usado durante todo el desarrollo de las tres prácticas.
+	
+	A continuación se describe en pseudocódigo las funciones empleadas en la mutación:
+	
+	
 
 	\section{Pseudocódigo Genético Estacionario}
 	\label{sec:GE}
