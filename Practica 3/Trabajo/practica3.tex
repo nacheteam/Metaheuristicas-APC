@@ -153,7 +153,94 @@
 	
 	A continuación se describe en pseudocódigo las funciones empleadas en la mutación:
 	
+	\begin{algorithm}
+		\caption{mutacionILS(solucion,MU=0,SIGMA=0.4)}
+		\begin{algorithmic}
+			\STATE num\_mutaciones $\leftarrow$ 0.1*longitud(solucion)
+			\STATE sample $\leftarrow$ num\_mutaciones índices aleatorios sin repetición entre 0 y logitud(solucion)
+			\FOR{i en sample}
+				\STATE solucion $\leftarrow$ mutacion(solucion,i,MU,SIGMA)
+			\ENDFOR		
+			\RETURN solucion
+		\end{algorithmic}
+	\end{algorithm}
 	
+	\begin{algorithm}
+		\caption{mutacion(w,pos,MU,SIGMA)}
+		\begin{algorithmic}
+			\STATE incremento $\leftarrow$ gauss(MU,SIGMA)
+			\STATE w[pos] $\leftarrow$ w[pos] + incremento
+			\IF{w[pos]$<$0}
+				\STATE w[pos] $\leftarrow$ 0
+			\ELSIF{w[pos]$>$1}
+				\STATE w[pos] $\leftarrow$ 1
+			\ENDIF
+			\RETURN w
+		\end{algorithmic}
+	\end{algorithm}
+	
+	A continuación describo el pseudocódigo de ILS:
+	
+	\begin{algorithm}
+		\caption{ILS(data,k,MAX\_EVALS)}
+		\begin{algorithmic}			
+			\STATE ncar $\leftarrow$ longitud(data[0])
+			\STATE mejor\_solucion $\leftarrow$ [0,0,...,0]
+			\STATE valoracion\_mejor\_solucion $\leftarrow$ 0
+			\STATE evaluaciones $\leftarrow$ 1
+			\WHILE{evaluaciones $<$ MAX\_EVALS}
+				\STATE solucion $\leftarrow$ Solución aleatoria
+				\STATE valoracion $\leftarrow$ Valoracion(solucion)
+				\IF{valoracion$>$valoracion\_mejor\_solucion}
+					\STATE mejor\_solucion $\leftarrow$ solucion
+					\STATE valoracion\_mejor\_solucion $\leftarrow$ valoracion
+				\ENDIF
+				\STATE mejorada,ev $\leftarrow$ busquedaLocal(data,k,1000,solucion)
+				\STATE evaluaciones $\leftarrow$ evaluciones + ev
+				\STATE valoracion\_mejorada $\leftarrow$ Valoracion(mejorada)
+				\IF{valoracion\_mejorada$>$valoracion\_mejor\_solucion}
+					\STATE mejor\_solucion $\leftarrow$ mejorada
+					\STATE valoracion\_mejor\_solucion $\leftarrow$ valoracion\_mejorada
+				\ENDIF
+				\IF{valoracion $>$ valoracion\_mejorada}
+					\STATE mejor\_local $\leftarrow$ solucion
+					\STATE valoracion\_mejor\_local $\leftarrow$ valoracion
+				\ELSE
+					\STATE mejor\_local $\leftarrow$ mejorada
+					\STATE valoracion\_mejor\_local $\leftarrow$ valoracion\_mejorada
+				\ENDIF
+				\STATE evaluaciones $\leftarrow$ evaluaciones + 1
+				\IF{valoracion\_mejor\_local$>$valoracion\_mejor\_solucion}
+					\STATE mejor\_solucion $\leftarrow$ mejor\_local
+					\STATE valoracion\_mejor\_solucion $\leftarrow$ valoracion\_mejor\_local
+				\ENDIF
+				\FOR{i en [0,...,13]}
+					\STATE mutada $\leftarrow$ mutacionILS(mejor\_local)
+					\STATE valoracion\_mutada $\leftarrow$ Valoracion(mutada)
+					\STATE mutada\_mejorada,ev $\leftarrow$ busquedaLocal(data,k,1000,mutada)
+					\STATE valoracion\_mutada\_mejorada $\leftarrow$ Valoracion(mutada\_mejorada)
+					\STATE evaluaciones $\leftarrow$ evaluaciones + 2 + ev
+					\IF{valoracion\_mutada$>$valoracion\_mutada\_mejorada}
+						\STATE mejor\_local $\leftarrow$ mutada
+						\STATE valoracion\_mejor\_local $\leftarrow$ valoracion\_mutada
+					\ELSE
+						\STATE mejor\_local $\leftarrow$ mutada\_mejorada
+						\STATE valoracion\_mejor\_local $\leftarrow$ valoracion\_mutada\_mejorada
+					\ENDIF
+					
+					\IF{valoracion\_mejor\_local$>$valoracion\_mejor\_solucion}
+						\STATE mejor\_solucion $\leftarrow$ mejor\_local
+						\STATE valoracion\_mejor\_solucion $\leftarrow$ valoracion\_mejor\_local
+					\ENDIF
+				\ENDFOR
+			\ENDWHILE
+			\RETURN mejor\_solucion
+			
+		\end{algorithmic}
+	\end{algorithm}
+	
+	\section{Evolución Diferencial}
+	\label{sec:DE}
 
 	\section{Pseudocódigo Genético Estacionario}
 	\label{sec:GE}
