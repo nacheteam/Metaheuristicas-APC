@@ -649,7 +649,21 @@
 	\section{Procedimiento de desarrollo de la práctica}
 	\label{sec:procedimiento}
 
-
+	La práctica ha sido desarrollada en Python3.5 utilizando la librería NumPy para agilizar los cálculos y que la computación fuera mucho más rápida.
+	
+	Los algoritmos están distribuidos en ficheros con extensión py con el mismo nombre que los algoritmos, de esta forma ILS estaría en el fichero ils.py por ejemplo.
+	
+	Si se quiere cambiar la semilla aleatoria esta se encuentra en la cabecera de los ficheros que albergan los algoritmos. 
+	
+	Si queremos obtener los resultados de todos los algoritmos implementados hasta ahora podemos ejecutar el fichero resultados.py de la siguiente forma:
+	
+	python3.5 resultados.py
+	
+	La ejecución de este fichero puede resultar excesivamente larga para comprobar un sólo algoritmo por lo que para ello he programado un fichero main.py que permite escoger el algoritmo que queremos ejecutar, el fichero de datos, la constante k de KNN y el número de particiones de los datos así como el algoritmo.
+	
+	Durante el transcurso de la práctica intenté utilizar el framework Sklearn pero lo encontré menos eficiente que las implementaciones que he realizado con NumPy por lo que descarté finalmente su uso.
+	
+	Por último cabe destacar que todo lo que es común a todos los algoritmos viene implementado en el fichero auxiliar.py donde podemos encontrar el algoritmo básico de mutación o la función de lectura de datos por ejemplo.
 
 	\newpage
 
@@ -925,6 +939,8 @@
 		\label{tablaMemetico10-01-mejores-CAK1}
 		\caption{Resultados AM(10,0.1,mejores) CA con K=1}
 	\end{table}
+	
+	\newpage
 
 	\begin{table}[ht]
 		\centering
@@ -947,6 +963,7 @@
 
 	\end{table}
 	
+	
 	\begin{table}[ht]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -967,6 +984,7 @@
 		\caption{Resultados ILS}
 		
 	\end{table}
+
 	
 	\begin{table}[ht]
 		\centering
@@ -989,7 +1007,6 @@
 		
 	\end{table}
 	
-	\newpage
 	
 	\begin{table}[ht]
 		\centering
