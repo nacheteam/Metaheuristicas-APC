@@ -241,6 +241,86 @@
 	
 	\section{Evolución Diferencial}
 	\label{sec:DE}
+	
+	Este algoritmo es un algoritmo basado en la teoría de algoritmos genéticos haciendo un énfasis especial en la mutación y usando una recombinación diferente a posteriori. 
+	
+	Como podremos observar posteriormente en los resultados este es un algoritmo que arroja unos resultados muy buenos en el problema de selección de características.
+	
+	He implementado para este algoritmo dos modelos de mutación: Rand1 y Current to Best 1.
+	
+	Rand1 toma tres individuos aleatorios de la población para cada individuo al que queremos aplicar la mutación y devolvemos la suma del primer individuo aleatorio mas un factor de escala por la resta de los dos otros individuos generados.
+
+	A continuación se describe el operador en pseudocódigo:
+	
+	\begin{algorithm}
+		\caption{Rand1(individuo,poblacion,valoraciones)}
+		\begin{algorithmic}			
+			\STATE sample $\leftarrow$ [0,...,longitud(poblacion)] excluyendo al entero individuo
+			\STATE Mezclamos de forma aleatoria la lista sample
+			\STATE sample $\leftarrow$ 3 primeros elementos de sample
+			\STATE
+			\RETURN poblacion[sample[0]] + F*(poblacion[sample[1]]-poblacion[sample[2]])
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Donde en nuestro caso $F=0.5$ como se sugiere en las diapositivas de teoría.
+	
+	El otro operador de mutación  es Current to Best 1 que se basa en intentar dirigir la mutación del individuo hacia el mejor actual de la población con un cierto factor de aleatoriedad al crear el individuo mutado usando dos individuos aleatorios de la población.
+	
+	A continuación se describe el pseudocódigo del operador:
+	
+	\begin{algorithm}
+		\caption{CBT1(individuo,poblacion,valoraciones)}
+		\begin{algorithmic}			
+			\STATE sample $\leftarrow$ [0,...,longitud(poblacion)] excluyendo al entero individuo
+			\STATE Mezclamos de forma aleatoria la lista sample
+			\STATE sample $\leftarrow$ 2 primeros elementos de sample
+			\STATE
+			\STATE mejor $\leftarrow$ Índice del mejor elemento de la población
+			\STATE
+			\RETURN poblacion[individuo] + F*(poblacion[mejor] - poblacion[individuo]) + F*(poblacion[sample[0]] - poblacion[sample[1]])
+		\end{algorithmic}
+	\end{algorithm}
+	
+	Donde en nuestro caso $F=0.5$ como se sugiere en las diapositivas de teoría.
+	
+	En el algoritmo la mutación sólo la aplicamos si al generar un valor aleatorio este es menor que la constante CR que viene dada como la constante $CR = \frac{0.1}{0.9}$ en las diapositivas de teoría.
+	
+	Tras la mutación se hace la selección de los mejores para quedarnos con los de la generación anterior si no hemos mejorado o con los mutados si hemos obtenido mejora.
+	
+	A continuación se describe el algoritmo en pseudocódigo:
+	
+	\begin{algorithm}
+		\caption{DE(data,k,operador\_mutacion,MAX\_EVALS=15000,TAM\_POBLACION=50)}
+		\begin{algorithmic}			
+			\STATE poblacion $\leftarrow$ Genera una población inicial aleatoria.
+			\STATE valoraciones $\leftarrow$ Valoraciones de la población
+			\STATE 
+			\STATE evaluaciones $\leftarrow$ TAM\_POBLACION
+			\STATE 
+			\WHILE{evaluaciones$<$MAX\_EVALS}
+				\STATE offspring $\leftarrow$ []
+				\FOR{i en [0,...,TAM\_POBLACION-1]}
+					\STATE random $\leftarrow$ Número aleatorio entre 0 y 1.
+					\IF{random$<$CR}
+						\STATE offspring $\leftarrow$ [offspring, operador\_mutacion(i,poblacion,valoraciones)]
+					\ELSE
+						\STATE offspring $\leftarrow$ [offspring,poblacion[i]]
+					\ENDIF
+				\ENDFOR
+				\STATE valoraciones\_offspring $\leftarrow$ Valoraciones de la población offspring
+				\STATE evaluaciones $\leftarrow$ evaluaciones + TAM\_POBLACION
+				\STATE 
+				\FOR{i en [0,...,TAM\_POBLACION-1]}
+					\IF{valoraciones[i]$<$valoraciones\_offspring[i]}
+						\STATE poblacion[i] $\leftarrow$ offspring[i]
+						\STATE valoraciones[i] $\leftarrow$ valoraciones\_offspring[i]
+					\ENDIF
+				\ENDFOR
+			\ENDWHILE
+			\RETURN El mejor individuo de la población.
+		\end{algorithmic}
+	\end{algorithm}
 
 	\section{Pseudocódigo Genético Estacionario}
 	\label{sec:GE}
