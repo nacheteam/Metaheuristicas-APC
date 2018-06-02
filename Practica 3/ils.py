@@ -8,6 +8,12 @@ MU = 0
 SIGMA = 0.4
 
 def mutacionILS(solucion,MU=MU,SIGMA=SIGMA):
+    '''
+    @brief Función de mutación de ILS
+    @param solucion Solución que queremos mutar
+    @param MU constante MU para el valor aleatorio según una gaussiana
+    @param SIGMA constante SIGMA para el valor aleatorio según una gaussiana
+    '''
     #Calculamos el número de posiciciones a mutar (10%)
     num_mutaciones = int(0.1*len(solucion))
 
@@ -23,6 +29,12 @@ def mutacionILS(solucion,MU=MU,SIGMA=SIGMA):
     return solucion
 
 def ILS(data,k,MAX_EVALS=15000):
+    '''
+    @brief Función que implementa el algoritmo ILS
+    @param data Conjunto de datos
+    @param k Constante K para el KNN
+    @param MAX_EVALS Número máximo de evaluaciones, por defecto 15000
+    '''
     #Se toman las tuplas y sus clases
     data_np = np.array([d[:-1] for d in data])
     labels_np = np.array([d[-1] for d in data])
@@ -94,7 +106,7 @@ def ValoracionILS(nombre_datos,k):
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético estacionario.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo ILS.
     """
     #Inicializa los datos con los del fichero y las particiones
     data = auxiliar.lecturaDatos(nombre_datos)

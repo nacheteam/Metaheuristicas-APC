@@ -9,10 +9,23 @@ PHI = 0.3
 np.random.seed(123456789)
 
 def enfriamiento(tk,beta):
+    '''
+    @brief Función que realiza el enfriamiento de ES.
+    @param tk Temperatura actual
+    @param beta Beta empleado en la fórmula
+    @return Devuelve la nueva temperatura enfriada.
+    '''
     return tk/(1.0+beta*tk)
     #return 0.95*tk
 
 def EnfriamientoSimulado(data,k,MAX_EVALS=15000):
+    '''
+    @brief Función que implementa el algoritmo de enfriamiento simulado
+    @param data Conjunto de datos
+    @param k Constante que se emplea en la valoración para el KNN
+    @param MAX_EVALS Número máximo de evaluaciones, por defecto es 15000
+    @return Devuelve una solución de APC
+    '''
     #Se toman las tuplas y sus clases
     data_np = np.array([d[:-1] for d in data])
     labels_np = np.array([d[-1] for d in data])
@@ -87,7 +100,7 @@ def ValoracionEnfriamientoSimulado(nombre_datos,k):
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético estacionario.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo ES.
     """
     #Inicializa los datos con los del fichero y las particiones
     data = auxiliar.lecturaDatos(nombre_datos)

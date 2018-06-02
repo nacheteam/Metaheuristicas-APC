@@ -8,6 +8,11 @@ CR = 0.1/0.9
 TAM_POBLACION = 50
 
 def poblacionInicial(ncar,TAM_POBLACION=TAM_POBLACION):
+    '''
+    @brief Función que obtiene una población aleatoria inicial
+    @param ncar Número de características de cada tupla
+    @param TAM_POBLACION Número de individuos que se quiere que tenga la población.
+    '''
     poblacion = []
     #Genero TAM_POBLACION vectores con valores aleatorios entre 0 y 1
     for i in range(TAM_POBLACION):
@@ -16,6 +21,13 @@ def poblacionInicial(ncar,TAM_POBLACION=TAM_POBLACION):
     return poblacion
 
 def Rand1(individuo,poblacion,valoraciones):
+    '''
+    @brief Operador de mutación Rand1
+    @param individuo Índice del individuo que se está mutando.
+    @param poblacion Población de soluciones
+    @param valoraciones Valoraciones de los individuos de la poblacion
+    @return Devuelve un vector mutado según la fórmula Rand1.
+    '''
     #Tomo una muestra aleatoria de 3 individuos
     sample = np.setdiff1d(np.arange(len(poblacion)),[individuo])
     np.random.shuffle(sample)
@@ -25,6 +37,13 @@ def Rand1(individuo,poblacion,valoraciones):
     return poblacion[sample[0]] + F*(poblacion[sample[1]]-poblacion[sample[2]])
 
 def CTB1(individuo,poblacion,valoraciones):
+    '''
+    @brief Operador de mutación CTB1
+    @param individuo Índice del individuo que se está mutando.
+    @param poblacion Población de soluciones
+    @param valoraciones Valoraciones de los individuos de la poblacion
+    @return Devuelve un vector mutado según la fórmula CTB1.
+    '''
     #Tomo una muestra de 2 individuos
     sample = np.setdiff1d(np.arange(len(poblacion)),[individuo])
     np.random.shuffle(sample)
@@ -37,6 +56,14 @@ def CTB1(individuo,poblacion,valoraciones):
     return poblacion[individuo] + F*(poblacion[mejor] - poblacion[individuo]) + F*(poblacion[sample[0]] - poblacion[sample[1]])
 
 def DE(data,k,operador_mutacion,MAX_EVALS=15000,TAM_POBLACION=TAM_POBLACION):
+    '''
+    @brief Función que implementa el algoritmo Evolución Diferencial
+    @param data Conjunto de datos
+    @param k Constante para KNN
+    @param operador_mutacion Operador de mutación para DE
+    @param MAX_EVALS Número máximo de evaluaciones, por defecto 15000
+    @param TAM_POBLACION Número de individuos en la población, por defecto 50
+    '''
     #Se toman las tuplas y sus clases
     data_np = np.array([d[:-1] for d in data])
     labels_np = np.array([d[-1] for d in data])
@@ -78,7 +105,7 @@ def ValoracionDERand1(nombre_datos,k):
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético estacionario.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo DE.
     """
     #Inicializa los datos con los del fichero y las particiones
     data = auxiliar.lecturaDatos(nombre_datos)
@@ -114,7 +141,7 @@ def ValoracionDECTB1(nombre_datos,k):
     @brief Función que obtiene la valoración para 5 particiones del conjunto de datos.
     @param nombre_datos Nombre del fichero de datos.
     @param k Número de vecinos que se quieren calcular en KNN.
-    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo genético estacionario.
+    @return Devuelve un vector con las valoraciones de los vectores de pesos obtenidos por el algoritmo DE.
     """
     #Inicializa los datos con los del fichero y las particiones
     data = auxiliar.lecturaDatos(nombre_datos)
