@@ -989,6 +989,8 @@
 		
 	\end{table}
 	
+	\newpage
+	
 	\begin{table}[ht]
 		\centering
 		\resizebox{\textwidth}{!}{
@@ -1047,6 +1049,36 @@
 	\newpage
 
 	\subsection{Análisis de los datos}
+	
+	Comparados con los anteriores algoritmos sólo ILS y DE han marcado una diferencia substancial. Podemos comprobar que ES está en un nivel parecido a los meméticos de la práctica anterior y un poco por encima de la búsqueda local simple.
+	
+	La única ventaja que podemos citar de dicho algoritmo es que comparativamente en tiempo es mucho más rápido que todos los que obtienen puntuaciones parecidas, por lo que puede resultar interesante en este caso por ejemplo para mezclarlo con la ILS en el sentido de dejar de usar la búsqueda local en dicho algoritmo y probar con ES.
+	
+	Cuando pasamos a ILS podemos observar que su nivel de puntuación está al nivel de los algoritmos genéticos con mejores puntuaciones de la práctica anterior lo que lo sitúa en un buen lugar aunque sus valoraciones no pasan del 65\%. 
+	
+	Si pasamos a analizar DE vemos que es el claro ganador en general de todos los algoritmos implementados en el transcurso de las prácticas arrojándonos puntuaciones de más de un 80\% en todos los casos y tasas de reducción de más de un 90\% lo cual está muy por encima de todos los algoritmos hasta el momento.
+	
+	Hemos de recordar que esta valoración nos indica cuántas de las características han sido poco útiles para la clasificación de las tuplas. Es decir, en el caso que estamos hablando DE ha sido capaz de clasificar de media entorno a un 70\% de las tuplas de forma correcta con tan sólo usar menos de un 10\% de las características.
+	
+	Cabe destacar también que estos resultados han sido obtenidos con el operador de mutación Rand1 mientras que el otro nos arroja unos resultados comparables con el mejor de los algoritmos genéticos pero siempre unos 10 puntos por debajo de Rand1.
+	
+	En cuanto al tiempo los algoritmos de esta práctica más costosos en tiempo han sido ILS y las dos variantes de DE que han consumido un poco menos de tiempo que los algoritmos genéticos de la práctica anterior.
+	
+	Todos estos datos se pueden percibir de forma más clara con las siguientes gráficas por ficheros:
+	
+	\includegraphics[scale=0.8]{./Imagenes/Resultados/ozone.png}
+	
+	\includegraphics[scale=0.8]{./Imagenes/Resultados/parkinsons.png}
+	
+	\includegraphics[scale=0.8]{./Imagenes/Resultados/spectf-heart.png}
+	
+	\includegraphics[scale=0.8]{./Imagenes/Tiempos/tiempos_ozone.png}
+	
+	\includegraphics[scale=0.8]{./Imagenes/Tiempos/tiempos_parkinsons.png}
+	
+	\includegraphics[scale=0.8]{./Imagenes/Tiempos/tiempos_spectf-heart.png}
+	
+	Donde podemos percibir claramente que en resultados de la tasa media DE con el operador de mutación Rand1 es el algoritmo que está por encima y en tiempos ILS y las dos variantes de DE obtienen tiempos parecidos mientras que el que menos tiempo consume es claramente ES.
 
 
 \end{document}
