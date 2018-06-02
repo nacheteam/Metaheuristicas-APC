@@ -4,56 +4,6 @@ El valor utilizado es K = 1
 ############################################
 
 
-
-
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado Enfriamiento Simulado
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado ILS
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado DE Rand1
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado DE CTB1
-
-
-
-
 ############################################
 Fichero de datos: ../Data/ozone-320.arff
 ############################################
@@ -122,52 +72,6 @@ DE Rand1: 72.8125 --- 91.94444444444446 --- 82.37847222222223 --- 414.8663294315
 DE CTB1: 73.125 --- 69.72222222222223 --- 71.42361111111111 --- 470.4088270664215
 
 ################################################################
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado Enfriamiento Simulado
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado ILS
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado DE Rand1
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado DE CTB1
-
-
 
 
 ############################################
@@ -238,52 +142,6 @@ DE Rand1: 74.4798041615667 --- 91.81818181818181 --- 83.14899298987426 --- 171.6
 DE CTB1: 71.26070991432069 --- 83.63636363636363 --- 77.44853677534215 --- 173.33936681747437
 
 ################################################################
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado Enfriamiento Simulado
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado ILS
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado DE Rand1
-Completado 0.0%
-
-Completado 20.0%
-
-Completado 40.0%
-
-Completado 60.0%
-
-Completado 80.0%
-
-Acabado DE CTB1
-
-
 
 
 ############################################
