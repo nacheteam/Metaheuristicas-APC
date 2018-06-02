@@ -78,7 +78,48 @@
 
 	\section{Descripción común a todos los algoritmos}
 
+	Los algoritmos empleados han sido el KNN, el algoritmo greedy Relief, la metaheurística de búsqueda local, un algoritmo genético estacionario, un algoritmo genético generacional, un memético basado en el algoritmo genético generacional, enfriamiento simulado, ILS y evolución diferencial.
 	
+	Estos algoritmos comparten ciertos métodos y operadores que pasaré a explicar en esta sección.
+	
+	Para empezar se debe destacar que la representación escogida para las soluciones es un vector de números reales, es decir, si n es el número de características:
+	$$w\in \mathbb{R}^n \ t.q. \ \forall i \ con \ 0\leq i < n \ se \ tiene \ w_i \in [0,1]$$
+	O lo que es lo mismo, un vector de tamaño n con todas las posiciones rellenas con números del intervalo [0,1].
+	
+	A estos números me referiré como pesos asociados a las características, ya que lo que nos indican es el grado de importancia de dicha característica a la hora de clasificar los datos, siendo 1 el máximo de relevancia y 0 el mínimo.
+	
+	Así mismo cabe destacar que nuestra intención en este problema es obtener una buena calificación de dicho vector de pesos. Esto lo medimos mediante las tasas de acierto y simplicidad que se definen como:
+	$$Tasa\_acierto = 100\cdot \frac{nº  \ aciertos}{nº \ datos} \ , \ Tasa\_simplicidad = 100\cdot \frac{nº \ valores \ de \ w \ < \ 0.2}{nº \ de \ atributos}$$
+	$$Tasa\_agregada = \frac{1}{2}\cdot Tasa\_acierto + \frac{1}{2}\cdot Tasa\_simplicidad$$
+	
+	La tasa de aciertos lo que nos mide es en un porcentaje cuántas instancias hemos clasificado correctamente mediante el algoritmo KNN usando el vector de pesos w.
+	
+	La tasa de simplicidad nos mide cuántos de los valores que tiene el vector de pesos son menores que 0.2. Esto se hace ya que, como imposición del problema, tenemos que si alguno de los pesos es menor que 0.2 no debemos usarlo, o lo que es lo mismo, debemos sustituirlo por un 0 en la función de la distancia que luego describiré. Midiendo esto obtenemos un dato de cuanto sobreajuste ha tenido nuestro algoritmo a la hora de obtener el vector de pesos. Cuantas menos características necesitemos para discernir la clase a la que pertenece una instancia de los datos, más simple será clasificar dicha instancia. Se expresa en porcentaje indicando 0 como ninguna simplicidad y 100 como la máxima simplicidad.
+	
+	De esta forma combinando ambas tasas obtenemos la tasa agregada que nos hace la media entre ambas tasas, de forma que le asignamos la misma importancia a acertar en la clasificación de las instancias y a la simplicidad en la solución. Cabe destacar que es imposible obtener una tasa de un 100\% a no ser que los datos se compongan únicamente de un punto ya que ello implicaría que la simplicidad ha de ser un 100\% (todos las posiciones del vector menores que 0.2) y por tanto la distancia sería 0 en todos los casos. De esta forma aspiraremos a una calificación lo mas alta posible pero teniendo en cuenta las restricciones de la función objetivo construida.
+	
+	Las funciones y operadores de uso común los he agrupado en un fichero llamado auxiliar.py. Este fichero contiene las funciones de lectura de datos, distancias, una función que devuelve el elemento más común de una lista, la norma euclídea, una función para dividir los datos en el número de particiones que queramos manteniendo el porcentaje de elementos de cada clase que había en el conjunto de datos original y el operador de mutación básico.
+	
+	\subsection{Generación de soluciones aleatorias}
+	
+	En el algoritmo DE partimos de una población de soluciones aleatorias que generamos con una distribución uniforme, de forma que partimos en un inicio con una población de 50 individuos con valores en los vectores de pesos entre 0 y 1 generados de forma aleatoria.
+	
+	Nótese que en nuestro caso TAM\_POBLACION=50.
+	
+	\begin{algorithm}
+		\caption{generaPoblacionInicial(longitud)}
+		\begin{algorithmic}
+			\STATE poblacion $\leftarrow$ [ ]
+			\FOR{i=0 , ... , TAM\_POBLACION-1}
+			\STATE cromosoma $\leftarrow$ [ ]
+			\FOR{j=0 , ... , longitud-1}
+			\STATE cromosoma $\leftarrow$ [cromosoma,uniforme(0,1)]
+			\ENDFOR
+			\STATE poblacion $\leftarrow$ [poblacion,cromosoma]
+			\ENDFOR
+			\RETURN poblacion
+		\end{algorithmic}
+	\end{algorithm}
 
 	\newpage
 	
