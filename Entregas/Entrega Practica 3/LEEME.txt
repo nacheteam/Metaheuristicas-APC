@@ -1,0 +1,14 @@
+Se incluye el fichero .tex por si se quiere compilar una vez recibido el trabajo así como el PDF ya generado y las gráficas empleadas (contenidas en la carpeta Imagenes).
+
+Los ficheros fuentes son:
+- auxiliar.py : contiene funciones auxiliares y comunes a muchos algoritmos tales como la lectura de los datos o la función de distancia.
+- busqueda_local.py : contiene el algoritmo de búsqueda local.
+- enfriamiento_simulado.py : contiene la implementación del algoritmo ES.
+- evolucion_diferencial.py : contiene la implementación del algoritmo DE.
+- geneticos.py : contiene la implementación de los algoritmos genéticos tanto el generacional como el estacionario.
+- ils.py : contiene la implementación del algoritmo ILS.
+- knn.py : contiene la implementación del algoritmo KNN y la función de valoración de soluciones.
+- main.py : fichero que permite la ejecución de un sólo algoritmo en un fichero de datos concreto con un valor de constante k concreto y con el número de particiones deseado.
+- memeticos.py : fichero que contiene la implementación del algoritmo memético en todas sus variantes.
+- relief.py : fichero que contiene la implementación del algoritmo greedy relief.
+- resultados.py : fichero que obtiene los resultados de todos los algoritmos sobre todos los ficheros de datos con k=1 y con 5 particiones por conjunto de datos.
