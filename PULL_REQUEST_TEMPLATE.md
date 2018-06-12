@@ -1,0 +1,3 @@
+- Give information about the change
+- Report which files you are changing
+- Separate the changed area in the files with comments and spaces from the rest of the code to locate it easily.
